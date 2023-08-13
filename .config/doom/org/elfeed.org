@@ -1,0 +1,6 @@
+* Elfeed :elfeed:
+
+** LukeSmith :LukeSmith:
+*** [[https://lukesmith.xyz/rss.xml][LukeSmith]]
+** ArchLinux :ArchLinux:
+*** [[https://archlinux.org/feeds/news][ArchLinux]]
