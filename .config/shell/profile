@@ -12,6 +12,7 @@ export BROWSER="brave"
 export WM="dwm"
 
 # bat as manpager:
+export MANROFFOPT="-c"
 export MANPAGER="/bin/sh -c 'col -bx | bat -l man -p'"
 # Run the following command if you want to reset the manpager:
 # `unset MANPAGER`
