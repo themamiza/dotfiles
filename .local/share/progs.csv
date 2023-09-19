@@ -1,0 +1,93 @@
+#TAG,NAME IN REPO (or git url),PURPOSE (should be a verb phrase to sound right while installing)
+
+# X11:
+,xorg-server,"is the graphical server."
+,xorg-xinit,"starts the graphical server."
+,xorg-xset,"is user prefrence utility for X."
+,libxft,"is a font drawing library."
+,libxinerama,"adds support for multi-monitors."
+G,https://github.com/themamiza/dwm,"is the Dynamic Window Manager."
+G,https://github.com/themamiza/dwmblocks,"is a modular status bar for dwm."
+G,https://github.com/themamiza/dmenu,"is a dynamic menu for X."
+,numlockx,"turns on the numlock key in X11."
+,unclutter,"hides the mouse cursor."
+,xcompmgr,"is a compositer for X."
+,xwallpaper,"sets wallpapers."
+,arandr,"provides a simple visual front end for XRandR."
+,scrot,"is a simple screenshot utility."
+
+# Terminal:
+G,https://github.com/themamiza/st,"is the suckless terminal."
+
+# Zsh:
+,zsh-autosuggestions,"provides fish-like autosuggestions for zsh"
+A,zsh-fast-syntax-highlighting-git,"is an optimized and extended zsh-syntax-highlighting"
+
+# Browser:
+,brave-bin,"is a web browser that blocks ads and trackers by default."
+
+# Filesystems:
+,dosfstools,"allows access to dos-like filesystems."
+A,simple-mtpfs,"allows access to android devices through the command line."
+
+# Notifications:
+,libnotify,"is a library for sending desktop notifications."
+,dunst,"is a lightweight notification-daemon."
+
+# Media:
+,nsxiv,"is the New Simple X Image Viewer."
+,mpv,"is a cross-platform media player."
+
+# Volume:
+,pulseaudio,"is a feature, general-purpose sound server."
+,pavucontrol,"is the PulseAudio Volume Control."
+,pamixer,"is a command line interface to pulseaudio."
+
+# Tools:
+,bat,"is a cat clone with syntax highlighting written in rust."
+,ripgrep,"is a search tool that combines the usability of ag with the raw speed of grep."
+,fd,"is a simple, fast and user-friendly alternative to find."
+,pass,"is THE password manager."
+,unzip,"unzips zips."
+,slock,"is a screen locker."
+,wimlib,"is a dependency for \`win2usb\`."
+A,ms-sys,"is a dependency for \`win2usb\`."
+A,7-zip,"is a file archiver with high compression ratio."
+,ffmpeg,"records and streams audio and video."
+,ffmpegthumbnailer,"generates thumnails using ffmpeg."
+,ueberzug,"allows display of images inside lf."
+,network-manager-applet,"is a systray program to manage your network."
+,os-prober,"detects other OSes on a set of drives."
+,sshpass,"fools ssh into accepting an interactive password non-interactively."
+
+# Messenger:
+,telegram-desktop,"is a messenger application."
+
+# Image Minipilations:
+,gimp,"is the GNU Image Manipulation Program."
+
+# Themes:
+,dracula-gtk-theme,"is a gtk theme."
+
+# Icons:
+,breeze-icons,"is an icon theme."
+
+# File management:
+,lf,"is a terminal file manager."
+
+# GUI file management:
+,thunar,"is a simple GUI file manager."
+,thunar-volman,"provides automatic management of removable drives for thunar."
+,tumbler,"creates thumnails for thunar."
+,gvfs,"provides filesystem implementation for thunar."
+,gvfs-mtp,"allows access to android devices through thunar."
+
+# Fonts:
+,ttf-dejavu,"is a font."
+,ttc-iosevka,"is a font."
+,noto-fonts-emoji,"is a font."
+,ttf-ubuntu-font-family,"is a font."
+
+# Emacs
+,emacs,"is an emacs-lisp intrepreter."
+D,https://github.com/doomemacs/doomemacs,"is an Emacs framework for the stubborn martian hacker."
