@@ -217,9 +217,10 @@ installationloop
 
 putgitrepo "$dotfilesrepo" "/home/$name" "$repobranch"
 rm -rf "/home/$name/.git/" "/home/$name/README.md" "/home/$name/LICENSE"
+sudo -u "$name" mkdir -p "/home/$name/.cache/zsh"
 
 chsh -s /bin/zsh "$name" >/dev/null 2>&1
-sudo -u "$name" mkdir -p "/home/$name/.cache/zsh"
+usermod -aG libvirt "$name" >/dev/null 2>&1
 
 dbus-uuidgen >/var/lib/dbus/machine-id
 

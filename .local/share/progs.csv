@@ -91,3 +91,11 @@ A,7-zip,"is a file archiver with high compression ratio."
 # Emacs
 ,emacs,"is an emacs-lisp intrepreter."
 D,https://github.com/doomemacs/doomemacs,"is an Emacs framework for the stubborn martian hacker."
+
+# Virtualazation:
+,qemu-full,"enables full support for qemu usage."
+,libvirt,"provides support for managing virtual machines."
+,iptables-nft,"is a different \`iptables\` only required for \`libvirt\`."
+,dnsmasq,"is a lightweight DNS forwarder and DHCP server."
+,openbsd-netcat,"is the TCP/IP swiss army knife."
+,virt-manager,"is a GUI interface for managing virtual machines."
