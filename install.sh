@@ -226,6 +226,15 @@ dbus-uuidgen >/var/lib/dbus/machine-id
 
 echo "export \$(dbus-launch)" >/etc/profile.d/dbus.sh
 
+[ ! -f /etc/X11/xorg.conf.d/40-libinput.conf ] && printf 'Section "InputClass"
+  		Identifier "libinput touchpad catchall"
+		MatchIsTouchpad "on"
+		MatchDevicePath "/dev/input/event*"
+		Driver "libinput"
+		Option "Tapping" "on"
+		Option "NaturalScrolling" "true"
+EndSection' > /etc/X11/xorg.conf.d/40-libinput.conf
+
 echo "%wheel ALL=(ALL:ALL) ALL" >/etc/sudoers.d/00-marbs-wheel-can-sudo
 echo "%wheel ALL=(ALL:ALL) NOPASSWD: /usr/bin/shutdown,/usr/bin/reboot,/usr/bin/systemctl suspend,/usr/bin/mount,/usr/bin/umount,/usr/bin/pacman -Syu,/usr/bin/pacman -Syyu,/usr/bin/pacman -Syyu --noconfirm" >/etc/sudoers.d/01-marbs-cmds-without-password
 echo "Defaults editor=/usr/bin/nvim" > /etc/sudoers.d/02-marbs-visudo-editor
