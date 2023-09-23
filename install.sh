@@ -239,6 +239,7 @@ echo "%wheel ALL=(ALL:ALL) ALL" >/etc/sudoers.d/00-marbs-wheel-can-sudo
 echo "%wheel ALL=(ALL:ALL) NOPASSWD: /usr/bin/shutdown,/usr/bin/reboot,/usr/bin/systemctl suspend,/usr/bin/mount,/usr/bin/umount,/usr/bin/pacman -Syu,/usr/bin/pacman -Syyu,/usr/bin/pacman -Syyu --noconfirm" >/etc/sudoers.d/01-marbs-cmds-without-password
 echo "Defaults editor=/usr/bin/nvim" > /etc/sudoers.d/02-marbs-visudo-editor
 
+blkid | grep "TYPE=\"swap\"" | cut -d " " -f1 | sed "s/://" | xargs df -h | awk 'NR==2P{print $2}' | sed "s/\..*//" | xargs test 7 -le && {#!
 sed -i "/^HOOKS=(.*)$/s/)$/ resume)/" /etc/mkinitcpio.conf
 mkinitcpio -P
 swapuuid=$(blkid | grep swap | grep -Po " UUID=\".*?\"" | sed "s/ //;s/UUID=//;s/\"//g")
@@ -247,5 +248,6 @@ sed -i "/^GRUB_TIMEOUT=.*$/s/=.*/=3/;/^#GRUB_DISABLE_OS_PROBER=false$/s/#//" /et
 sed -i "/^GRUB_DEFAULT=.*$/s/=.*/=saved/;/^#GRUB_SAVEDEFAULT=true$/s/#//" /etc/default/grub
 unset swapuuid
 grub-mkconfig -o /boot/grub/grub.cfg
+}
 
 finalize
