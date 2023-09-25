@@ -20,7 +20,7 @@ cmd open ${{
          image/svg+xml)                         display -- "$f";;
          image/*)       rotdir "$f" |
                         grep -i "\.\(png\|jpg\|jpeg\|gif\|webp\)\(_large\)*$" |
-                        setsid -f sxiv -aiob 2>/dev/null |
+                        setsid -f nsxiv -aiob 2>/dev/null |
                         while read -r file; do
                             [ -z "$file" ] && continue
                             lf -remote "send select \"$file\""

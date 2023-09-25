@@ -29,7 +29,7 @@ alias \
 	cp="cp -iv" \
 	mv="mv -iv" \
 	rm="rm -vI" \
-	sxiv="sxiv -b" \
+	nsxiv="nsxiv -b" \
 	mkd="mkdir -pv" \
 	history="history 0" \
 	up="uptime -p" \
@@ -55,7 +55,7 @@ alias \
 	v="vim" \
 	sv="sudo vim" \
 	e="emacs" \
-	s="sxiv" \
+	s="nsxiv" \
 	z="zathura" \
 	lf="lfub" \
 	sys="systemctl" \
