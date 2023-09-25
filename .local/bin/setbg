@@ -9,5 +9,7 @@ trueloc="$(readlink -f "$1")" &&
 		*) notify-send "Error" "Not a valid image."; exit 1;;
 	esac
 
-
-xwallpaper --zoom "$bgloc"
+command -v identify 2>/dev/null 1>&2 && identify -format '%w %h %i\n' -- "$bgloc" | \
+	while read W H FN; do
+		[ "$W" -lt "$H" ] && xwallpaper --maximize "$bgloc" || xwallpaper --zoom "$bgloc"
+	done || xwallpaper --zoom "$bgloc"
