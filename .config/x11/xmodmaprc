@@ -1,4 +1,3 @@
-# Replace right alt with super.
 remove mod1 = Alt_R
 clear mod4
 keycode 108 = Super_R
