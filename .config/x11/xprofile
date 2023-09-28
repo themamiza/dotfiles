@@ -12,5 +12,5 @@ xmodmap "$HOME/.config/x11/xmodmaprc"
 
 autostart="xcompmgr screenres nm-applet numlockx taptoclick unclutter dunst setbg"
 for p in $autostart; do
-    pidof -s "$p" || setsid -f "$p"
-done
+    pidof -sx "$p" || setsid -f "$p"
+done >/dev/null 2>&1
