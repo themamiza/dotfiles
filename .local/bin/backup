@@ -1,0 +1,31 @@
+#!/bin/sh
+
+# This script performs all the backups I need and is mostly
+# spicific to my setup. I have an external HDD mounted at '~/fl'
+# and this file will backup files into '~/fl/Backup/home'.
+
+# If you have a different directory that you backup to,
+# you can change it here.
+backupdir="$HOME/fl/Backup/home"
+
+# Removes old backup
+rm -rf   "$backupdir"
+
+# Creates needed directories
+mkdir -p "$backupdir"
+mkdir -p "$backupdir/.cache/zsh"
+mkdir -p "$backupdir/.local/bin"
+mkdir -p "$backupdir/.local/share/pass"
+mkdir -p "$backupdir/.local/src"
+
+# Copies everything
+cp -rf "$XDG_CACHE_HOME/zsh"        "$backupdir/.cache"
+cp -rf "$XDG_CONFIG_HOME"           "$backupdir"
+cp -rf "$HOME/.local/bin"           "$backupdir/.local"
+cp -rf "$HOME/.local/share/pass"    "$backupdir/.local/share"
+cp -rf "$HOME/.local/src"           "$backupdir/.local"
+
+# TODO: Backup browser profile automatically
+printf "TODO: Backup browser profile manually!\n"
+
+# TODO: Implement restore functionality
