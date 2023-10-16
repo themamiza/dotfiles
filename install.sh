@@ -235,6 +235,19 @@ echo "export \$(dbus-launch)" >/etc/profile.d/dbus.sh
 		Option "NaturalScrolling" "true"
 EndSection' > /etc/X11/xorg.conf.d/40-libinput.conf
 
+mkdir -p /etc/pacman.d/hooks >/dev/null 2>&1
+[ ! -f /etc/pacman.d/hooks/dashbinsh.hook ] && printf "[Trigger]
+Type = Package
+Operation = Install
+Operation = Upgrade
+Target = bash
+
+[Action]
+Description = Re-pointing /bin/sh symlink to dash...
+When = PostTransaction
+Exec = /usr/bin/ln -sfT dash /usr/bin/sh
+Depends = dash" > /etc/pacman.d/hooks/dashbinsh.hook
+
 echo "%wheel ALL=(ALL:ALL) ALL" >/etc/sudoers.d/00-marbs-wheel-can-sudo
 echo "%wheel ALL=(ALL:ALL) NOPASSWD: /usr/bin/shutdown,/usr/bin/reboot,/usr/bin/systemctl suspend,/usr/bin/mount,/usr/bin/umount,/usr/bin/pacman -Syu,/usr/bin/pacman -Syyu,/usr/bin/pacman -Syyu --noconfirm" >/etc/sudoers.d/01-marbs-cmds-without-password
 echo "Defaults editor=/usr/bin/nvim" > /etc/sudoers.d/02-marbs-visudo-editor
