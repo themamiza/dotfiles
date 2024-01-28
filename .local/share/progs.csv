@@ -3,18 +3,25 @@
 # X11:
 ,xorg-server,"is the graphical server."
 ,xorg-xinit,"starts the graphical server."
-,xorg-xset,"is user prefrence utility for X."
+,xorg-xset,"is user preference utility for X."
 ,libxft,"is a font drawing library."
 ,libxinerama,"adds support for multi-monitors."
+,xf86-video-intel,"is the intel graphics driver."
 G,https://github.com/themamiza/dwm,"is the Dynamic Window Manager."
 G,https://github.com/themamiza/dwmblocks,"is a modular status bar for dwm."
 G,https://github.com/themamiza/dmenu,"is a dynamic menu for X."
 ,numlockx,"turns on the numlock key in X11."
+,xorg-xbacklight,"changes screen brightness."
+,xorg-xinput,"is a small cli tool to control touchpad."
+,xclip,"is a cli interface to X11 clipboard."
+,xdotool,"is a cli X11 automation tool."
+,xorg-xev,"prints contents of X events."
 ,unclutter,"hides the mouse cursor."
-,xcompmgr,"is a compositer for X."
+,xcompmgr,"is a compositor for X."
 ,xwallpaper,"sets wallpapers."
 ,arandr,"provides a simple visual front end for XRandR."
 ,scrot,"is a simple screenshot utility."
+,slock,"is a screen locker."
 
 # Terminal:
 G,https://github.com/themamiza/st,"is the suckless terminal."
@@ -23,8 +30,20 @@ G,https://github.com/themamiza/st,"is the suckless terminal."
 ,zsh-autosuggestions,"provides fish-like autosuggestions for zsh"
 A,zsh-fast-syntax-highlighting-git,"is an optimized and extended zsh-syntax-highlighting"
 
+# Shell:
+,dash,"is a POSIX compliant shell that aims to be as small as possible."
+
 # Browser:
 ,brave-bin,"is a web browser that blocks ads and trackers by default."
+
+# C:
+,clang,"is clang."
+,cmake,"is cmake."
+
+# Nvidia:
+,nvidia-lts,"is the nvidia graphics driver for \`linux-lts\`"
+,nvidia-settings,"is a tool for configuring NVIDIA graphics driver."
+,nvidia-prime,"is NVIDIA prime render offload configuration and utilities."
 
 # Filesystems:
 ,dosfstools,"allows access to dos-like filesystems."
@@ -43,28 +62,41 @@ A,simple-mtpfs,"allows access to android devices through the command line."
 ,pavucontrol,"is the PulseAudio Volume Control."
 ,pamixer,"is a command line interface to pulseaudio."
 
-# Tools:
+# CLI Tools:
 ,bat,"is a cat clone with syntax highlighting written in rust."
-,ripgrep,"is a search tool that combines the usability of ag with the raw speed of grep."
 ,fd,"is a simple, fast and user-friendly alternative to find."
+,eza,"is a modern replacement for ls."
+,ripgrep,"is a search tool that combines the usability of ag with the raw speed of grep."
 ,pass,"is THE password manager."
 ,unzip,"unzips zips."
-,slock,"is a screen locker."
-,wimlib,"is a dependency for \`win2usb\`."
-A,ms-sys,"is a dependency for \`win2usb\`."
 A,7-zip,"is a file archiver with high compression ratio."
-,ffmpeg,"records and streams audio and video."
-,ffmpegthumbnailer,"generates thumnails using ffmpeg."
-,ueberzug,"allows display of images inside lf."
+,vidir,"allows for editing directory contents with an editor."
+,entr,"runs arbitrary commands when files change."
+,fzf,"is a command line fuzzy finder."
+,yt-dlp,"downloads videos from websites."
+
+# TUI Applications:
+,bc,"is a terminal calculator."
+,htop,"is an interactive process viewer."
+,tmux,"is terminal multiplexer."
+
+# Network:
+,tor,"provides access to the TOR network."
 ,network-manager-applet,"is a systray program to manage your network."
-,os-prober,"detects other OSes on a set of drives."
 ,sshpass,"fools ssh into accepting an interactive password non-interactively."
 
 # Messenger:
 ,telegram-desktop,"is a messenger application."
 
-# Image Minipilations:
+# Image Manipulation:
 ,gimp,"is the GNU Image Manipulation Program."
+,imagemagick,"is a cli image manipulation program."
+,ueberzug,"allows display of images inside lf."
+,ffmpegthumbnailer,"generates thumbnails using ffmpeg."
+
+# Video Manipulation:
+,obs-studio,"records and streams audio and video."
+,ffmpeg,"records and streams audio and video."
 
 # Themes:
 ,dracula-gtk-theme,"is a gtk theme."
@@ -78,24 +110,32 @@ A,7-zip,"is a file archiver with high compression ratio."
 # GUI file management:
 ,thunar,"is a simple GUI file manager."
 ,thunar-volman,"provides automatic management of removable drives for thunar."
-,tumbler,"creates thumnails for thunar."
+,tumbler,"creates thumbnails for thunar."
 ,gvfs,"provides filesystem implementation for thunar."
 ,gvfs-mtp,"allows access to android devices through thunar."
 
 # Fonts:
 ,ttf-dejavu,"is a font."
 ,ttc-iosevka,"is a font."
+,ttf-iosevka-nerd,"is a font."
 ,noto-fonts-emoji,"is a font."
 ,ttf-ubuntu-font-family,"is a font."
 
-# Emacs
-,emacs,"is an emacs-lisp intrepreter."
+# Emacs:
+,emacs,"is an emacs-lisp interpreter."
 D,https://github.com/doomemacs/doomemacs,"is an Emacs framework for the stubborn martian hacker."
 
-# Virtualazation:
+# Virtualization:
 ,qemu-full,"enables full support for qemu usage."
 ,libvirt,"provides support for managing virtual machines."
 ,iptables-nft,"is a different \`iptables\` only required for \`libvirt\`."
 ,dnsmasq,"is a lightweight DNS forwarder and DHCP server."
 ,openbsd-netcat,"is the TCP/IP swiss army knife."
 ,virt-manager,"is a GUI interface for managing virtual machines."
+
+# GRUB:
+,os-prober,"detects other OSes on a set of drives."
+
+# Dependencies:
+,wimlib,"is a dependency for \`win2usb\`."
+A,ms-sys,"is a dependency for \`win2usb\`."
