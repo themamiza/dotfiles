@@ -10,7 +10,7 @@ xset r rate 300 50
 setxkbmap -option "caps:swapescape"
 xmodmap "$HOME/.config/x11/xmodmaprc"
 
-autostart="xcompmgr screenres nm-applet numlockx taptoclick unclutter dunst setbg"
+autostart="xcompmgr screenres nm-applet blueman-applet numlockx taptoclick unclutter dunst setbg"
 for p in $autostart; do
     pidof -sx "$p" || setsid -f "$p"
 done >/dev/null 2>&1
