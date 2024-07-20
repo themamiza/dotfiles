@@ -40,6 +40,7 @@ export TERMINFO_DIRS="$XDG_DATA_HOME/terminfo:/usr/share/terminfo"
 export _JAVA_OPTIONS="-Djava.util.prefs.userRoot=\"$XDG_CONFIG_HOME/java\" -Djavafx.cachedir=\"$XDG_CACHE_HOME/openjfx\""
 
 # Some settings:
+export TERM=xterm-256color
 export SUDO_ASKPASS="$HOME/.local/bin/dmenupass"
 export QT_QPA_PLATFORMTHEME="qt5ct"
 export LESS=-R
