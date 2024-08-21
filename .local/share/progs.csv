@@ -6,6 +6,7 @@
 ,xorg-xset,"is user preference utility for X."
 ,libxft,"is a font drawing library."
 ,libxinerama,"adds support for multi-monitors."
+,fribidi,"is used to draw RTL fonts correctly."
 ,xf86-video-intel,"is the intel graphics driver."
 G,https://github.com/themamiza/dwm,"is the Dynamic Window Manager."
 G,https://github.com/themamiza/dwmblocks,"is a modular status bar for dwm."
@@ -22,16 +23,21 @@ G,https://github.com/themamiza/dmenu,"is a dynamic menu for X."
 ,arandr,"provides a simple visual front end for XRandR."
 ,scrot,"is a simple screenshot utility."
 ,slock,"is a screen locker."
+,xcolor,"is a lightweight color picker for X."
 
 # Terminal:
 G,https://github.com/themamiza/st,"is the suckless terminal."
 
 # Zsh:
+,zsh,"is a very advanced and programmable command interpreter (shell) for UNIX."
 ,zsh-autosuggestions,"provides fish-like autosuggestions for zsh"
 A,zsh-fast-syntax-highlighting-git,"is an optimized and extended zsh-syntax-highlighting"
 
 # Shell:
 ,dash,"is a POSIX compliant shell that aims to be as small as possible."
+,bash-language-server,"is a language server for shell scripting."
+,bash-completion,"is a set of completions for bash."
+,shellcheck,"is a shell script analysis tool."
 
 # Browser:
 ,brave-bin,"is a web browser that blocks ads and trackers by default."
@@ -40,6 +46,13 @@ A,zsh-fast-syntax-highlighting-git,"is an optimized and extended zsh-syntax-high
 ,clang,"is clang."
 ,cmake,"is cmake."
 
+# Python:
+,python,"is the python programming language."
+,python-lsp-server,"is the python language server."
+,python-pip,"is the python package manager."
+,python-pipenv,"provides virtual environments for python projects."
+,"ipython","is an enhanced interactive python shell."
+
 # Nvidia:
 ,nvidia-lts,"is the nvidia graphics driver for \`linux-lts\`"
 ,nvidia-settings,"is a tool for configuring NVIDIA graphics driver."
@@ -47,6 +60,7 @@ A,zsh-fast-syntax-highlighting-git,"is an optimized and extended zsh-syntax-high
 
 # Filesystems:
 ,dosfstools,"allows access to dos-like filesystems."
+,ntfs-3g,"is the NTFS filesystem driver and utilities."
 A,simple-mtpfs,"allows access to android devices through the command line."
 
 # Notifications:
@@ -58,9 +72,16 @@ A,simple-mtpfs,"allows access to android devices through the command line."
 ,mpv,"is a cross-platform media player."
 
 # Volume:
-,pulseaudio,"is a feature, general-purpose sound server."
-,pavucontrol,"is the PulseAudio Volume Control."
-,pamixer,"is a command line interface to pulseaudio."
+,pipewire,"is a low-latency audio/video router and processor."
+,pipewire-jack,"is a low-latency audio/video router and processor (JACK replacement)."
+,pipewire-pulse,"is a low-latency audio/video router and processor (PulseAudio replacement)."
+,wireplumber,"is the session/policy manager implementation for pipewire."
+,qpwgraph,"provides a GUI interface to pipewire."
+
+# Bluetooth:
+,bluez,"enables bluetooth."
+,bluez-utils,"is a set of cli tools for controlling bluetooth connections."
+,blueman,"is a set of gui tools for controlling bluetooth connections."
 
 # CLI Tools:
 ,bat,"is a cat clone with syntax highlighting written in rust."
@@ -70,10 +91,11 @@ A,simple-mtpfs,"allows access to android devices through the command line."
 ,pass,"is THE password manager."
 ,unzip,"unzips zips."
 A,7-zip,"is a file archiver with high compression ratio."
-,vidir,"allows for editing directory contents with an editor."
+A,vidir,"allows for editing directory contents with an editor."
 ,entr,"runs arbitrary commands when files change."
 ,fzf,"is a command line fuzzy finder."
 ,yt-dlp,"downloads videos from websites."
+,git,"is the fast distributed version control system."
 
 # TUI Applications:
 ,bc,"is a terminal calculator."
@@ -81,9 +103,11 @@ A,7-zip,"is a file archiver with high compression ratio."
 ,tmux,"is terminal multiplexer."
 
 # Network:
-,tor,"provides access to the TOR network."
+,networkmanager,"provides network management functionality."
 ,network-manager-applet,"is a systray program to manage your network."
+,tor,"provides access to the TOR network."
 ,sshpass,"fools ssh into accepting an interactive password non-interactively."
+,proxychains-ng,"allows you to redirect traffic to specific route."
 
 # Messenger:
 ,telegram-desktop,"is a messenger application."
@@ -99,7 +123,7 @@ A,7-zip,"is a file archiver with high compression ratio."
 ,ffmpeg,"records and streams audio and video."
 
 # Themes:
-,dracula-gtk-theme,"is a gtk theme."
+A,dracula-gtk-theme,"is a gtk theme."
 
 # Icons:
 ,breeze-icons,"is an icon theme."
@@ -133,9 +157,30 @@ D,https://github.com/doomemacs/doomemacs,"is an Emacs framework for the stubborn
 ,openbsd-netcat,"is the TCP/IP swiss army knife."
 ,virt-manager,"is a GUI interface for managing virtual machines."
 
-# GRUB:
+# Booting:
+,grub,"is the grub bootloader."
+,efibootmgr,"is used to modify EFI boot manager."
 ,os-prober,"detects other OSes on a set of drives."
 
 # Dependencies:
 ,wimlib,"is a dependency for \`win2usb\`."
 A,ms-sys,"is a dependency for \`win2usb\`."
+
+# System Essentials (These are most probably installed by now):
+,base,"provides the basic GNU core utilities."
+,base-devel,"provides basic building tools."
+,linux-lts,"is the preferred linux kernel."
+,linux-firmware,"provides firmware files for linux."
+A,paru,"is the package manager."
+,sudo,"gives certain users the ability to run some commands as root."
+,neovim,"is the text editor."
+
+# PDF:
+,zathura,"is a minimalistic document viewer."
+,zathura-pdf-mupdf,"is the PDF backend for zathura."
+,tesseract-data-eng,"is a language data file for zathura."
+
+# JavaScript:
+,nodejs,"is the JavaScript interpreter?"
+,typescript,"is JavaScript but with syntax for types."
+,typescript-language-server,"is a language server for typescript."
