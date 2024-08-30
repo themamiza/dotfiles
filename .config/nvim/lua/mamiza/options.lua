@@ -50,6 +50,9 @@ set.timeoutlen = 300
 -- How to complete:
 set.completeopt = "menuone,noselect"
 
+-- Don't show intro message:
+set.shortmess = "atI"
+
 vim.cmd [[
         augroup RestoreCursor
         autocmd!
