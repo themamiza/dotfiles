@@ -42,6 +42,12 @@ A,zsh-fast-syntax-highlighting-git,"is an optimized and extended zsh-syntax-high
 # Browser:
 ,brave-bin,"is a web browser that blocks ads and trackers by default."
 
+# Calculator:
+,qalculate-gtk,"is a gtk frontend for libqalculate."
+
+# Computation:
+,octave,"is a high-level language, primarily for numerical computations."
+
 # C:
 ,clang,"is clang."
 ,cmake,"is cmake."
