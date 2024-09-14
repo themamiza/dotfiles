@@ -130,9 +130,18 @@ A,vidir,"allows for editing directory contents with an editor."
 
 # Themes:
 A,dracula-gtk-theme,"is a gtk theme."
+,kvantum,"is a QT theme engine."
+,kvantum-qt5,"provides kvantum for QT5."
+
+# Tools To theme with:
+,lxappearance-gtk3,"is the GTK theme switcher."
+,qt5ct,"is the QT configuration utility."
+
+# Cursors:
+a,xcursor-breeze,"provides breeze cursors for non KDE desktops."
 
 # Icons:
-,breeze-icons,"is an icon theme."
+,breeze-icons,"provides breeze icons for non KDE desktops."
 
 # File management:
 ,lf,"is a terminal file manager."
