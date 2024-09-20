@@ -31,7 +31,7 @@ sb_pulseaudio() {
 
 sb_wireplumber() {
 	case $BLOCK_BUTTON in
-		1) setsid -f "$TERMINAL" -e qpwgraph;;
+		1) setsid -f qpwgraph;;
 		2) wpctl set-mute @DEFAULT_SINK@ toggle;;
 		4) wpctl set-volume @DEFAULT_SINK@ 1%+;;
 		5) wpctl set-volume @DEFAULT_SINK@ 1%-;;
