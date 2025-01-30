@@ -1,0 +1,3 @@
+#!/bin/sh
+
+"$TERMINAL" -e tmux attach || "$TERMINAL" -e tmux new -s main
