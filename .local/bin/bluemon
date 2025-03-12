@@ -1,0 +1,8 @@
+#!/bin/sh
+
+killall bluetoothctl
+stdbuf -oL bluetoothctl | while read -r line; do
+    if echo "$line" | grep -q "Connected: yes\|Connected: no"; then
+        sleep 1; kill -44 $(pidof dwmblocks)
+    fi
+done
