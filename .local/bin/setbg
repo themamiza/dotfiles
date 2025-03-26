@@ -30,7 +30,7 @@ esac
 
 # If pywal is installed, use it.
 if command -v wal >/dev/null 2>&1; then
-	wal -n -i "$(readlink -f $bgloc)" -o "${XDG_CONFIG_HOME:-$HOME/.config}/wal/postrun" >/dev/null 2>&1
+	wal -n -i "$(readlink -f "$bgloc")" -o "${XDG_CONFIG_HOME:-$HOME/.config}/wal/postrun" >/dev/null 2>&1
 # If pywal is removed, return config files to normal.
 else
 	[ -f "$dunstconf.bak" ] && unlink "$dunstconf" && mv "$dunstconf.bak" "$dunstconf"
@@ -38,10 +38,30 @@ else
 fi
 
 # Maximize wallpaper only when it's portrait.
-command -v identify 2>/dev/null 1>&2 && identify -format '%w %h %i\n' -- "$bgloc" | \
-	while read W H FN; do
-		[ "$W" -lt "$H" ] && xwallpaper --maximize "$bgloc" || xwallpaper --zoom "$bgloc"
-	done || xwallpaper --zoom "$bgloc"
+command -v identify 2>/dev/null 1>&2 && identify -format '%w %h\n' -- "$bgloc" | \
+	while read -r W H; do
+		if [ "$W" -lt "$H" ]; then
+			case "$WM" in
+				"dwm") xwallpaper --maximize "$bgloc";;
+				"hyprland")
+					monitors="$(hyprctl monitors list | grep "Monitor" | awk '{print $2}')"
+					for monitor in $monitors; do
+						hyprctl hyprpaper reload "$monitor,contain:$bgloc"
+					done
+					;;
+			esac
+		else
+			case "$WM" in
+				"dwm") xwallpaper --zoom "$bgloc";;
+				"hyprland")
+					monitors="$(hyprctl monitors list | grep "Monitor" | awk '{print $2}')"
+					for monitor in $monitors; do
+						hyprctl hyprpaper reload "$monitor,$bgloc"
+					done
+					;;
+			esac
+		fi
+	done
 
 # If running dwm, hit the key to refresh the color scheme.
 pidof dwm >/dev/null && xdotool key super+F5
