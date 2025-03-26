@@ -1,0 +1,25 @@
+[general]
+    # requires: https://github.com/alacritty/alacritty-theme/
+    import = ["/usr/share/alacritty/themes/ayu_dark.toml"]
+
+[window]
+    opacity = 0.9
+    padding = { x = 10, y = 10 }
+
+[scrolling]
+    history = 16384
+
+[font]
+    normal      = { family = "monospace", style = "Regular"     }
+    bold        = { family = "monospace", style = "Bold"        }
+    italic      = { family = "monospace", style = "Italic"      }
+    bold_italic = { family = "monospace", style = "Bold Italic" }
+    size        = 16
+
+[keyboard]
+    bindings = [
+        { key = "Up",   mods = "Alt",         action = "ScrollLineUp",      mode = "~Alt" },
+        { key = "K",    mods = "Alt",         action = "ScrollLineUp",      mode = "~Alt" },
+        { key = "Down", mods = "Alt",         action = "ScrollLineDown",    mode = "~Alt" },
+        { key = "j",    mods = "Alt",         action = "ScrollLineDown",    mode = "~Alt" },
+    ]
