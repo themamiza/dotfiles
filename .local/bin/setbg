@@ -13,9 +13,10 @@ bgloc="${XDG_DATA_HOME:-$HOME/.local/share}/bg"
 dunstconf="${XDG_CONFIG_HOME:-$HOME/.config}/dunst/dunstrc"
 zathuraconf="${XDG_CONFIG_HOME:-$HOME/.config}/zathura/zathurarc"
 
-# Give -s as parameter to make notifications silent.
-while getopts "s" o; do case "${o}" in
-	s) silent='1';;
+# Give -q as parameter to make notifications silent.
+while getopts "q" o; do case "${o}" in
+	q) silent='1';;
+	*) exit 1;;
 esac done
 
 shift $((OPTIND - 1))
