@@ -1,0 +1,118 @@
+{
+    "height": 32,
+    "modules-left":  [
+        "hyprland/workspaces"
+    ],
+    "modules-right": [
+        "custom/uptime",
+        "custom/spacer",
+        "custom/volume",
+        "custom/spacer",
+        "custom/nettraf",
+        "custom/spacer",
+        "custom/memory",
+        "custom/spacer",
+        "custom/battery",
+        "custom/spacer",
+        "custom/internet",
+        "custom/spacer",
+        "custom/clock",
+        "custom/spacer",
+        "tray",
+    ],
+
+    "custom/spacer": {
+        "format": "/",
+        "tooltip": false
+    },
+
+    "hyprland/workspaces": {
+        "on-scroll-up": "hyprctl dispatch workspace r+1",
+        "on-scroll-down": "hyprctl dispatch workspace r-1"
+    },
+
+    "custom/uptime": {
+        "exec": "sb-uptime",
+        "on-click":         "BLOCK_BUTTON=1 sb-uptime",
+        "on-click-middle":  "BLOCK_BUTTON=2 sb-uptime",
+        "on-click-right":   "BLOCK_BUTTON=3 sb-uptime",
+        "on-scroll-up":     "BLOCK_BUTTON=4 sb-uptime",
+        "on-scroll-down":   "BLOCK_BUTTON=5 sb-uptime",
+        "interval": 60,
+        "tooltip": false
+    },
+
+    "custom/volume": {
+        "exec":             "sb-volume",
+        "on-click":         "BLOCK_BUTTON=1 sb-volume",
+        "on-click-middle":  "BLOCK_BUTTON=2 sb-volume",
+        "on-click-right":   "BLOCK_BUTTON=3 sb-volume",
+        "on-scroll-up":     "BLOCK_BUTTON=4 sb-volume",
+        "on-scroll-down":   "BLOCK_BUTTON=5 sb-volume",
+        "signal": 10,
+        "tooltip": false
+    },
+
+    "custom/nettraf": {
+        "exec":             "sb-nettraf",
+        "on-click":         "BLOCK_BUTTON=1 sb-nettraf",
+        "on-click-middle":  "BLOCK_BUTTON=2 sb-nettraf",
+        "on-click-right":   "BLOCK_BUTTON=3 sb-nettraf",
+        "on-scroll-up":     "BLOCK_BUTTON=4 sb-nettraf",
+        "on-scroll-down":   "BLOCK_BUTTON=5 sb-nettraf",
+        "signal": 16,
+        "interval": 1,
+        "tooltip": false
+    },
+
+    "custom/memory": {
+        "exec":             "sb-memory",
+        "on-click":         "BLOCK_BUTTON=1 sb-memory",
+        "on-click-middle":  "BLOCK_BUTTON=2 sb-memory",
+        "on-click-right":   "BLOCK_BUTTON=3 sb-memory",
+        "on-scroll-up":     "BLOCK_BUTTON=4 sb-memory",
+        "on-scroll-down":   "BLOCK_BUTTON=5 sb-memory",
+        "signal": 17,
+        "interval": 1,
+        "tooltip": false
+    },
+
+    "custom/battery": {
+        "exec": "sb-battery",
+        "on-click":         "BLOCK_BUTTON=1 sb-battery",
+        "on-click-middle":  "BLOCK_BUTTON=2 sb-battery",
+        "on-click-right":   "BLOCK_BUTTON=3 sb-battery",
+        "on-scroll-up":     "BLOCK_BUTTON=4 sb-battery",
+        "on-scroll-down":   "BLOCK_BUTTON=5 sb-battery",
+        "interval": 5,
+        "signal": 3,
+        "tooltip": false
+    },
+
+    "custom/internet": {
+        "exec":             "sb-internet",
+        "on-click":         "BLOCK_BUTTON=1 sb-internet",
+        "on-click-middle":  "BLOCK_BUTTON=2 sb-internet",
+        "on-click-right":   "BLOCK_BUTTON=3 sb-internet",
+        "on-scroll-up":     "BLOCK_BUTTON=4 sb-internet",
+        "on-scroll-down":   "BLOCK_BUTTON=5 sb-internet",
+        "signal": 4,
+        "interval": 5,
+        "tooltip": false
+    },
+
+    "custom/clock": {
+        "exec": "sb-clock",
+        "on-click":         "BLOCK_BUTTON=1 sb-clock",
+        "on-click-middle":  "BLOCK_BUTTON=2 sb-clock",
+        "on-click-right":   "BLOCK_BUTTON=3 sb-clock",
+        "on-scroll-up":     "BLOCK_BUTTON=4 sb-clock",
+        "on-scroll-down":   "BLOCK_BUTTON=5 sb-clock",
+        "interval": 60,
+        "tooltip": false
+    }
+
+    "tray": {
+        "icon-size": 26
+    },
+}
