@@ -1,25 +1,32 @@
 #!/bin/sh
 
-# Get WM:
-# WM="$(wmctrl -m | awk 'NR==1{print $2}')"
-WM="dwm"
-
-wmpid()
-{
-	tree="$(pstree -ps $$)"
-	tree="${tree#*$WM(}"
-	echo "${tree%%)*}"
-}
-
-case "$(printf "🔒 Lockdown\n🚪 Leave $WM\n🪟 Restart $WM\n💤 Suspend\n🐻 Hibernate\n🔃 Reboot\n💻 Shutdown\n📺 Display off\n⏰ Uptime" | dmenu -i -p "Action: ")" in
-	"🔒 Lockdown") notify-send "Locking down" && sleep 2 && slock;;
-	"🚪 Leave $WM") kill -TERM "$(wmpid)";;
-	"🪟 Restart $WM") kill -HUP "$(wmpid)";;
-	"💤 Suspend") slock systemctl suspend -i;;
-	"🐻 Hibernate") slock systemctl hibernate -i;;
-	"🔃 Reboot") notify-send "Rebooting the system" && sleep 2 && reboot;;
-	"💻 Shutdown") notify-send "Going down" && sleep 2 && shutdown -h now;;
-	"📺 Display off") xset dpms force off;;
-	"⏰ Uptime") notify-send "$(uptime -p)" ;;
-	*) exit 1;;
+case "$WM" in
+	"dwm")
+		case "$(printf "🔒 lockdown\n🚪 leave dwm\n🪟 restart dwm\n💤 suspend\n🐻 hibernate\n🔃 reboot\n💻 shutdown\n📺 display off\n⏰ uptime" | dmenu -i -p "action: ")" in
+			"🔒 lockdown") notify-send "locking down" && sleep 2 && slock;;
+			"🚪 leave ") kill -term "$(pidof dwm)";;
+			"🪟 restart ") kill -hup "$(pidof dwm)";;
+			"💤 suspend") slock systemctl suspend -i;;
+			"🐻 hibernate") slock systemctl hibernate -i;;
+			"🔃 reboot") notify-send "rebooting the system" && sleep 2 && reboot;;
+			"💻 shutdown") notify-send "going down" && sleep 2 && shutdown -h now;;
+			"📺 display off") xset dpms force off;;
+			"⏰ uptime") notify-send "$(uptime -p)" ;;
+			*) exit 1;;
+		esac
+		;;
+	"hyprland")
+		case "$(printf "🔒 lockdown\n🚪 leave hyprland\n🪟 restart hyprland\n💤 suspend\n🐻 hibernate\n🔃 reboot\n💻 shutdown\n📺 display off\n⏰ uptime" | dmenu -i -p "action: ")" in
+			"🔒 lockdown") notify-send "locking down" && sleep 2 && slock;;
+			"🚪 leave hyprland") hyprctl dispatch exit;;
+			"🪟 restart hyprland") hyprctl reload;;
+			"💤 suspend") waylock -fork-on-lock; systemctl suspend -i;;
+			"🐻 hibernate") waylock -fork-on-lock; systemctl hibernate -i;;
+			"🔃 reboot") notify-send "rebooting the system" && sleep 2 && reboot;;
+			"💻 shutdown") notify-send "going down" && sleep 2 && shutdown -h now;;
+			"📺 display off") hyprctl dispatch dpms off;;
+			"⏰ uptime") notify-send "$(uptime -p)" ;;
+			*) exit 1;;
+		esac
+		;;
 esac
