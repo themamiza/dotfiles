@@ -4,8 +4,8 @@ case "$WM" in
 	"dwm")
 		case "$(printf "🔒 lockdown\n🚪 leave dwm\n🪟 restart dwm\n💤 suspend\n🐻 hibernate\n🔃 reboot\n💻 shutdown\n📺 display off\n⏰ uptime" | dmenu -i -p "action: ")" in
 			"🔒 lockdown") notify-send "locking down" && sleep 2 && slock;;
-			"🚪 leave ") kill -term "$(pidof dwm)";;
-			"🪟 restart ") kill -hup "$(pidof dwm)";;
+			"🚪 leave dwm") kill -term "$(pidof dwm)";;
+			"🪟 restart dwm") kill -hup "$(pidof dwm)";;
 			"💤 suspend") slock systemctl suspend -i;;
 			"🐻 hibernate") slock systemctl hibernate -i;;
 			"🔃 reboot") notify-send "rebooting the system" && sleep 2 && reboot;;
