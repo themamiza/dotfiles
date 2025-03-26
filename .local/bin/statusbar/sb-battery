@@ -11,6 +11,8 @@ case $BLOCK_BUTTON in
 	6) "$TERMINAL" -e "$EDITOR" "$0";;
 esac
 
+brightness="🌞$(brightnessctl info | grep "Current brightness" | awk '{print $4}' | tr -d '()')"
+
 # Loop through all attached batteries and format the info:
 for battery in /sys/class/power_supply/BAT?*; do
 	# if non-first battery, print a space separator.
@@ -27,5 +29,5 @@ for battery in /sys/class/power_supply/BAT?*; do
 	# Will make a warn variable if discharging and low battery:
 	[ "$status" = "🔋" ] && [ "$capacity" -le 15 ] && warn="❗"
 	# Prints the info:
-	printf "%s%s%d%%" "$status" "$warn" "$capacity"; unset warn
+	printf "%s%s%d%% %s" "$status" "$warn" "$capacity" "$brightness"; unset warn
 done && printf "\\n"
