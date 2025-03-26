@@ -9,7 +9,7 @@ export PATH="$PATH$(find ~/.local/bin -type d -printf ":%p")"
 export EDITOR="nvim"
 export TERMINAL="st"
 export BROWSER="brave"
-export WM="dwm"
+export WM="hyprland"
 
 # bat as manpager:
 export MANROFFOPT="-c"
@@ -56,4 +56,7 @@ export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
 export _JAVA_AWT_WM_NONREPARENTING=1
 
 # Start graphical server on user's first tty if not already running.
-[ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && exec startx "$XINITRC"
+case "$WM" in
+    "dwm")      [ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg     >/dev/null 2>&1 && export STATUSBAR="dwmblocks" && exec startx "$XINITRC";;
+    "hyprland") [ "$(tty)" = "/dev/tty1" ] && ! pidof -s hyprland >/dev/null 2>&1 && export STATUSBAR="waybar"    && exec hyprland;;
+esac
