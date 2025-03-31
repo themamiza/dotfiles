@@ -1,0 +1,216 @@
+#!/bin/bash
+
+program_name="$(basename "$0")"
+
+# These options can only be changed by editing this code.
+# TODO: Create a configuration file that these variables are sourced from.
+bios_or_uefi="UEFI"        # Set to "BIOS" to install for BIOS systems.
+bootloader_id="ArchLinux"  # Only matters when using "UEFI".
+efi_directory="/efi"
+disk_to_install="/dev/vda" # Only matters when using "BIOS".
+
+programs_file="programs.csv"
+
+eprint(){ printf "%s: %s\n" "$program_name" "$1" >&2; exit 1; }
+print_help() {
+    printf "%s [-h|--help]
+    -h|--help|help                        Print this help message and exit.
+    -a|--arch-install|arch-install        Run through installation of ArchLinux.
+        --vm|vm                               Pre-Configured partitioning for a virtual machine.
+        --main|main                           Pre-Configured partitioning for my main machine.
+        --X220|X220|x220                      Pre-Configured partitioning for my Lenovo X220 machine.
+        Note: You can also use your own partitioning scheme.
+              Make sure you mount your filesystems correctly before installation.
+              The script expects these:
+              UEFI -> An efi system directory; defaults to '/efi'.
+              BIOS -> Should specify disk to be installed -
+                          in the script (No option provided); defaults to '/dev/vda'.\n" "$program_name"
+}
+
+# 
+# label -> label type: dos/gpt
+# size  -> measured in sectors; each sector being 512 bytes.
+partition_main() {
+    echo "NOT IMPLEMENTED!" && exit 1
+}
+
+partition_x220() {
+    echo "NOT IMPLEMENTED!" && exit 1
+}
+
+partition_vm() {
+    case "$bios_or_uefi" in
+        "UEFI") 
+            printf "label: gpt
+start=,size=2000000,type=U
+start=,size=64000000
+start=,size=\n" | sfdisk /dev/vda --wipe always
+        mkfs.fat  -F 32 /dev/vda1
+        mkfs.ext4 -qF /dev/vda2
+        mkfs.ext4 -qF /dev/vda3
+
+        mount /dev/vda2 /mnt
+        mount --mkdir /dev/vda1 /mnt/efi
+        mount --mkdir /dev/vda3 /mnt/home
+        ;;
+
+
+        "BIOS") printf "label: dos
+start=,size=64000000
+start=,size=\n" | sfdisk /dev/vda --wipe always
+        mkfs.ext4 -qF /dev/vda1
+        mkfs.ext4 -qF /dev/vda2
+
+        mount /dev/vda1 /mnt
+        mount --mkdir /dev/vda2 /mnt/home
+        ;;
+    esac
+}
+
+# Why do I pass all the variables as arguments? Explained in `arch_install` 
+# args: username pass1 hostname timezone bios_or_uefi bootloader_id efi_directory disk_to_install
+arch_install_run_in_chroot() {
+    # Renaming vars only for more readability.
+    username="$1"
+    pass1="$2"
+    hostname="$3"
+    timezone="$4"
+    bios_or_uefi="$5"
+    bootloader_id="$6"
+    efi_directory="$7"
+    disk_to_install="$8"
+
+    ln -sf /usr/bin/nvim /usr/bin/vim
+    ln -sf /usr/bin/nvim /usr/bin/vi
+
+    ln -sf "/usr/share/locale/$timezone" /etc/localtime
+    hwclock --systohc
+
+    sed -i '/en_US.UTF-8/s/^#//g' /etc/locale.gen
+    locale-gen
+    printf "LANG=en_US.UTF-8\n" > /etc/locale.conf
+    printf "%s\n" "$hostname" > /etc/hostname
+
+    mkinitcpio -P
+
+    case "$bios_or_uefi" in
+        "UEFI") grub-install --target=x86_64-efi --efi-directory="$efi_directory" --bootloader-id="$bootloader_id";;
+        "BIOS") grub-install --target=i386-pc "$disk_to_install";;
+    esac
+    grub-mkconfig -o /boot/grub/grub.cfg
+
+    useradd --create-home --groups wheel --shell /bin/bash "$username"
+    echo "$username:$pass1" | chpasswd
+    unset pass1 pass2
+
+    echo "%wheel ALL=(ALL:ALL) ALL" >/etc/sudoers.d/00-mais-wheel-can-sudo
+    echo "%wheel ALL=(ALL:ALL) NOPASSWD: /usr/bin/shutdown,/usr/bin/reboot,/usr/bin/systemctl suspend,/usr/bin/mount,/usr/bin/umount,/usr/bin/pacman -Syu,/usr/bin/pacman -Syyu,/usr/bin/pacman -Syyu --noconfirm" >/etc/sudoers.d/01-mais-cmds-without-password
+    echo "Defaults editor=/usr/bin/nvim" > /etc/sudoers.d/02-mais-visudo-editor
+
+    systemctl enable NetworkManager
+
+    # This should be the last thing done.
+    date >> /etc/installation.date
+}
+
+arch_install() {
+    printf "The rest of the installation assumes you have
+1. an internet connection (iwctl).
+2. synchronized system clock. (timedatectl set-ntp true)
+3. configured your filesystem and mounted your root at /mnt (fdisk).\n
+SHOULD NOT BE RAN ON AN EXISTING ARCH INSTALLAION!\n\n"
+    read -rp "Continue (Y/N): " continue && [[ "$continue" == [yY] ]] || exit 0
+
+    read -rp "Username: " username
+    while ! echo "$username" | grep -q "^[a-z_][a-z0-9_-]*$"; do
+        printf "Username not valid. Give a username beginning with a letter, with only lowercase letters, - or _.\n"
+        read -rp "Username: " username
+    done
+
+    read -rsp "Enter a password for $username: " pass1
+    printf "\n"
+    read -rsp "Retype password: " pass2
+    printf "\n"
+    while ! [ "$pass1" = "$pass2" ]; do
+        unset pass2
+        read -rsp "Passwords do not match. Enter password again: " pass1
+        printf "\n"
+        read -rsp "Retype password: " pass2
+        printf "\n"
+    done
+
+    read -rp "Hostname: " hostname
+    while ! echo "$hostname" | grep -q "^[a-z_][a-z0-9_-]*$"; do
+        printf "Hostname not valid. Give a hostname beginning with a letter, with only lowercase letters, - or _.\n"
+        read -rp "Hostname: " hostname
+    done
+
+    read -rp "Timezone (Region/City): " timezone
+    while ! find /usr/share/zoneinfo | grep -q "$timezone"; do
+        printf "Timezone not valid. A valid timezone looks like -> \"US/Eastern\"\n"
+        read -rp "Timezone (Region/City): " timezone
+    done
+
+    # TODO: Print configuration before installing.
+
+    printf "Checking internet connection...\n"
+    curl -sSf http://www.google.com >/dev/null || eprint "Can't reach the web."
+    printf "Internet connection is available.\n"
+
+    printf "Bootstraping the system...\n"
+    pacstrap -K /mnt base linux-lts linux-firmware grub efibootmgr networkmanager sudo neovim
+    printf "Done bootstraping the system.\n"
+
+    genfstab -U /mnt >> /mnt/etc/fstab
+
+    # Exporting the function to later be passed to arch-chroot as a command.
+    # That is why all the variables are passed manually.
+    # TODO: Investigate if it can be done any other way.
+    # arch_install_run_in_chroot() { # -> args: username pass1 hostname timezone bios_or_uefi bootloader_id efi_directory disk_to_install
+    export -f arch_install_run_in_chroot
+    arch-chroot /mnt /bin/sh -c "arch_install_run_in_chroot $username $pass1 $hostname $timezone $bios_or_uefi $bootloader_id $efi_directory $disk_to_install"
+    unset pass1 pass2
+    unset -f arch_install_run_in_chroot
+    reboot
+}
+
+clean_programs_file() {
+    sed -i 's/[ ]*#.*//g;/^$/d' "$programs_file"
+    number_of_packages="$(wc -l <"$programs_file")"
+    while IFS="|" read -r installation_method environment package_name description; do
+        echo "NOT IMPLEMENTED!"
+    done
+}
+
+install_packages() {
+    echo "NOT IMPLEMENTED!"
+}
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        "-h"|"--help"|"help")
+            print_help
+            shift # Technically no need to shift since we're exiting.
+            exit 0
+            ;;
+        "-a"|"--arch-install"|"arch-install")
+            case "$2" in
+                "--vm"|"vm") partition_vm; shift;;
+                "--main"|"main") partition_main; shift;;
+                "--X220"|"X220"|"x220") partition_x220; shift;;
+            esac
+            arch_install
+            shift
+            ;;
+        "-i"|"--install-packages"|"install-packages")
+            case "$2" in
+                "hyprland") echo "NOT IMPLEMENTED"; shift;;
+                "dwm") echo "NOT IMPLEMENTED"; shift;;
+                "all") echo "NOT IMPLEMENTED"; shift;;
+            esac
+            install_packages
+            shift
+            ;;
+            *) eprint "Invalid option '$1'\nTry '$program_name --help' for more information.";;
+    esac
+done

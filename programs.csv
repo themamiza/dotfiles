@@ -1,0 +1,20 @@
+# Add comments like this. W h i t e s p a c e does not matter.
+
+# Here is what each field is in order:
+# 1. Installation method. Can be one of => Pacman/AUR/Suckless/DoomEmacs (defaults to 'Pacman')
+# 2. Environment. Can be one of         => All/X11/DWM/Wayland/Hyprland (defaults to 'All')
+# 3. Package name.
+# 4. Description. # TODO: Bring all descriptions from the arch repositories.
+
+# Here are some examples:
+# AUR             |                    | brave-bin     | Web browser that blocks ads and trackers by default (binary release).
+#                 | WAYLAND            | waylock       | A simple screenlocker for wayland compositors.
+# Suckless        | DWM                | dwm           | A dynamic window manager for X.
+# DoomEmacs       |                    | doomemacs     | An Emacs framework for the stubborn martian hacker.
+
+
+# A few of every kind of programs for testing purposes.
+AUR             |                    | brave-bin     | Web browser that blocks ads and trackers by default (binary release).
+                | WAYLAND            | waylock       | A simple screenlocker for wayland compositors. # Here is a comment
+Suckless        | DWM                | dwm           | A dynamic window manager for X.
+DoomEmacs       |                    | doomemacs     | An Emacs framework for the stubborn martian hacker.
