@@ -52,6 +52,7 @@ export LESS_TERMCAP_se="$(printf '%b' '\e[0m')"
 export LESS_TERMCAP_us="$(printf '%b' '\e[1;32m')"
 export LESS_TERMCAP_ue="$(printf '%b' '\e[0m')"
 export LESSOPEN="| /usr/bin/highlight -O ansi %s 2>/dev/null"
+export FZF_DEFAULT_OPTS="--reverse"
 # export AWT_TOOLKIT="MToolkit wmname LG3D" # May have to install `wmname`
 export _JAVA_AWT_WM_NONREPARENTING=1
 

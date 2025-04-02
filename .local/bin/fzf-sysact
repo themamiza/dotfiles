@@ -16,8 +16,8 @@ case "$WM" in
 		esac
 		;;
 	"hyprland")
-		case "$(printf "🔒 lockdown\n🚪 leave hyprland\n🪟 restart hyprland\n💤 suspend\n🐻 hibernate\n🔃 reboot\n💻 shutdown\n📺 display off\n⏰ uptime" | dmenu -i -p "action: ")" in
-			"🔒 lockdown") notify-send "locking down" && sleep 2 && slock;;
+		case "$(printf "🔒 lockdown\n🚪 leave hyprland\n🪟 restart hyprland\n💤 suspend\n🐻 hibernate\n🔃 reboot\n💻 shutdown\n📺 display off\n⏰ uptime" | fzf)" in
+			"🔒 lockdown") notify-send "locking down" && sleep 2 && waylock;;
 			"🚪 leave hyprland") hyprctl dispatch exit;;
 			"🪟 restart hyprland") hyprctl reload;;
 			"💤 suspend") waylock -fork-on-lock; systemctl suspend -i;;

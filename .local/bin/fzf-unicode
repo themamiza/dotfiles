@@ -1,0 +1,11 @@
+#!/bin/sh
+
+chosen=$(cut -d ';' -f1 ~/.local/share/emoji | fzf | sed "s/ .*//")
+[ -z "$chosen" ] && exit
+
+case "$WM" in
+    "dwm") printf "%s" "$chosen" | xclip -selection clipboard;;
+    "hyprland") printf "%s" "$chosen" | wl-copy;;
+esac
+	
+notify-send "'$chosen' copied to clipboard."
