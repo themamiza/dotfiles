@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# Requires `alacritty-theme`
+theme="$(find /usr/share/alacritty/themes/* | awk -F/ '{print $NF}' | sort | cut -d'.' -f1 | fzf)"
+[ -z "$theme" ] && exit
+
+sed -i "s|alacritty/themes/.*|alacritty/themes/$theme.toml\"\]|g" "$XDG_CONFIG_HOME/alacritty/alacritty.toml"
