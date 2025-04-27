@@ -61,7 +61,17 @@ command -v identify 2>/dev/null 1>&2 && identify -format '%w %h\n' -- "$bgloc" |
 					;;
 			esac
 		fi
-	done
+	done || {
+		case "$WM" in
+			"dwm") xwallpaper --zoom "$bgloc";;
+			"hyprland")
+				monitors="$(hyprctl monitors list | grep "Monitor" | awk '{print $2}')"
+				for monitor in $monitors; do
+					hyprctl hyprpaper reload "$monitor,$bgloc"
+				done
+				;;
+		esac
+	}
 
 # If running dwm, hit the key to refresh the color scheme.
 pidof dwm >/dev/null && xdotool key super+F5
