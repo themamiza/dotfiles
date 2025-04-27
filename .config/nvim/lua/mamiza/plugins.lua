@@ -17,7 +17,7 @@ require("lazy").setup({
         {
                 "neovim/nvim-lspconfig",
                 dependencies = {
-                        {  "j-hui/fidget.nvim", tag = "legacy", opts = {} },
+                        { "j-hui/fidget.nvim", opts = {} },
                         "folke/neodev.nvim",
                 }
         },
