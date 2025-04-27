@@ -8,8 +8,10 @@ bios_or_uefi="UEFI"        # Set to "BIOS" to install for BIOS systems.
 bootloader_id="ArchLinux"  # Only matters when using "UEFI".
 efi_directory="/efi"
 disk_to_install="/dev/vda" # Only matters when using "BIOS".
+aurhelper="paru"
 
 programs_file="programs.csv"
+programs_to_install="/tmp/programs.tmp"
 
 eprint(){ printf "%s: %s\n" "$program_name" "$1" >&2; exit 1; }
 print_help() {
@@ -28,10 +30,20 @@ print_help() {
               The script expects these:
               UEFI -> An efi system directory; defaults to '/efi'.
               BIOS -> Should specify disk to be installed -
-                          in the script (No option provided); defaults to '/dev/vda'.\n" "$program_name"
+                          in the script (No option provided); defaults to '/dev/vda'.
+
+    -i|--install-environment|install-environment    Install packages corresponding to specified install-environment.
+        Hyprland    Only install packages used in hyprland.
+        DWM         Only install packages used in dwm.
+        All         Install all packages.
+    -g|--configure-grub|configure-grub              Configure grub. # TODO: Expand on this
+    -d|--debug|debug                                Debug options, mainly for testing purposes.
+                                                    Some extra functions are available here.    
+        -e|--install-essentials|install-essentials      Install essential packages needed to install and
+                                                        configure other packages. 
+        -u|--update-package-descriptions|update-package-descriptions    Update package descriptions in '%s'.\n" "$program_name" "$programs_file"
 }
 
-# 
 # label -> label type: dos/gpt
 # size  -> measured in sectors; each sector being 512 bytes.
 partition_main() {
@@ -107,9 +119,7 @@ arch_install_run_in_chroot() {
     echo "$username:$pass1" | chpasswd
     unset pass1 pass2
 
-    echo "%wheel ALL=(ALL:ALL) ALL" >/etc/sudoers.d/00-mais-wheel-can-sudo
-    echo "%wheel ALL=(ALL:ALL) NOPASSWD: /usr/bin/shutdown,/usr/bin/reboot,/usr/bin/systemctl suspend,/usr/bin/mount,/usr/bin/umount,/usr/bin/pacman -Syu,/usr/bin/pacman -Syyu,/usr/bin/pacman -Syyu --noconfirm" >/etc/sudoers.d/01-mais-cmds-without-password
-    echo "Defaults editor=/usr/bin/nvim" > /etc/sudoers.d/02-mais-visudo-editor
+    wheel_can_sudo
 
     systemctl enable NetworkManager
 
@@ -125,11 +135,7 @@ arch_install() {
 SHOULD NOT BE RAN ON AN EXISTING ARCH INSTALLAION!\n\n"
     read -rp "Continue (Y/N): " continue && [[ "$continue" == [yY] ]] || exit 0
 
-    read -rp "Username: " username
-    while ! echo "$username" | grep -q "^[a-z_][a-z0-9_-]*$"; do
-        printf "Username not valid. Give a username beginning with a letter, with only lowercase letters, - or _.\n"
-        read -rp "Username: " username
-    done
+    ask_username
 
     read -rsp "Enter a password for $username: " pass1
     printf "\n"
@@ -178,18 +184,131 @@ SHOULD NOT BE RAN ON AN EXISTING ARCH INSTALLAION!\n\n"
     reboot
 }
 
-clean_programs_file() {
+clean_programs_file() { 
     sed -i 's/[ ]*#.*//g;/^$/d' "$programs_file"
-    number_of_packages="$(wc -l <"$programs_file")"
-    while IFS="|" read -r installation_method environment package_name description; do
-        echo "NOT IMPLEMENTED!"
-    done
+    awk '
+        BEGIN {FS = OFS = "\""}
+        /^[[:blank:]]*$/ {next}
+        {for (i=1; i<=NF; i+=2) gsub (/[[:space:]]/,"",$i)}
+        1
+    ' "$programs_file" > "$programs_file.tmp" && mv "$programs_file.tmp" "$programs_file"
 }
 
-install_packages() {
+update-package-descriptions() {
+    # Only the lines which have "|" at the end are effected.
     echo "NOT IMPLEMENTED!"
 }
 
+install_package() {
+    package_info="$(grep "$1" "$programs_file")"
+
+    while IFS="|" read -r method _ _ description; do
+        case "$method" in
+            "Pacman"|"") pacman_install    "$1" "$description";;
+            "AUR")       aur_install       "$1" "$description";;
+            "Suckless")  suckless_install  "$1" "$description";;
+            "DoomEmacs") doomemacs_install "$1" "$description";;
+        esac
+    done <<<"$package_info"
+
+}
+
+install_aurhelper() {
+    check_installed "$aurhelper" && return 0
+    sudo -u "$username" mkdir -p "/home/$username/.local/src"
+    sudo -u "$username" git clone --depth 1 --single-branch --no-tags "https://aur.archlinux.org/$aurhelper.git" "/home/$username/.local/src/$aurhelper" ||
+        {
+            cd "/home/$username/.local/src/$aurhelper" || exit 1
+            sudo -u "$username" git pull --force origin master
+        }
+    cd "/home/$username/.local/src/$aurhelper" || exit 1
+    sudo -u "$username" makepkg --noconfirm -si
+}
+
+pacman_install() {
+    printf "Installing %s :: %s\n" "$1" "$2"
+    pacman -S --noconfirm "$1"
+}
+
+aur_install() {
+    printf "Installing %s :: %s\n" "$1" "$2"
+    sudo -u "$username" "$aurhelper" -S --noconfirm "$1"
+}
+
+suckless_install() {
+    printf "Installing %s :: %s\n" "$1" "$2"
+    echo "NOT IMPLEMENTED!"
+}
+
+doomemacs_install() {
+    printf "Installing %s :: %s\n" "$1" "$2"
+    echo "NOT IMPLEMENTED!"
+}
+
+install_environment() {
+    case "$1" in
+        "Hyprland") grep -E "Wayland|Hyprland|All" "$programs_file" | cut -d"|" -f3 >> "$programs_to_install";;
+        "DWM") grep -E "X11|DWM|All" "$programs_file" | cut -d"|" -f3 >> "$programs_to_install";;
+        "All"|"") cut -d"|" -f3  "$programs_file" >> "$programs_to_install";;
+    esac
+    while IFS= read -r program; do
+        install_package "$program"
+    done <"$programs_to_install"
+}
+
+ask_username() {
+    read -rp "Username: " username
+    while ! echo "$username" | grep -q "^[a-z_][a-z0-9_-]*$"; do
+        printf "Username not valid. Give a username beginning with a letter, with only lowercase letters, - or _.\n"
+        read -rp "Username: " username
+    done
+}
+
+check_installed() {
+    command -v "$1" >/dev/null && return 0
+    pacman -Q "$1" >/dev/null 2>&1 && return 0
+    return 1
+}
+
+wheel_can_sudo() {
+    rm -f /etc/sudoers.d/*mais*
+
+    # Remove tmp file and restore normal functionality on exit.
+    trap 'rm -f /etc/sudoers.d/mais-tmp;
+          echo "%wheel ALL=(ALL:ALL) ALL" >/etc/sudoers.d/00-mais-wheel-can-sudo;
+          echo "%wheel ALL=(ALL:ALL) NOPASSWD: /usr/bin/shutdown,/usr/bin/reboot,/usr/bin/systemctl suspend,/usr/bin/mount,/usr/bin/umount,/usr/bin/pacman -Syu,/usr/bin/pacman -Syyu,/usr/bin/pacman -Syyu --noconfirm" >/etc/sudoers.d/01-mais-cmds-without-password;
+          echo "Defaults editor=/usr/bin/nvim" > /etc/sudoers.d/02-mais-visudo-editor;' HUP INT QUIT TERM PWR EXIT ILL
+
+    echo "%wheel ALL=(ALL) NOPASSWD: ALL" >/etc/sudoers.d/mais-tmp
+}
+
+install_essentials() {
+    for p in "base-devel" "git"; do
+        check_installed "$p" || pacman_install "$p" "Installing $p which is required to install and configure other packages."
+    done
+}
+
+configure-grub() {
+    # These configurations need to be done regardless of having swap.
+    sed -i "/^GRUB_TIMEOUT=.*$/s/=.*/=3/;/^#GRUB_DISABLE_OS_PROBER=false$/s/#//" /etc/default/grub
+    sed -i "/^GRUB_DEFAULT=.*$/s/=.*/=saved/;/^#GRUB_SAVEDEFAULT=true$/s/#//" /etc/default/grub
+    sed -i "/^GRUB_CMDLINE_LINUX_DEFAULT=.*$/s/ quiet//" /etc/default/grub
+
+    # Enable hibernation only if there is a swap device larger than 8G.
+    blkid | grep "TYPE=\"swap\"" | cut -d " " -f1 | sed "s/://" | xargs lsblk -no SIZE | sed "s/\s\+//;s/.$//" | xargs test 8 -le && {
+        grep -q resume /etc/mkinitcpio.conf || {
+            sed -i "/^HOOKS=(.*)$/s/)$/ resume)/" /etc/mkinitcpio.conf
+            mkinitcpio -P
+        }
+        grep -q resume /etc/default/grub || {
+            swapuuid=$(blkid | grep swap | grep -Po " UUID=\".*?\"" | sed "s/ //;s/UUID=//;s/\"//g")
+            sed -i "/^GRUB_CMDLINE_LINUX_DEFAULT=.*$/s/.$/ resume=UUID=$swapuuid\"/" /etc/default/grub
+            grub-mkconfig -o /boot/grub/grub.cfg
+            unset swapuuid
+        }
+    }
+}
+    
 while [[ $# -gt 0 ]]; do
     case "$1" in
         "-h"|"--help"|"help")
@@ -205,16 +324,45 @@ while [[ $# -gt 0 ]]; do
             esac
             arch_install
             shift
+            exit 0 # Do not check for other arguments.
             ;;
-        "-i"|"--install-packages"|"install-packages")
+        "-i"|"--install-environment"|"install-environment")
+            clean_programs_file
+            ask_username
+            wheel_can_sudo
+            install_essentials
+            install_aurhelper
             case "$2" in
-                "hyprland") echo "NOT IMPLEMENTED"; shift;;
-                "dwm") echo "NOT IMPLEMENTED"; shift;;
-                "all") echo "NOT IMPLEMENTED"; shift;;
+                "Hyprland") install_environment "Hyprland"; shift;;
+                "DWM") install_environment "DWM"; shift;;
+                "All"|"") install_environment "All"; shift;;
+                *) eprint "Invalid option '$2'
+Try '$program_name --help' for more information.";;
             esac
-            install_packages
             shift
             ;;
-            *) eprint "Invalid option '$1'\nTry '$program_name --help' for more information.";;
+        "-p"|"--install-aurhelper"|"install-aurhelper")
+            ask_username
+            wheel_can_sudo
+            install_essentials
+            case "$2" in
+                "yay")     aurhelper="yay";  install_aurhelper; shift;;
+                "paru"|"") aurhelper="paru"; install_aurhelper; shift;;
+            esac
+            shift
+            ;;
+        "-g"|"--configure-grub"|"configure-grub")
+            configure-grub
+            shift
+            ;;
+        "-d"|"--debug"|"debug")
+            case "$2" in
+                "-e"|"--install-essentials"|"install-essentials") install_essentials; shift;;
+                "-u"|"--update-package-descriptions"|"update-package-descriptions") update-package-descriptions; shift;;
+            esac
+            shift
+            ;;
+            *) eprint "Invalid option '$1'
+Try '$program_name --help' for more information.";;
     esac
 done
