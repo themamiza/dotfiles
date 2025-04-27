@@ -15,6 +15,9 @@ vim.keymap.set("n", "<M-x>", ":")
 vim.keymap.set("n", "<leader>bp", ":bprev<CR>", { silent = true })
 vim.keymap.set("n", "<leader>bn", ":bnext<CR>", { silent = true })
 vim.keymap.set("n", "<leader>bk", ":q!<CR>", { silent = true })
+
+vim.keymap.set("n", "<leader>.", ":Telescope find_files<CR>", { silent = true })
+vim.keymap.set("n", "<leader>f", ":Telescope git_files<CR>", { silent = true })
 vim.keymap.set("n", "<leader>:", ":Telescope commands<CR>", { silent = true })
 vim.keymap.set("n", "<leader>bb", ":Telescope buffers<CR>", { silent = true })
 
