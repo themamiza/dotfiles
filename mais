@@ -13,7 +13,11 @@ programs_file="programs.csv"
 
 eprint(){ printf "%s: %s\n" "$program_name" "$1" >&2; exit 1; }
 print_help() {
-    printf "%s [-h|--help]
+    printf "Usage: %s [Options]
+
+    Options are sequential meaning they execute in the order you provide them.
+    If an option exits the script (such as --help) the other options are not read.
+
     -h|--help|help                        Print this help message and exit.
     -a|--arch-install|arch-install        Run through installation of ArchLinux.
         --vm|vm                               Pre-Configured partitioning for a virtual machine.
