@@ -2,19 +2,217 @@
 
 # Here is what each field is in order:
 # 1. Installation method. Can be one of => Pacman/AUR/Suckless/DoomEmacs (defaults to 'Pacman')
-# 2. Environment. Can be one of         => All/X11/DWM/Wayland/Hyprland (defaults to 'All')
+# 2. Environment. Can be one of         => All/X11/DWM/Wayland/Hyprland/Extra (defaults to 'All')
 # 3. Package name.
 # 4. Description. # TODO: Bring all descriptions from the arch repositories.
 
-# Here are some examples:
-# AUR             |                    | brave-bin     | Web browser that blocks ads and trackers by default (binary release).
-#                 | WAYLAND            | waylock       | A simple screenlocker for wayland compositors.
-# Suckless        | DWM                | dwm           | A dynamic window manager for X.
-# DoomEmacs       |                    | doomemacs     | An Emacs framework for the stubborn martian hacker.
+# Terminal Emulator
+                |            | alacritty                        | Description
+Suckless        | DWM        | st                               | Description
+
+# Browser
+AUR             |            | brave-bin                        | Description
+
+# Windowing System
+                | X11        | xorg-server                      | Description
+                | X11        | xorg-xinit                       | Description
+                | X11        | xorg-xset                        | Description
+                | X11        | libxft                           | Description
+                | X11        | libxinerama                      | Description
+                | X11        | fribidi                          | Description
+                | X11        | xf86-video-intel                 | Description
+
+# Window Manager / Compositor
+                | Hyprland   | hyprland                         | Description
+Suckless        | DWM        | dwm                              | Description
+                | X11        | xcompmgr                         | Description
+
+# X11
+                | X11        | xorg-xinput                      | Description
+                | X11        | numlockx                         | Description
+                | X11        | xorg-xev                         | Description
+                | X11        | xdotool                          | Description
+                | X11        | unclutter                        | Description
+                | X11        | arandr                           | Description
+                | X11        | xcolor                           | Description
+
+# Clipboard
+                | Wayland    | wl-clipboard                     | Description
+                | X11        | xclip                            | Description
+
+# Nvidia
+                |            | nvidia-lts                       | Description
+                |            | nvidia-prime                     | Description
+                |            | nvidia-settings                  | Description
+
+# Lock Screen
+                | Wayland    | waylock                          | Description
+                | DWM        | slock                            | Description
+
+# Wallpaper
+                | Hyprland   | hyprpaper                        | Description
+                | X11        | xwallpaper                       | Description
+
+# Bar / Panel
+                | Wayland    | waybar                           | Description
+Suckless        | DWM        | dwmblocks                        | Description
+
+# Screenshot
+                | Wayland    | slurp                            | Description
+                | Wayland    | grim                             | Description
+                | X11        | scrot                            | Description
+
+# Audio
+                |            | pipewire                         | Description
+                |            | pipewire-jack                    | Description
+                |            | pipewire-pulse                   | Description
+                |            | wireplumber                      | Description
+                |            | qpwgraph                         | Description
+
+# Image Viewer
+                | X11        | nsxiv                            | Description
+
+# Video Player
+                |            | mpv                              | Description
+
+# Image Manipulation
+                |            | imagemagick                      | Description
+                | Extra      | gimp                             | Description
+                |            | ueberzug                         | Description
+                |            | ffmpegthumbnailer                | Description
+
+# Video Manipulation
+                |            | obs-studio                       | Description
+                |            | ffmpeg                           | Description
+
+# Bluetooth
+                |            | bluez                            | Description
+                |            | bluez-utils                      | Description
+                |            | blueman                          | Description
+
+# Network
+                |            | network-manager-applet           | Description
+                |            | openssh                          | Description
+                |            | sshpass                          | Description
+                |            | proxychains-ng                   | Description
+
+# File Manager
+                |            | lf                               | Description
+                |            | thunar                           | Description
+                |            | thunar-volman                    | Description
+                |            | tumbler                          | Description
+                |            | gvfs                             | Description
+                |            | gvfs-mtp                         | Description
+
+# Notification
+                |            | libnotify                        | Description
+                |            | dunst                            | Description
+
+# Calculator
+                |            | bc                               | Description
+                |            | qalculate-gtk                    | Description
+
+# PDF
+                |            | zathura                          | Description
+                |            | zathura-pdf-mupdf                | Description
+                |            | tesseract-data-eng               | Description
 
 
-# A few of every kind of programs for testing purposes.
-AUR             |                    | brave-bin     | Web browser that blocks ads and trackers by default (binary release).
-                | WAYLAND            | waylock       | A simple screenlocker for wayland compositors. # Here is a comment
-Suckless        | DWM                | dwm           | A dynamic window manager for X.
-DoomEmacs       |                    | doomemacs     | An Emacs framework for the stubborn martian hacker.
+# Shell
+                |            | dash                             | Description
+                |            | zsh                              | Description
+                |            | zsh-autosuggestions              | Description
+AUR             |            | zsh-fast-syntax-highlighting-git | Description
+                |            | bash-completion                  | Description
+                |            | bash-language-server             | Description
+                |            | shellcheck                       | Description
+
+# CLI Tools
+                |            | bat                              | Description
+                |            | eza                              | Description
+                |            | fd                               | Description
+                |            | fzf                              | Description
+                |            | 7zip                             | Description
+                |            | pass                             | Description
+                |            | ripgrep                          | Description
+                |            | tmux                             | Description
+                |            | brightnessctl                    | Description
+                |            | man-db                           | Description
+                |            | man-pages                        | Description
+                |            | unzip                            | Description
+                |            | entr                             | Description
+                |            | yt-dlp                           | Description
+#                |            | vidir                            | Description
+                |            | htop                              | Description
+
+# Filesystem
+                |            | dosfstools                       | Description
+                |            | ntfs-3g                          | Description
+AUR             |            | simple-mtpfs                     | Description
+
+# Virtual Machine
+                |            | qemu-full                        | Description
+                |            | libvirt                          | Description
+                |            | dnsmasq                          | Description
+                |            | iptables-nft                     | Description
+                |            | openbsd-netcat                   | Description
+                |            | virt-manager                     | Description
+
+
+# Font
+                |            | ttc-iosevka                      | Description
+                |            | ttf-dejavu                       | Description
+                |            | ttf-iosevka-nerd                 | Description
+                |            | ttf-ubuntu-font-family           | Description
+                |            | noto-fonts-emoji                 | Description
+
+# Theme
+AUR             |            | dracula-gtk-theme-git            | Description
+                |            | breeze-icons                     | Description
+AUR             |            | catppuccin-gtk-theme-macchiato   | Description
+AUR             |            | alacritty-theme-git              | Description
+                |            | nwg-look                         | Description
+AUR             |            | xcursor-breeze                   | Description
+#                |            | kvantum                         | Description
+#                |            | kvantum-qt5                     | Description
+#                |            | lxappearance-gtk3                | Description
+
+# C
+                |            | clang                            | Description
+                |            | cmake                            | Description
+
+# Python
+                |            | python                           | Description
+                |            | python-lsp-server                | Description
+                |            | python-pip                       | Description
+                |            | python-pipenv                    | Description
+                |            | ipython                          | Description
+
+
+# Lua
+                |            | lua-language-server              | Description
+
+# Javascript
+                | Extra      | nodejs                           | Description
+                | Extra      | typescript                       | Description
+                | Extra      | typescript-language-server       | Description
+
+# Emacs
+                | Extra      | emacs                            | Description
+DoomEmacs       | Extra      | doomemacs                        | Description
+
+# Communication
+                |            | telegram-desktop                 | Description
+
+# Computation
+                | Extra      | octave                           | Description
+
+# Game
+                | Extra      | jre21-openjdk                    | Description
+
+# Grub
+                |            | os-prober                        | Description
+
+# win2usb Dependencies
+AUR             |            | ms-sys                           | Description
+                |            | wimlib                           | Description
