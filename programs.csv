@@ -7,212 +7,212 @@
 # 4. Description. # TODO: Bring all descriptions from the arch repositories.
 
 # Terminal Emulator
-                |            | alacritty                        | Description
-Suckless        | DWM        | st                               | Description
+                |            | alacritty                        | "A cross-platform, GPU-accelerated terminal emulator."
+Suckless        | DWM        | st                               | "N/A."
 
 # Browser
-AUR             |            | brave-bin                        | Description
+AUR             |            | brave-bin                        | "N/A."
 
 # Windowing System
-                | X11        | xorg-server                      | Description
-                | X11        | xorg-xinit                       | Description
-                | X11        | xorg-xset                        | Description
-                | X11        | libxft                           | Description
-                | X11        | libxinerama                      | Description
-                | X11        | fribidi                          | Description
-                | X11        | xf86-video-intel                 | Description
+                | X11        | xorg-server                      | "Xorg X server."
+                | X11        | xorg-xinit                       | "X.Org initialisation program."
+                | X11        | xorg-xset                        | "User preference utility for X."
+                | X11        | libxft                           | "FreeType-based font drawing library for X."
+                | X11        | libxinerama                      | "X11 Xinerama extension library."
+                | X11        | fribidi                          | "A Free Implementation of the Unicode Bidirectional Algorithm."
+                | X11        | xf86-video-intel                 | "X.org Intel i810/i830/i915/945G/G965+ video drivers."
 
 # Window Manager / Compositor
-                | Hyprland   | hyprland                         | Description
-Suckless        | DWM        | dwm                              | Description
-                | X11        | xcompmgr                         | Description
+                | Hyprland   | hyprland                         | "a highly customizable dynamic tiling Wayland compositor."
+Suckless        | DWM        | dwm                              | "N/A."
+                | X11        | xcompmgr                         | "Composite window effect manager for X.org."
 
 # X11
-                | X11        | xorg-xinput                      | Description
-                | X11        | numlockx                         | Description
-                | X11        | xorg-xev                         | Description
-                | X11        | xdotool                          | Description
-                | X11        | unclutter                        | Description
-                | X11        | arandr                           | Description
-                | X11        | xcolor                           | Description
+                | X11        | xorg-xinput                      | "Small commandline tool to configure devices."
+                | X11        | numlockx                         | "Turns on the numlock key in X11.."
+                | X11        | xorg-xev                         | "Print contents of X events."
+                | X11        | xdotool                          | "Command-line X11 automation tool."
+                | X11        | unclutter                        | "A small program for hiding the mouse cursor."
+                | X11        | arandr                           | "Provide a simple visual front end for XRandR 1.2.."
+                | X11        | xcolor                           | "Lightweight color picker for X11."
 
 # Clipboard
-                | Wayland    | wl-clipboard                     | Description
-                | X11        | xclip                            | Description
+                | Wayland    | wl-clipboard                     | "Command-line copy/paste utilities for Wayland."
+                | X11        | xclip                            | "Command line interface to the X11 clipboard."
 
 # Nvidia
-                |            | nvidia-lts                       | Description
-                |            | nvidia-prime                     | Description
-                |            | nvidia-settings                  | Description
+                |            | nvidia-lts                       | "NVIDIA drivers for linux-lts."
+                |            | nvidia-prime                     | "NVIDIA Prime Render Offload configuration and utilities."
+                |            | nvidia-settings                  | "Tool for configuring the NVIDIA graphics driver."
 
 # Lock Screen
-                | Wayland    | waylock                          | Description
-                | DWM        | slock                            | Description
+                | Wayland    | waylock                          | "A simple screenlocker for wayland compositors."
+                | DWM        | slock                            | "A simple screen locker for X."
 
 # Wallpaper
-                | Hyprland   | hyprpaper                        | Description
-                | X11        | xwallpaper                       | Description
+                | Hyprland   | hyprpaper                        | "a blazing fast wayland wallpaper utility with IPC controls."
+                | X11        | xwallpaper                       | "Wallpaper setting utility for X."
 
 # Bar / Panel
-                | Wayland    | waybar                           | Description
-Suckless        | DWM        | dwmblocks                        | Description
+                | Wayland    | waybar                           | "Highly customizable Wayland bar for Sway and Wlroots based compositors."
+Suckless        | DWM        | dwmblocks                        | "N/A."
 
 # Screenshot
-                | Wayland    | slurp                            | Description
-                | Wayland    | grim                             | Description
-                | X11        | scrot                            | Description
+                | Wayland    | slurp                            | "Select a region in a Wayland compositor."
+                | Wayland    | grim                             | "Screenshot utility for Wayland."
+                | X11        | scrot                            | "Simple command-line screenshot utility for X."
 
 # Audio
-                |            | pipewire                         | Description
-                |            | pipewire-jack                    | Description
-                |            | pipewire-pulse                   | Description
-                |            | wireplumber                      | Description
-                |            | qpwgraph                         | Description
+                |            | pipewire                         | "Low-latency audio/video router and processor."
+                |            | pipewire-jack                    | "Low-latency audio/video router and processor - JACK replacement."
+                |            | pipewire-pulse                   | "Low-latency audio/video router and processor - PulseAudio replacement."
+                |            | wireplumber                      | "Session / policy manager implementation for PipeWire."
+                |            | qpwgraph                         | "PipeWire Graph Qt GUI Interface."
 
 # Image Viewer
-                | X11        | nsxiv                            | Description
+                | X11        | nsxiv                            | "Neo (or New or Not) Simple (or Small or Suckless) X Image Viewer."
 
 # Video Player
-                |            | mpv                              | Description
+                |            | mpv                              | "a free, open source, and cross-platform media player."
 
 # Image Manipulation
-                |            | imagemagick                      | Description
-                | Extra      | gimp                             | Description
-                |            | ueberzug                         | Description
-                |            | ffmpegthumbnailer                | Description
+                |            | imagemagick                      | "An image viewing/manipulation program."
+                | Extra      | gimp                             | "GNU Image Manipulation Program."
+                |            | ueberzug                         | "Command line util which allows to display images in combination with X11."
+                |            | ffmpegthumbnailer                | "Lightweight video thumbnailer that can be used by file managers."
 
 # Video Manipulation
-                |            | obs-studio                       | Description
-                |            | ffmpeg                           | Description
+                |            | obs-studio                       | "Free, open source software for live streaming and recording."
+                |            | ffmpeg                           | "Complete solution to record, convert and stream audio and video."
 
 # Bluetooth
-                |            | bluez                            | Description
-                |            | bluez-utils                      | Description
-                |            | blueman                          | Description
+                |            | bluez                            | "Daemons for the bluetooth protocol stack."
+                |            | bluez-utils                      | "Development and debugging utilities for the bluetooth protocol stack."
+                |            | blueman                          | "GTK+ Bluetooth Manager."
 
 # Network
-                |            | network-manager-applet           | Description
-                |            | openssh                          | Description
-                |            | sshpass                          | Description
-                |            | proxychains-ng                   | Description
+                |            | network-manager-applet           | "Applet for managing network connections."
+                |            | openssh                          | "SSH protocol implementation for remote login, command execution and file transfer."
+                |            | sshpass                          | "Fool ssh into accepting an interactive password non-interactively."
+                |            | proxychains-ng                   | "A hook preloader that allows to redirect TCP traffic of existing dynamically linked programs through one or more SOCKS or HTTP proxies."
 
 # File Manager
-                |            | lf                               | Description
-                |            | thunar                           | Description
-                |            | thunar-volman                    | Description
-                |            | tumbler                          | Description
-                |            | gvfs                             | Description
-                |            | gvfs-mtp                         | Description
+                |            | lf                               | "A terminal file manager inspired by ranger."
+                |            | thunar                           | "Modern, fast and easy-to-use file manager for Xfce."
+                |            | thunar-volman                    | "Automatic management of removable drives and media for Thunar."
+                |            | tumbler                          | "Thumbnail service implementing the thumbnail management D-Bus specification."
+                |            | gvfs                             | "Virtual filesystem implementation for GIO."
+                |            | gvfs-mtp                         | "Virtual filesystem implementation for GIO - MTP backend (Android, media player)."
 
 # Notification
-                |            | libnotify                        | Description
-                |            | dunst                            | Description
+                |            | libnotify                        | "Library for sending desktop notifications."
+                |            | dunst                            | "Customizable and lightweight notification-daemon."
 
 # Calculator
-                |            | bc                               | Description
-                |            | qalculate-gtk                    | Description
+                |            | bc                               | "An arbitrary precision calculator language."
+                |            | qalculate-gtk                    | "GTK frontend for libqalculate."
 
 # PDF
-                |            | zathura                          | Description
-                |            | zathura-pdf-mupdf                | Description
-                |            | tesseract-data-eng               | Description
+                |            | zathura                          | "Minimalistic document viewer."
+                |            | zathura-pdf-mupdf                | "PDF support for Zathura (MuPDF backend) (Supports PDF, ePub, and OpenXPS)."
+                |            | tesseract-data-eng               | "Tesseract OCR data (eng)."
 
 
 # Shell
-                |            | dash                             | Description
-                |            | zsh                              | Description
-                |            | zsh-autosuggestions              | Description
-AUR             |            | zsh-fast-syntax-highlighting-git | Description
-                |            | bash-completion                  | Description
-                |            | bash-language-server             | Description
-                |            | shellcheck                       | Description
+                |            | dash                             | "POSIX compliant shell that aims to be as small as possible."
+                |            | zsh                              | "A very advanced and programmable command interpreter (shell) for UNIX."
+                |            | zsh-autosuggestions              | "Fish-like autosuggestions for zsh."
+AUR             |            | zsh-fast-syntax-highlighting-git | "N/A."
+                |            | bash-completion                  | "Programmable completion for the bash shell."
+                |            | bash-language-server             | "Bash language server implementation based on Tree Sitter and its grammar for Bash."
+                |            | shellcheck                       | "Shell script analysis tool."
 
 # CLI Tools
-                |            | bat                              | Description
-                |            | eza                              | Description
-                |            | fd                               | Description
-                |            | fzf                              | Description
-                |            | 7zip                             | Description
-                |            | pass                             | Description
-                |            | ripgrep                          | Description
-                |            | tmux                             | Description
-                |            | brightnessctl                    | Description
-                |            | man-db                           | Description
-                |            | man-pages                        | Description
-                |            | unzip                            | Description
-                |            | entr                             | Description
-                |            | yt-dlp                           | Description
+                |            | bat                              | "Cat clone with syntax highlighting and git integration."
+                |            | eza                              | "A modern replacement for ls (community fork of exa)."
+                |            | fd                               | "Simple, fast and user-friendly alternative to find."
+                |            | fzf                              | "Command-line fuzzy finder."
+                |            | 7zip                             | "File archiver for extremely high compression."
+                |            | pass                             | "Stores, retrieves, generates, and synchronizes passwords securely."
+                |            | ripgrep                          | "A search tool that combines the usability of ag with the raw speed of grep."
+                |            | tmux                             | "Terminal multiplexer."
+                |            | brightnessctl                    | "Lightweight brightness control tool."
+                |            | man-db                           | "A utility for reading man pages."
+                |            | man-pages                        | "Linux man pages."
+                |            | unzip                            | "For extracting and viewing files in .zip archives."
+                |            | entr                             | "Run arbitrary commands when files change."
+                |            | yt-dlp                           | "A youtube-dl fork with additional features and fixes."
 #                |            | vidir                            | Description
-                |            | htop                              | Description
+                |            | htop                              | "Interactive process viewer."
 
 # Filesystem
-                |            | dosfstools                       | Description
-                |            | ntfs-3g                          | Description
-AUR             |            | simple-mtpfs                     | Description
+                |            | dosfstools                       | "DOS filesystem utilities."
+                |            | ntfs-3g                          | "NTFS filesystem driver and utilities."
+AUR             |            | simple-mtpfs                     | "N/A."
 
 # Virtual Machine
-                |            | qemu-full                        | Description
-                |            | libvirt                          | Description
-                |            | dnsmasq                          | Description
-                |            | iptables-nft                     | Description
-                |            | openbsd-netcat                   | Description
-                |            | virt-manager                     | Description
+                |            | qemu-full                        | "A full QEMU setup."
+                |            | libvirt                          | "API for controlling virtualization engines (openvz,kvm,qemu,virtualbox,xen,etc)."
+                |            | dnsmasq                          | "Lightweight, easy to configure DNS forwarder and DHCP server."
+                |            | iptables-nft                     | "Linux kernel packet control tool (using nft interface)."
+                |            | openbsd-netcat                   | "TCP/IP swiss army knife. OpenBSD variant.."
+                |            | virt-manager                     | "Desktop user interface for managing virtual machines."
 
 
 # Font
-                |            | ttc-iosevka                      | Description
-                |            | ttf-dejavu                       | Description
-                |            | ttf-iosevka-nerd                 | Description
-                |            | ttf-ubuntu-font-family           | Description
-                |            | noto-fonts-emoji                 | Description
+                |            | ttc-iosevka                      | "Typeface family designed for coding, terminal use and technical documents."
+                |            | ttf-dejavu                       | "Font family based on the Bitstream Vera Fonts with a wider range of characters."
+                |            | ttf-iosevka-nerd                 | "Patched font Iosevka from nerd fonts library."
+                |            | ttf-ubuntu-font-family           | "Ubuntu font family."
+                |            | noto-fonts-emoji                 | "Google Noto emoji fonts."
 
 # Theme
-AUR             |            | dracula-gtk-theme-git            | Description
-                |            | breeze-icons                     | Description
-AUR             |            | catppuccin-gtk-theme-macchiato   | Description
-AUR             |            | alacritty-theme-git              | Description
-                |            | nwg-look                         | Description
-AUR             |            | xcursor-breeze                   | Description
+AUR             |            | dracula-gtk-theme-git            | "N/A."
+                |            | breeze-icons                     | "Breeze icon theme."
+AUR             |            | catppuccin-gtk-theme-macchiato   | "N/A."
+AUR             |            | alacritty-theme-git              | "N/A."
+                |            | nwg-look                         | "GTK settings editor adapted to work on wlroots-based compositors."
+AUR             |            | xcursor-breeze                   | "N/A."
 #                |            | kvantum                         | Description
 #                |            | kvantum-qt5                     | Description
 #                |            | lxappearance-gtk3                | Description
 
 # C
-                |            | clang                            | Description
-                |            | cmake                            | Description
+                |            | clang                            | "C language family frontend for LLVM."
+                |            | cmake                            | "A cross-platform open-source make system."
 
 # Python
-                |            | python                           | Description
-                |            | python-lsp-server                | Description
-                |            | python-pip                       | Description
-                |            | python-pipenv                    | Description
-                |            | ipython                          | Description
+                |            | python                           | "The Python programming language."
+                |            | python-lsp-server                | "Fork of the python-language-server project, maintained by the Spyder IDE team and the community."
+                |            | python-pip                       | "The PyPA recommended tool for installing Python packages."
+                |            | python-pipenv                    | "Sacred Marriage of Pipfile, Pip, & Virtualenv.."
+                |            | ipython                          | "Enhanced Interactive Python shell."
 
 
 # Lua
-                |            | lua-language-server              | Description
+                |            | lua-language-server              | "Lua Language Server coded by Lua."
 
 # Javascript
-                | Extra      | nodejs                           | Description
-                | Extra      | typescript                       | Description
-                | Extra      | typescript-language-server       | Description
+                | Extra      | nodejs                           | "Evented I/O for V8 javascript ("Current" release)."
+                | Extra      | typescript                       | "JavaScript with syntax for types."
+                | Extra      | typescript-language-server       | "Language Server Protocol (LSP) implementation for TypeScript using tsserver."
 
 # Emacs
-                | Extra      | emacs                            | Description
-DoomEmacs       | Extra      | doomemacs                        | Description
+                | Extra      | emacs                            | "The extensible, customizable, self-documenting real-time display editor."
+DoomEmacs       | Extra      | doomemacs                        | "N/A."
 
 # Communication
-                |            | telegram-desktop                 | Description
+                |            | telegram-desktop                 | "Official Telegram Desktop client."
 
 # Computation
-                | Extra      | octave                           | Description
+                | Extra      | octave                           | "A high-level language, primarily intended for numerical computations."
 
 # Game
-                | Extra      | jre21-openjdk                    | Description
+                | Extra      | jre21-openjdk                    | "OpenJDK Java 21 full runtime environment."
 
 # Grub
-                |            | os-prober                        | Description
+                |            | os-prober                        | "Utility to detect other OSes on a set of drives."
 
 # win2usb Dependencies
-AUR             |            | ms-sys                           | Description
-                |            | wimlib                           | Description
+AUR             |            | ms-sys                           | "N/A."
+                |            | wimlib                           | "A library and program to extract, create, and modify WIM files."

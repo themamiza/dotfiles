@@ -195,8 +195,49 @@ clean_programs_file() {
 }
 
 update-package-descriptions() {
-    # Only the lines which have "|" at the end are effected.
-    echo "NOT IMPLEMENTED!"
+    output_file="$programs_file.new"
+
+    # Create or truncate the output file
+    : > "$output_file"
+
+    # Read input file line by line
+    # Use IFS='|' to split fields by '|'
+    while IFS='|' read -r method environment package description; do
+
+    # Check if line is a comment (starts with '#') or empty
+    case "$method" in
+        \#*|"")
+            # Write comment or empty line as-is to the output
+            # Preserve the original number of columns
+            printf '%s' "$method" >> "$output_file"
+            [ -n "$environment" ] && printf '|%s' "$environment" >> "$output_file"
+            [ -n "$package" ] && printf '|%s' "$package" >> "$output_file"
+            [ -n "$description" ] && printf '|%s' "$description" >> "$output_file"
+            printf '\n' >> "$output_file"
+            continue
+            ;;
+    esac
+
+    # Trim spaces from package name (third column)
+    pkgname=$(printf '%s' "$package" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
+
+    # If no package name, set description to N/A
+    if [ -z "$pkgname" ]; then
+        description="N/A"
+    else
+        # Query pacman for package description
+        description=$(pacman -Si "$pkgname" 2>/dev/null | awk -F': ' '/^Description/ {print $2}' | sed 's/|/ /g')
+
+        # If description not found, set to N/A
+        [ -z "$description" ] && description="N/A"
+    fi
+
+    # Write updated line to output: method|environment|package|new_description
+    printf '%s|%s|%s| "%s."\n' "$method" "$environment" "$package" "$description" >> "$output_file"
+
+    done <"$programs_file"
+
+    printf "Updated package descriptions!\n"
 }
 
 install_package() {
