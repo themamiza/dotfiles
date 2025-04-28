@@ -8,8 +8,8 @@ case "$WM" in
 			"🪟 restart dwm") kill -hup "$(pidof dwm)";;
 			"💤 suspend") slock systemctl suspend -i;;
 			"🐻 hibernate") slock systemctl hibernate -i;;
-			"🔃 reboot") notify-send "rebooting the system" && sleep 2 && reboot;;
-			"💻 shutdown") notify-send "going down" && sleep 2 && shutdown -h now;;
+			"🔃 reboot") notify-send "rebooting the system" && setsid -f bash -c "sleep 2; shutdown -r now";;
+			"💻 shutdown") notify-send "going down" && setsid -f bash -c "sleep 2; shutdown -h now";;
 			"📺 display off") xset dpms force off;;
 			"⏰ uptime") notify-send "$(uptime -p)" ;;
 			*) exit 1;;
@@ -22,8 +22,8 @@ case "$WM" in
 			"🪟 restart hyprland") hyprctl reload;;
 			"💤 suspend") waylock -fork-on-lock; systemctl suspend -i;;
 			"🐻 hibernate") waylock -fork-on-lock; systemctl hibernate -i;;
-			"🔃 reboot") notify-send "rebooting the system" && sleep 2 && reboot;;
-			"💻 shutdown") notify-send "going down" && sleep 2 && shutdown -h now;;
+			"🔃 reboot") notify-send "rebooting the system" && setsid -f bash -c "sleep 2; shutdown -r now";;
+			"💻 shutdown") notify-send "going down" && setsid -f bash -c "sleep 2; shutdown -h now";;
 			"📺 display off") hyprctl dispatch dpms off;;
 			"⏰ uptime") notify-send "$(uptime -p)" ;;
 			*) exit 1;;
