@@ -36,6 +36,7 @@ print_help() {
         Hyprland    Only install packages used in hyprland.
         DWM         Only install packages used in dwm.
         All         Install all packages.
+    -p|--install-aurhelper|install-aurhelper        Install AUR helper (Can be one of 'paru/yay': defaults to 'paru')
     -g|--configure-grub|configure-grub              Configure grub. # TODO: Expand on this
     -d|--debug|debug                                Debug options, mainly for testing purposes.
                                                     Some extra functions are available here.    
@@ -362,6 +363,8 @@ while [[ $# -gt 0 ]]; do
                 "--vm"|"vm") partition_vm; shift;;
                 "--main"|"main") partition_main; shift;;
                 "--X220"|"X220"|"x220") partition_x220; shift;;
+                *) eprint "Invalid option '$2'
+Try '$program_name --help' for more information.";;
             esac
             arch_install
             shift
@@ -389,6 +392,8 @@ Try '$program_name --help' for more information.";;
             case "$2" in
                 "yay")     aurhelper="yay";  install_aurhelper; shift;;
                 "paru"|"") aurhelper="paru"; install_aurhelper; shift;;
+                *) eprint "Invalid option '$2'
+Try '$program_name --help' for more information.";;
             esac
             shift
             ;;
@@ -400,6 +405,8 @@ Try '$program_name --help' for more information.";;
             case "$2" in
                 "-e"|"--install-essentials"|"install-essentials") install_essentials; shift;;
                 "-u"|"--update-package-descriptions"|"update-package-descriptions") update-package-descriptions; shift;;
+                *) eprint "Invalid option '$2'
+Try '$program_name --help' for more information.";;
             esac
             shift
             ;;
