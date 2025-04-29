@@ -340,8 +340,13 @@ wheel_can_sudo() {
 }
 
 install_essentials() {
+    echo -e "${BOLD}${CYAN}  ==>${RESET} ${BOLD}${WHITE}Installing essential programs.${RESET}"
     for p in "base-devel" "git"; do
-        check_installed "$p" || pacman_install "$p" "Installing $p which is required to install and configure other packages."
+        if check_installed "$p"; then
+            printf "'%s' is already installed.\n" "$p"
+        else
+            pacman_install "$p" "Installing $p which is required to install and configure other packages."
+        fi
     done
 }
 
