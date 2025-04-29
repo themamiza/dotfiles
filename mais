@@ -351,6 +351,7 @@ install_essentials() {
 }
 
 configure-grub() {
+    echo -e "${BOLD}${CYAN}  ==>${RESET} ${BOLD}${WHITE}Configuring grub.${RESET}"
     # These configurations need to be done regardless of having swap.
     sed -i "/^GRUB_TIMEOUT=.*$/s/=.*/=3/;/^#GRUB_DISABLE_OS_PROBER=false$/s/#//" /etc/default/grub
     sed -i "/^GRUB_DEFAULT=.*$/s/=.*/=saved/;/^#GRUB_SAVEDEFAULT=true$/s/#//" /etc/default/grub
