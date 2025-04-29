@@ -56,7 +56,8 @@ print_help() {
                                                     Some extra functions are available here.    
         -e|--install-essentials|install-essentials      Install essential packages needed to install and
                                                         configure other packages. 
-        -u|--update-package-descriptions|update-package-descriptions    Update package descriptions in '%s'.\n" "$program_name" "$programs_file"
+        -u|--update-package-descriptions|update-package-descriptions    Update package descriptions in '%s'.
+        -c|--check-installation-environment|check-installation-environment      Checks requirements for running the script.\n" "$program_name" "$programs_file"
 }
 
 # label -> label type: dos/gpt
@@ -369,6 +370,13 @@ check_internet_connection() {
     curl -sSf http://www.google.com >/dev/null
 }
 
+check_installation_environment() {
+    # The 'X' is special! 
+    check_installed "pacman"  && echo -e "${BOLD}${WHITE}[${RESET}${BOLD}${GREEN}X${RESET}${BOLD}${WHITE}] 'pacman' binary found.${RESET}"         || eprint "'pacman' binary not found."
+    [ "$(id -u)" == 0 ]       && echo -e "${BOLD}${WHITE}[${RESET}${BOLD}${GREEN}X${RESET}${BOLD}${WHITE}] Running as root.${RESET}"               || eprint "Should be run as root."
+    check_internet_connection && echo -e "${BOLD}${WHITE}[${RESET}${BOLD}${GREEN}X${RESET}${BOLD}${WHITE}] Internet connection available.${RESET}" || eprint "Can't reach the web."
+}
+
 invalid_option() {
     eprint "Invalid option '$1'
 Try '$program_name --help' for more information."
@@ -425,6 +433,7 @@ while [[ $# -gt 0 ]]; do
             case "$2" in
                 "-e"|"--install-essentials"|"install-essentials") install_essentials; shift;;
                 "-u"|"--update-package-descriptions"|"update-package-descriptions") update_package_descriptions; shift;;
+                "-c"|"--check-installation-environment"|"check-installation-environment") check_installation_environment; shift;;
                 *) invalid_option "$2";;
             esac
             shift
