@@ -165,7 +165,7 @@ SHOULD NOT BE RAN ON AN EXISTING ARCH INSTALLAION!\n\n"
     # TODO: Print configuration before installing.
 
     printf "Checking internet connection...\n"
-    curl -sSf http://www.google.com >/dev/null || eprint "Can't reach the web."
+    check_internet_connection || eprint "Can't reach the web."
     printf "Internet connection is available.\n"
 
     printf "Bootstraping the system...\n"
@@ -349,6 +349,10 @@ configure-grub() {
             unset swapuuid
         }
     }
+}
+
+check_internet_connection() {
+    curl -sSf http://www.google.com >/dev/null
 }
 
 invalid_option() {
