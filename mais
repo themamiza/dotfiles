@@ -350,6 +350,11 @@ configure-grub() {
         }
     }
 }
+
+invalid_option() {
+    eprint "Invalid option '$1'
+Try '$program_name --help' for more information."
+}
     
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -363,8 +368,7 @@ while [[ $# -gt 0 ]]; do
                 "--vm"|"vm") partition_vm; shift;;
                 "--main"|"main") partition_main; shift;;
                 "--X220"|"X220"|"x220") partition_x220; shift;;
-                *) eprint "Invalid option '$2'
-Try '$program_name --help' for more information.";;
+                *) invalid_option "$2";;
             esac
             arch_install
             shift
@@ -380,8 +384,7 @@ Try '$program_name --help' for more information.";;
                 "Hyprland") install_environment "Hyprland"; shift;;
                 "DWM") install_environment "DWM"; shift;;
                 "All"|"") install_environment "All"; shift;;
-                *) eprint "Invalid option '$2'
-Try '$program_name --help' for more information.";;
+                *) invalid_option "$2";;
             esac
             shift
             ;;
@@ -392,8 +395,7 @@ Try '$program_name --help' for more information.";;
             case "$2" in
                 "yay")     aurhelper="yay";  install_aurhelper; shift;;
                 "paru"|"") aurhelper="paru"; install_aurhelper; shift;;
-                *) eprint "Invalid option '$2'
-Try '$program_name --help' for more information.";;
+                *) invalid_option "$2";;
             esac
             shift
             ;;
@@ -405,12 +407,10 @@ Try '$program_name --help' for more information.";;
             case "$2" in
                 "-e"|"--install-essentials"|"install-essentials") install_essentials; shift;;
                 "-u"|"--update-package-descriptions"|"update-package-descriptions") update-package-descriptions; shift;;
-                *) eprint "Invalid option '$2'
-Try '$program_name --help' for more information.";;
+                *) invalid_option "$2";;
             esac
             shift
             ;;
-            *) eprint "Invalid option '$1'
-Try '$program_name --help' for more information.";;
+            *) invalid_option "$1";;
     esac
 done
