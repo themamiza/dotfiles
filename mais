@@ -195,7 +195,7 @@ clean_programs_file() {
     ' "$programs_file" > "$programs_file.tmp" && mv "$programs_file.tmp" "$programs_file"
 }
 
-update-package-descriptions() {
+update_package_descriptions() {
     output_file="$programs_file.new"
 
     # Create or truncate the output file
@@ -406,7 +406,7 @@ while [[ $# -gt 0 ]]; do
         "-d"|"--debug"|"debug")
             case "$2" in
                 "-e"|"--install-essentials"|"install-essentials") install_essentials; shift;;
-                "-u"|"--update-package-descriptions"|"update-package-descriptions") update-package-descriptions; shift;;
+                "-u"|"--update-package-descriptions"|"update-package-descriptions") update_package_descriptions; shift;;
                 *) invalid_option "$2";;
             esac
             shift
