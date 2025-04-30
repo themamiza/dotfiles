@@ -24,6 +24,12 @@ efi_directory="/efi"
 disk_to_install="/dev/vda" # Only matters when using "BIOS".
 aurhelper="paru"
 
+dotfiles_url="https://github.com/themamiza/dotfiles"
+dotfiles_name="$(basename $dotfiles_url)"
+# The script expects a 'programs.csv' file present in the same efi_directory
+# TODO: Download the file if not present.
+# programs_file_url="https://raw.githubusercontent.com/themamiza/dotfiles/refs/heads/master/programs.csv"
+
 programs_file="programs.csv"
 programs_to_install="/tmp/programs.tmp"
 
@@ -50,6 +56,7 @@ print_help() {
         Hyprland    Only install packages used in hyprland.
         DWM         Only install packages used in dwm.
         All         Install all packages.
+    -u|--install-dotfiles|install-dotfiles          Install dotfiles to user's home directory.
     -p|--install-aurhelper|install-aurhelper        Install AUR helper (Can be one of 'paru/yay': defaults to 'paru')
     -g|--configure-grub|configure-grub              Configure grub. # TODO: Expand on this
     -d|--debug|debug                                Debug options, mainly for testing purposes.
@@ -313,6 +320,26 @@ install_environment() {
     done <"$programs_to_install"
 }
 
+install_dotfiles() {
+    echo -e "${BOLD}${CYAN}  ==>${RESET} ${BOLD}${WHITE}Installing dotfiles.${RESET}"
+    sudo -u "$username" mkdir -p "/home/$username/.local/src"
+    sudo -u "$username" git clone --depth 1 --single-branch --no-tags "$dotfiles_url" "/home/$username/.local/src/$dotfiles_name" ||
+        {
+            cd "/home/$username/.local/src/$dotfiles_name" || exit 1
+            sudo -u "$username" git pull --force origin master
+        }
+    cd "/home/$username/.local/src/$dotfiles_name" || exit 1
+    sudo -u "$username" cp -rfT "/home/$username/.local/src/$dotfiles_name/" "/home/$username"
+    # Remove extra files
+    rm "/home/$username/LICENSE" "/home/$username/README.md" "/home/$username/programs.csv" "/home/$username/mais" 
+
+    rm -rf "/home/$username/.git"
+
+    sudo -u "$username" ln -sf "/home/$username/.config/bash/.bashrc"  "/home/$username/.bashrc"
+    sudo -u "$username" ln -sf "/home/$username/.config/shell/profile" "/home/$username/.zprofile"
+    sudo -u "$username" ln -sf "/home/$username/.config/x11/xprofile"  "/home/$username/.xprofile"
+}
+
 ask_username() {
     read -rp "Username: " username
     while ! echo "$username" | grep -q "^[a-z_][a-z0-9_-]*$"; do
@@ -418,6 +445,12 @@ while [[ $# -gt 0 ]]; do
                 "All"|"") install_environment "All"; shift;;
                 *) invalid_option "$2";;
             esac
+            shift
+            ;;
+        "-u"|"--install-dotfiles"|"install-dotfiles")
+            ask_username
+            wheel_can_sudo
+            install_dotfiles
             shift
             ;;
         "-p"|"--install-aurhelper"|"install-aurhelper")
