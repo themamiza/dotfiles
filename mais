@@ -74,7 +74,34 @@ partition_main() {
 }
 
 partition_x220() {
-    echo "NOT IMPLEMENTED!" && exit 1
+        "UEFI") 
+            printf "label: gpt
+start=,size=2000000,type=U
+start=,size=64000000
+start=,size=394000000
+start=,size=\n" | sfdisk /dev/sda --wipe always
+        mkfs.fat  -F 32 /dev/sda1
+        mkfs.ext4 -qF /dev/sda2
+        mkfs.ext4 -qF /dev/sda3
+        mkswap /dev/sda4
+
+        mount /dev/sda2 /mnt
+        mount --mkdir /dev/sda1 /mnt/efi
+        mount --mkdir /dev/sda3 /mnt/home
+        swapon /dev/sda4
+        ;;
+
+
+        "BIOS") printf "label: dos
+start=,size=64000000
+start=,size=\n" | sfdisk /dev/sda --wipe always
+        mkfs.ext4 -qF /dev/sda1
+        mkfs.ext4 -qF /dev/sda2
+
+        mount /dev/sda1 /mnt
+        mount --mkdir /dev/sda2 /mnt/home
+        ;;
+    esac
 }
 
 partition_vm() {
