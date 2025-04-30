@@ -74,7 +74,8 @@ partition_main() {
 }
 
 partition_x220() {
-        "UEFI") 
+    case "$bios_or_uefi" in
+        "UEFI")
             printf "label: gpt
 start=,size=2000000,type=U
 start=,size=64000000
