@@ -79,7 +79,7 @@ partition_x220() {
             printf "label: gpt
 start=,size=2000000,type=U
 start=,size=64000000
-start=,size=410000000
+start=,size=416000000
 start=,size=,type=S\n" | sfdisk /dev/sda --wipe always
         mkfs.fat  -F 32 /dev/sda1
         mkfs.ext4 -qF /dev/sda2
