@@ -111,7 +111,7 @@
         "on-scroll-down":   "BLOCK_BUTTON=5 sb-clock",
         "interval": 60,
         "tooltip": false
-    }
+    },
 
     "tray": {
         "icon-size": 26
