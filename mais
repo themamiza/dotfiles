@@ -310,11 +310,23 @@ doomemacs_install() {
 }
 
 install_environment() {
+    : > "$programs_to_install"
     case "$1" in
         "Hyprland") grep -E "Wayland|Hyprland|All" "$programs_file" | cut -d"|" -f3 >> "$programs_to_install";;
         "DWM") grep -E "X11|DWM|All" "$programs_file" | cut -d"|" -f3 >> "$programs_to_install";;
-        "All"|"") cut -d"|" -f3  "$programs_file" >> "$programs_to_install";;
+        "All") cut -d"|" -f3  "$programs_file" >> "$programs_to_install";;
     esac
+    awk -F'|' '
+      {
+        original_line = $0
+      }
+      NF && $1 !~ /^#/ {
+        field2 = $2
+        gsub(/^[ \t]+|[ \t]+$/, "", field2)
+        if (field2 == "") print original_line
+      }
+    ' "$programs_file" | cut -d"|" -f3 >> "$programs_to_install"
+
     while IFS= read -r program; do
         install_package "$program"
     done <"$programs_to_install"
