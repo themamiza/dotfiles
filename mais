@@ -367,36 +367,49 @@ install_environment() {
 }
 
 install_dotfiles() {
-    echo -e "${BOLD}${CYAN}  ==>${RESET} ${BOLD}${WHITE}Installing dotfiles.${RESET}"
-    sudo -u "$username" mkdir -p "/home/$username/.local/src"
-    sudo -u "$username" git clone --depth 1 --single-branch --no-tags "$dotfiles_url" "/home/$username/.local/src/$dotfiles_name" ||
-        {
-            cd "/home/$username/.local/src/$dotfiles_name" || exit 1
-            sudo -u "$username" git pull --force origin master
-        }
-    cd "/home/$username/.local/src/$dotfiles_name" || exit 1
-    sudo -u "$username" cp -rfT "/home/$username/.local/src/$dotfiles_name/" "/home/$username"
+    print_info "Installing dotfiles."
+    # Mainly for my convenience.
+    if [ -d "/home/$username/rp/dotfiles" ]; then
+        print_info "Found local dotfiles."
+        srcdir="/home/$username/rp/dotfiles/"
+    else
+        print_info "Cloning remote repository."
+        srcdir="/home/$username/.local/src/$dotfiles_name/"
+        sudo -u "$username" mkdir -p "/home/$username/.local/src"
+        sudo -u "$username" git clone --depth 1 --single-branch --no-tags "$dotfiles_url" "/home/$username/.local/src/$dotfiles_name" ||
+            {
+                cd "/home/$username/.local/src/$dotfiles_name" || exit 1
+                sudo -u "$username" git pull --force origin master
+            }
+        cd "/home/$username/.local/src/$dotfiles_name" || exit 1
+    fi
+
+    sudo -u "$username" cp -rfT "$srcdir" "/home/$username"
     # Remove extra files
     rm "/home/$username/LICENSE" "/home/$username/README.md" "/home/$username/programs.csv" "/home/$username/mais" 
 
     rm -rf "/home/$username/.git"
 
+    # TODO: Do not create link if it already exists.
     sudo -u "$username" ln -sf "/home/$username/.config/bash/.bashrc"  "/home/$username/.bashrc"
     sudo -u "$username" ln -sf "/home/$username/.config/shell/profile" "/home/$username/.zprofile"
     sudo -u "$username" ln -sf "/home/$username/.config/x11/xprofile"  "/home/$username/.xprofile"
 }
 
 ask_username() {
-    read -rp "Username: " username
+    print_prompt "Username: " && read -r username
     while ! echo "$username" | grep -q "^[a-z_][a-z0-9_-]*$"; do
-        printf "Username not valid. Give a username beginning with a letter, with only lowercase letters, - or _.\n"
-        read -rp "Username: " username
+        print_warn "Username not valid. Give a username beginning with a letter, with only lowercase letters, - or _."
+        print_prompt "Username: " && read -r username
     done
 }
 
 check_installed() {
+    # Check if a command is available.
     command -v "$1" >/dev/null && return 0
+    # Check if a package is available.
     pacman -Q "$1" >/dev/null 2>&1 && return 0
+    # Return false otherwise.
     return 1
 }
 
