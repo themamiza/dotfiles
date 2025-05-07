@@ -33,6 +33,9 @@ dotfiles_name="$(basename $dotfiles_url)"
 programs_file="programs.csv"
 programs_to_install="/tmp/programs.tmp"
 
+print_info()   { echo -e "${BOLD}${CYAN}  ==>${RESET} ${BOLD}${WHITE}$1${RESET}"; }
+print_warn()   { echo -e "${BOLD}${YELLOW}  ==>${RESET} ${BOLD}${WHITE}$1${RESET}"; }
+print_prompt() { echo -en "${BOLD}${WHITE}$1${RESET}"; }
 eprint(){ printf "%s: %s\n" "$program_name" "$1" >&2; exit 1; }
 print_help() {
     printf "Usage: %s [Options]
@@ -70,7 +73,7 @@ print_help() {
 # label -> label type: dos/gpt
 # size  -> measured in sectors; each sector being 512 bytes.
 partition_main() {
-    echo "NOT IMPLEMENTED!" && exit 1
+    eprint "NOT IMPLEMENTED!"
 }
 
 partition_x220() {
@@ -185,32 +188,33 @@ arch_install() {
 2. synchronized system clock. (timedatectl set-ntp true)
 3. configured your filesystem and mounted your root at /mnt (fdisk).\n
 SHOULD NOT BE RAN ON AN EXISTING ARCH INSTALLAION!\n\n"
-    read -rp "Continue (Y/N): " continue && [[ "$continue" == [yY] ]] || exit 0
+    print_prompt "Continue (Y/N): " && read -r continue && [[ "$continue" == [yY] ]] || exit 0
 
     ask_username
 
-    read -rsp "Enter a password for $username: " pass1
+    print_prompt "Enter a password for $username: " && read -rs pass1
     printf "\n"
-    read -rsp "Retype password: " pass2
+    print_prompt "Retype password: " && read -rs pass2
     printf "\n"
     while ! [ "$pass1" = "$pass2" ]; do
         unset pass2
-        read -rsp "Passwords do not match. Enter password again: " pass1
+        print_warn "Passwords do not match. Enter password again: " && read -rs pass1
         printf "\n"
-        read -rsp "Retype password: " pass2
+        print_prompt "Retype password: " && read -rs pass2
         printf "\n"
     done
 
-    read -rp "Hostname: " hostname
+    print_prompt "Hostname: " && read -r hostname
     while ! echo "$hostname" | grep -q "^[a-z_][a-z0-9_-]*$"; do
-        printf "Hostname not valid. Give a hostname beginning with a letter, with only lowercase letters, - or _.\n"
-        read -rp "Hostname: " hostname
+        print_warn "Hostname not valid. Give a hostname beginning with a letter, with only lowercase letters, - or _."
+        print_prompt "Hostname: " && read -rp hostname
     done
 
-    read -rp "Timezone (Region/City): " timezone
+    # Change this so it uses fzf for easier access.
+    print_prompt "Timezone (Region/City): " && read -rp timezone
     while ! find /usr/share/zoneinfo | grep -q "$timezone"; do
-        printf "Timezone not valid. A valid timezone looks like -> \"US/Eastern\"\n"
-        read -rp "Timezone (Region/City): " timezone
+        print_warn "Timezone not valid. A valid timezone looks like -> \"US/Eastern\""
+        print_prompt "Timezone (Region/City): " && read -rp timezone
     done
 
     # TODO: Print configuration before installing.
@@ -243,7 +247,7 @@ clean_programs_file() {
         /^[[:blank:]]*$/ {next}
         {for (i=1; i<=NF; i+=2) gsub (/[[:space:]]/,"",$i)}
         1
-    ' "$programs_file" > "$programs_file.tmp" && mv "$programs_file.tmp" "$programs_file"
+        ' "$programs_file" > "$programs_file.tmp" && mv "$programs_file.tmp" "$programs_file"
 }
 
 update_package_descriptions() {
@@ -289,7 +293,7 @@ update_package_descriptions() {
 
     done <"$programs_file"
 
-    printf "Updated package descriptions!\n"
+    print_info "Updated package descriptions."
 }
 
 install_package() {
@@ -319,23 +323,23 @@ install_aurhelper() {
 }
 
 pacman_install() {
-    printf "Installing %s :: %s\n" "$1" "$2"
+    print_info "Installing $1 :: $2"
     pacman -S --noconfirm "$1"
 }
 
 aur_install() {
-    printf "Installing %s :: %s\n" "$1" "$2"
+    print_info "Installing $1 :: $2"
     sudo -u "$username" "$aurhelper" -S --noconfirm "$1"
 }
 
 suckless_install() {
-    printf "Installing %s :: %s\n" "$1" "$2"
-    echo "NOT IMPLEMENTED!"
+    print_info "Installing $1 :: $2"
+    eprint "NOT IMPLEMENTED!"
 }
 
 doomemacs_install() {
-    printf "Installing %s :: %s\n" "$1" "$2"
-    echo "NOT IMPLEMENTED!"
+    print_info "Installing $1 :: $2"
+    eprint "NOT IMPLEMENTED!"
 }
 
 install_environment() {
@@ -408,10 +412,10 @@ wheel_can_sudo() {
 }
 
 install_essentials() {
-    echo -e "${BOLD}${CYAN}  ==>${RESET} ${BOLD}${WHITE}Installing essential programs.${RESET}"
+    print_info "Installing essential programs."
     for p in "base-devel" "git"; do
         if check_installed "$p"; then
-            printf "'%s' is already installed.\n" "$p"
+            print_info "'$p' is already installed.\n"
         else
             pacman_install "$p" "Installing $p which is required to install and configure other packages."
         fi
