@@ -136,6 +136,7 @@ start=,size=\n" | sfdisk /dev/vda --wipe always
 
 # Why do I pass all the variables as arguments? Explained in `arch_install` 
 # args: username pass1 hostname timezone bios_or_uefi bootloader_id efi_directory disk_to_install
+# TODO: Fix `arch_install_run_in_chroot` not executing.
 arch_install_run_in_chroot() {
     # Renaming vars only for more readability.
     username="$1"
@@ -150,7 +151,7 @@ arch_install_run_in_chroot() {
     ln -sf /usr/bin/nvim /usr/bin/vim
     ln -sf /usr/bin/nvim /usr/bin/vi
 
-    ln -sf "/usr/share/locale/$timezone" /etc/localtime
+    ln -sf "/usr/share/zoneinfo/$timezone" /etc/localtime
     hwclock --systohc
 
     sed -i '/en_US.UTF-8/s/^#//g' /etc/locale.gen
@@ -439,9 +440,7 @@ configure-grub() {
     }
 }
 
-check_internet_connection() {
-    curl -sSf http://www.google.com >/dev/null
-}
+check_internet_connection() { curl -sSf http://www.google.com >/dev/null; }
 
 check_installation_environment() {
     # The 'X' is special! 
