@@ -207,14 +207,14 @@ SHOULD NOT BE RAN ON AN EXISTING ARCH INSTALLAION!\n\n"
     print_prompt "Hostname: " && read -r hostname
     while ! echo "$hostname" | grep -q "^[a-z_][a-z0-9_-]*$"; do
         print_warn "Hostname not valid. Give a hostname beginning with a letter, with only lowercase letters, - or _."
-        print_prompt "Hostname: " && read -rp hostname
+        print_prompt "Hostname: " && read -r hostname
     done
 
     # Change this so it uses fzf for easier access.
-    print_prompt "Timezone (Region/City): " && read -rp timezone
+    print_prompt "Timezone (Region/City): " && read -r timezone
     while ! find /usr/share/zoneinfo | grep -q "$timezone"; do
         print_warn "Timezone not valid. A valid timezone looks like -> \"US/Eastern\""
-        print_prompt "Timezone (Region/City): " && read -rp timezone
+        print_prompt "Timezone (Region/City): " && read -r timezone
     done
 
     # TODO: Print configuration before installing.
