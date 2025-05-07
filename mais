@@ -43,12 +43,13 @@ print_help() {
     Options are sequential meaning they execute in the order you provide them.
     If an option exits the script (such as --help) the other options are not read.
 
-    -h|--help|help                        Print this help message and exit.
-    -n|--username|username                Set username so it won't be asked interactively.
-    -a|--arch-install|arch-install        Run through installation of ArchLinux.
-        --vm|vm                               Pre-Configured partitioning for a virtual machine.
-        --main|main                           Pre-Configured partitioning for my main machine.
-        --X220|X220|x220                      Pre-Configured partitioning for my Lenovo X220 machine.
+    -h|--help                               Print this help message and exit.
+    -n|--username                           Set username so it won't be asked interactively.
+    -a|--arch-install                       Run through installation of ArchLinux.
+
+        vm                                      Pre-Configured partitioning for a virtual machine.
+        main                                    Pre-Configured partitioning for my main machine.
+        X220|x220                               Pre-Configured partitioning for my Lenovo X220 machine.
         Note: You can also use your own partitioning scheme.
               Make sure you mount your filesystems correctly before installation.
               The script expects these:
@@ -56,19 +57,17 @@ print_help() {
               BIOS -> Should specify disk to be installed -
                           in the script (No option provided); defaults to '/dev/vda'.
 
-    -i|--install-environment|install-environment    Install packages corresponding to specified install-environment.
-        Hyprland    Only install packages used in hyprland.
-        DWM         Only install packages used in dwm.
-        All         Install all packages.
-    -u|--install-dotfiles|install-dotfiles          Install dotfiles to user's home directory.
-    -p|--install-aurhelper|install-aurhelper        Install AUR helper (Can be one of 'paru/yay': defaults to 'paru')
-    -g|--configure-grub|configure-grub              Configure grub. # TODO: Expand on this
-    -d|--debug|debug                                Debug options, mainly for testing purposes.
-                                                    Some extra functions are available here.    
-        -e|--install-essentials|install-essentials      Install essential packages needed to install and
-                                                        configure other packages. 
-        -u|--update-package-descriptions|update-package-descriptions    Update package descriptions in '%s'.
-        -c|--check-installation-environment|check-installation-environment      Checks requirements for running the script.\n" "$program_name" "$programs_file"
+    -i|--install-environment                Install packages corresponding to specified install-environment.
+        Hyprland                                Only install packages used in hyprland.
+        DWM                                     Only install packages used in dwm.
+        All                                     Install all packages.
+    -u|--install-dotfiles                   Install dotfiles to user's home directory.
+    -p|--install-aurhelper                  Install AUR helper (Can be one of 'paru/yay': defaults to 'paru')
+    -g|--configure-grub                     Configure grub. # TODO: Expand on this
+    -d|--debug                              Debug options, mainly for testing purposes.
+        -e|--install-essentials                 Install essential packages needed to install and configure other packages. 
+        -u|--update-package-descriptions    Update package descriptions in '%s'.
+        -c|--check-installation-environment Checks requirements for running the script.\n" "$program_name" "$programs_file"
 }
 
 # label -> label type: dos/gpt
@@ -191,7 +190,7 @@ arch_install() {
 SHOULD NOT BE RAN ON AN EXISTING ARCH INSTALLAION!\n\n"
     print_prompt "Continue (Y/N): " && read -r continue && [[ "$continue" == [yY] ]] || exit 0
 
-    [ -z "$username" ] && ask_username
+    ask_username
 
     print_prompt "Enter a password for $username: " && read -rs pass1
     printf "\n"
@@ -397,6 +396,7 @@ install_dotfiles() {
 }
 
 ask_username() {
+    [ -z "$username" ] || return
     print_prompt "Username: " && read -r username
     while ! echo "$username" | grep -q "^[a-z_][a-z0-9_-]*$"; do
         print_warn "Username not valid. Give a username beginning with a letter, with only lowercase letters, - or _."
@@ -475,31 +475,31 @@ Try '$program_name --help' for more information."
     
 while [[ $# -gt 0 ]]; do
     case "$1" in
-        "-h"|"--help"|"help")
+        "-h"|"--help")
             print_help
             shift # Technically no need to shift since we're exiting.
             exit 0
             ;;
-        "-n"|"--username"|"username")
+        "-n"|"--username")
             [ -z "$2" ] && eprint "You should provide a username."
             username="$2"
             echo "$username" | grep -q "^[a-z_][a-z0-9_-]*$" || eprint "Username not valid. Give a username beginning with a letter, with only lowercase letters, - or _."
             shift 2
             ;;
-        "-a"|"--arch-install"|"arch-install")
+        "-a"|"--arch-install")
             case "$2" in
-                "--vm"|"vm") partition_vm; shift;;
-                "--main"|"main") partition_main; shift;;
-                "--X220"|"X220"|"x220") partition_x220; shift;;
+                "vm") partition_vm; shift;;
+                "main") partition_main; shift;;
+                "X220"|"x220") partition_x220; shift;;
                 *) invalid_option "$2";;
             esac
             arch_install
             shift
             exit 0 # Do not check for other arguments.
             ;;
-        "-i"|"--install-environment"|"install-environment")
+        "-i"|"--install-environment")
             clean_programs_file
-            [ -z "$username" ] && ask_username
+            ask_username
             wheel_can_sudo
             install_essentials
             install_aurhelper
@@ -511,14 +511,14 @@ while [[ $# -gt 0 ]]; do
             esac
             shift
             ;;
-        "-u"|"--install-dotfiles"|"install-dotfiles")
-            [ -z "$username" ] && ask_username
+        "-u"|"--install-dotfiles")
+            ask_username
             wheel_can_sudo
             install_dotfiles
             shift
             ;;
-        "-p"|"--install-aurhelper"|"install-aurhelper")
-            [ -z "$username" ] && ask_username
+        "-p"|"--install-aurhelper")
+            ask_username
             wheel_can_sudo
             install_essentials
             case "$2" in
@@ -528,15 +528,15 @@ while [[ $# -gt 0 ]]; do
             esac
             shift
             ;;
-        "-g"|"--configure-grub"|"configure-grub")
+        "-g"|"--configure-grub")
             configure-grub
             shift
             ;;
-        "-d"|"--debug"|"debug")
+        "-d"|"--debug")
             case "$2" in
-                "-e"|"--install-essentials"|"install-essentials") install_essentials; shift;;
-                "-u"|"--update-package-descriptions"|"update-package-descriptions") update_package_descriptions; shift;;
-                "-c"|"--check-installation-environment"|"check-installation-environment") check_installation_environment; shift;;
+                "-e"|"--install-essentials") install_essentials; shift;;
+                "-u"|"--update-package-descriptions") update_package_descriptions; shift;;
+                "-c"|"--check-installation-environment") check_installation_environment; shift;;
                 *) invalid_option "$2";;
             esac
             shift
