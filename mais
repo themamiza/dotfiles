@@ -237,6 +237,7 @@ SHOULD NOT BE RAN ON AN EXISTING ARCH INSTALLAION!\n\n"
     arch-chroot /mnt /bin/sh -c "arch_install_run_in_chroot $username $pass1 $hostname $timezone $bios_or_uefi $bootloader_id $efi_directory $disk_to_install"
     unset pass1 pass2
     unset -f arch_install_run_in_chroot
+    print_prompt "The system should be ready to reboot, Continue (Y/N): " && read -r continue && [[ "$continue" == [yY] ]] || exit 0
     reboot
 }
 
@@ -429,7 +430,7 @@ install_essentials() {
     print_info "Installing essential programs."
     for p in "base-devel" "git"; do
         if check_installed "$p"; then
-            print_info "'$p' is already installed.\n"
+            print_info "'$p' is already installed."
         else
             pacman_install "$p" "Installing $p which is required to install and configure other packages."
         fi
