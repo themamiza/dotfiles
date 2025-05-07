@@ -45,6 +45,7 @@ print_help() {
 
     -h|--help                               Print this help message and exit.
     -n|--username                           Set username so it won't be asked interactively.
+    -H|--hostname                           Set hostname so it won't be asked interactively.
     -a|--arch-install                       Run through installation of ArchLinux.
 
         vm                                      Pre-Configured partitioning for a virtual machine.
@@ -70,6 +71,7 @@ print_help() {
         -c|--check-installation-environment Checks requirements for running the script.\n" "$program_name" "$programs_file"
 }
 
+# TODO: Make sure device is not mounted before going through the install.
 # label -> label type: dos/gpt
 # size  -> measured in sectors; each sector being 512 bytes.
 partition_main() {
@@ -94,7 +96,6 @@ start=,size=,type=S\n" | sfdisk /dev/sda --wipe always
         mount --mkdir /dev/sda3 /mnt/home
         swapon /dev/sda4
         ;;
-
 
         "BIOS") printf "label: dos
 start=,size=64000000
@@ -123,7 +124,6 @@ start=,size=\n" | sfdisk /dev/vda --wipe always
         mount --mkdir /dev/vda1 /mnt/efi
         mount --mkdir /dev/vda3 /mnt/home
         ;;
-
 
         "BIOS") printf "label: dos
 start=,size=64000000
@@ -204,11 +204,13 @@ SHOULD NOT BE RAN ON AN EXISTING ARCH INSTALLAION!\n\n"
         printf "\n"
     done
 
-    print_prompt "Hostname: " && read -r hostname
-    while ! echo "$hostname" | grep -q "^[a-z_][a-z0-9_-]*$"; do
-        print_warn "Hostname not valid. Give a hostname beginning with a letter, with only lowercase letters, - or _."
+    [ -z "$hostname" ] && {
         print_prompt "Hostname: " && read -r hostname
-    done
+        while ! echo "$hostname" | grep -q "^[a-z_][a-z0-9_-]*$"; do
+            print_warn "Hostname not valid. Give a hostname beginning with a letter, with only lowercase letters, - or _."
+            print_prompt "Hostname: " && read -r hostname
+        done
+    }
 
     # Change this so it uses fzf for easier access.
     print_prompt "Timezone (Region/City): " && read -r timezone
@@ -485,6 +487,12 @@ while [[ $# -gt 0 ]]; do
             [ -z "$2" ] && eprint "You should provide a username."
             username="$2"
             echo "$username" | grep -q "^[a-z_][a-z0-9_-]*$" || eprint "Username not valid. Give a username beginning with a letter, with only lowercase letters, - or _."
+            shift 2
+            ;;
+        "-H"|"--hostname")
+            [ -z "$2" ] && eprint "You should provide a hostname."
+            hostname="$2"
+            echo "$hostname" | grep -q "^[a-z_][a-z0-9_-]*$" || eprint "Hostname not valid. Give a hostname beginning with a letter, with only lowercase letters, - or _."
             shift 2
             ;;
         "-a"|"--arch-install")
