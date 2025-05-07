@@ -44,6 +44,7 @@ print_help() {
     If an option exits the script (such as --help) the other options are not read.
 
     -h|--help|help                        Print this help message and exit.
+    -n|--username|username                Set username so it won't be asked interactively.
     -a|--arch-install|arch-install        Run through installation of ArchLinux.
         --vm|vm                               Pre-Configured partitioning for a virtual machine.
         --main|main                           Pre-Configured partitioning for my main machine.
@@ -190,7 +191,7 @@ arch_install() {
 SHOULD NOT BE RAN ON AN EXISTING ARCH INSTALLAION!\n\n"
     print_prompt "Continue (Y/N): " && read -r continue && [[ "$continue" == [yY] ]] || exit 0
 
-    ask_username
+    [ -z "$username" ] && ask_username
 
     print_prompt "Enter a password for $username: " && read -rs pass1
     printf "\n"
@@ -466,6 +467,12 @@ while [[ $# -gt 0 ]]; do
             shift # Technically no need to shift since we're exiting.
             exit 0
             ;;
+        "-n"|"--username"|"username")
+            [ -z "$2" ] && eprint "You should provide a username."
+            username="$2"
+            echo "$username" | grep -q "^[a-z_][a-z0-9_-]*$" || eprint "Username not valid. Give a username beginning with a letter, with only lowercase letters, - or _."
+            shift 2
+            ;;
         "-a"|"--arch-install"|"arch-install")
             case "$2" in
                 "--vm"|"vm") partition_vm; shift;;
@@ -479,7 +486,7 @@ while [[ $# -gt 0 ]]; do
             ;;
         "-i"|"--install-environment"|"install-environment")
             clean_programs_file
-            ask_username
+            [ -z "$username" ] && ask_username
             wheel_can_sudo
             install_essentials
             install_aurhelper
@@ -492,13 +499,13 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         "-u"|"--install-dotfiles"|"install-dotfiles")
-            ask_username
+            [ -z "$username" ] && ask_username
             wheel_can_sudo
             install_dotfiles
             shift
             ;;
         "-p"|"--install-aurhelper"|"install-aurhelper")
-            ask_username
+            [ -z "$username" ] && ask_username
             wheel_can_sudo
             install_essentials
             case "$2" in
