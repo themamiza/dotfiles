@@ -448,7 +448,7 @@ configure-grub() {
     sed -i "/^GRUB_CMDLINE_LINUX_DEFAULT=.*$/s/ quiet//" /etc/default/grub
 
     # Enable hibernation only if there is a swap device larger than 8G.
-    blkid | grep "TYPE=\"swap\"" | cut -d " " -f1 | sed "s/://" | xargs lsblk -no SIZE | sed "s/\s\+//;s/.$//" | xargs test 8 -le && {
+    blkid | grep "TYPE=\"swap\"" | cut -d " " -f1 | sed "s/://" | xargs lsblk -no SIZE | sed "s/\s\+//;s/.$//;s/\..*//" | xargs test 8 -le && {
         grep -q resume /etc/mkinitcpio.conf || {
             sed -i "/^HOOKS=(.*)$/s/)$/ resume)/" /etc/mkinitcpio.conf
             mkinitcpio -P
