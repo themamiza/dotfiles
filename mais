@@ -33,10 +33,11 @@ dotfiles_name="$(basename $dotfiles_url)"
 programs_file="programs.csv"
 programs_to_install="/tmp/programs.tmp"
 
-print_info()   { echo -e "${BOLD}${CYAN}  ==>${RESET} ${BOLD}${WHITE}$1${RESET}"; }
-print_warn()   { echo -e "${BOLD}${YELLOW}  ==>${RESET} ${BOLD}${WHITE}$1${RESET}"; }
-print_prompt() { echo -en "${BOLD}${WHITE}$1${RESET}"; }
-eprint(){ printf "%s: %s\n" "$program_name" "$1" >&2; exit 1; }
+
+nprint(){ printf "${BOLD}${BLUE}%s:${RESET} %s\n" "$program_name" "$1"; }
+wprint(){ printf "${BOLD}${YELLOW}%s:${RESET} %s\n" "$program_name" "$1" >&2; }
+eprint(){ printf "${BOLD}${RED}%s:${RESET} %s\n" "$program_name" "$1" >&2; exit 1; }
+print_prompt() { echo -en "${BOLD}$1${RESET}"; }
 print_help() {
     printf "Usage: %s [Options]
 
