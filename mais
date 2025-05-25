@@ -24,6 +24,9 @@ efi_directory="/efi"
 disk_to_install="/dev/vda" # Only matters when using "BIOS".
 aurhelper="paru"
 
+# Default script behavior.
+verbose=false
+
 dotfiles_url="https://github.com/themamiza/dotfiles"
 dotfiles_name="$(basename $dotfiles_url)"
 # The script expects a 'programs.csv' file present in the same efi_directory
@@ -45,6 +48,7 @@ print_help() {
     If an option exits the script (such as --help) the other options are not read.
 
     -h|--help                               Print this help message and exit.
+    -v|--verbose                            Print everything that's happening.
     -n|--username                           Set username so it won't be asked interactively.
     -H|--hostname                           Set hostname so it won't be asked interactively.
     -a|--arch-install                       Run through installation of ArchLinux.
@@ -327,22 +331,28 @@ install_aurhelper() {
 }
 
 pacman_install() {
-    print_info "Installing $1 :: $2"
-    pacman -S --noconfirm "$1"
+    if "$verbose"; then
+        nprint "Installing $1 :: $2"
+        pacman -S --noconfirm "$1"
+    else
+        pacman -S --noconfirm "$1" >/dev/null 2>&1
+    fi
 }
 
 aur_install() {
-    print_info "Installing $1 :: $2"
-    sudo -u "$username" "$aurhelper" -S --noconfirm "$1"
+    if "$verbose"; then
+        nprint "Installing $1 :: $2"
+        sudo -u "$username" "$aurhelper" -S --noconfirm "$1"
+    else
+        sudo -u "$username" "$aurhelper" -S --noconfirm "$1" >/dev/null 2>&1
+    fi
 }
 
 suckless_install() {
-    print_info "Installing $1 :: $2"
     eprint "NOT IMPLEMENTED!"
 }
 
 doomemacs_install() {
-    print_info "Installing $1 :: $2"
     eprint "NOT IMPLEMENTED!"
 }
 
@@ -410,7 +420,7 @@ ask_username() {
 
 check_installed() {
     # Check if a command is available.
-    command -v "$1" >/dev/null && return 0
+    command -v "$1" >/dev/null 2>&1 && return 0
     # Check if a package is available.
     pacman -Q "$1" >/dev/null 2>&1 && return 0
     # Return false otherwise.
@@ -430,46 +440,115 @@ wheel_can_sudo() {
 }
 
 install_essentials() {
-    print_info "Installing essential programs."
-    for p in "base-devel" "git"; do
-        if check_installed "$p"; then
-            print_info "'$p' is already installed."
+    if "$verbose"; then
+        nprint "Installing essential programs."
+        for p in "base-devel" "git"; do
+            if check_installed "$p"; then
+                nprint "'$p' is already installed."
+            else
+                pacman_install "$p" "Installing $p which is required to install and configure other packages."
+            fi
+        done
+    else
+        for p in "base-devel" "git"; do
+            check_installed "$p" || pacman_install "$p" "Installing $p which is required to install and configure other packages."
+        done
+    fi
+}
+
+configure_grub() {
+    verbose=false isRoot || eprint "Only root can configure grub."
+    if "$verbose"; then
+        nprint "Configuring grub options."
+
+        # These configurations need to be done regardless of having swap.
+        sed -i "/^GRUB_TIMEOUT=.*$/s/=.*/=3/;/^#GRUB_DISABLE_OS_PROBER=false$/s/#//" /etc/default/grub
+        sed -i "/^GRUB_DEFAULT=.*$/s/=.*/=saved/;/^#GRUB_SAVEDEFAULT=true$/s/#//" /etc/default/grub
+        sed -i "/^GRUB_CMDLINE_LINUX_DEFAULT=.*$/s/ quiet//" /etc/default/grub
+
+        nprint "Checking swap partition."
+        # Enable hibernation only if there is a swap device larger than 8G.
+        blkid | grep "TYPE=\"swap\"" | cut -d " " -f1 | sed "s/://" | xargs lsblk -no SIZE | sed "s/\s\+//;s/.$//;s/\..*//" | xargs test 8 -le && {
+            nprint "Enabling hibernation."
+            grep -q resume /etc/mkinitcpio.conf || {
+                sed -i "/^HOOKS=(.*)$/s/)$/ resume)/" /etc/mkinitcpio.conf
+                mkinitcpio -P
+            }
+            grep -q resume /etc/default/grub || {
+                swapuuid=$(blkid | grep swap | grep -Po " UUID=\".*?\"" | sed "s/ //;s/UUID=//;s/\"//g")
+                sed -i "/^GRUB_CMDLINE_LINUX_DEFAULT=.*$/s/.$/ resume=UUID=$swapuuid\"/" /etc/default/grub
+                grub-mkconfig -o /boot/grub/grub.cfg
+                unset swapuuid
+            }
+        }
+    else
+        sed -i "/^GRUB_TIMEOUT=.*$/s/=.*/=3/;/^#GRUB_DISABLE_OS_PROBER=false$/s/#//" /etc/default/grub
+        sed -i "/^GRUB_DEFAULT=.*$/s/=.*/=saved/;/^#GRUB_SAVEDEFAULT=true$/s/#//" /etc/default/grub
+        sed -i "/^GRUB_CMDLINE_LINUX_DEFAULT=.*$/s/ quiet//" /etc/default/grub
+
+        blkid | grep "TYPE=\"swap\"" | cut -d " " -f1 | sed "s/://" | xargs lsblk -no SIZE | sed "s/\s\+//;s/.$//;s/\..*//" | xargs test 8 -le && {
+            grep -q resume /etc/mkinitcpio.conf || {
+                sed -i "/^HOOKS=(.*)$/s/)$/ resume)/" /etc/mkinitcpio.conf
+                mkinitcpio -P >/dev/null 2>&1
+            }
+            grep -q resume /etc/default/grub || {
+                swapuuid=$(blkid | grep swap | grep -Po " UUID=\".*?\"" | sed "s/ //;s/UUID=//;s/\"//g")
+                sed -i "/^GRUB_CMDLINE_LINUX_DEFAULT=.*$/s/.$/ resume=UUID=$swapuuid\"/" /etc/default/grub
+                grub-mkconfig -o /boot/grub/grub.cfg >/dev/null 2>&1
+                unset swapuuid
+            }
+        }
+     fi
+}
+
+check_internet_connection() {
+    if "$verbose"; then
+        if curl -sSf http://www.google.com >/dev/null; then
+            nprint "Internet connection available."
+            return 0
         else
-            pacman_install "$p" "Installing $p which is required to install and configure other packages."
+            wprint "Can't reach the web."
+            return 1
         fi
-    done
+    else
+        curl -sSf http://www.google.com >/dev/null 2>&1 || return 1
+    fi
 }
 
-configure-grub() {
-    [ "$(id -u)" == 0 ] || eprint "Only root can configure grub."
-    print_info "Configuring grub."
-    # These configurations need to be done regardless of having swap.
-    sed -i "/^GRUB_TIMEOUT=.*$/s/=.*/=3/;/^#GRUB_DISABLE_OS_PROBER=false$/s/#//" /etc/default/grub
-    sed -i "/^GRUB_DEFAULT=.*$/s/=.*/=saved/;/^#GRUB_SAVEDEFAULT=true$/s/#//" /etc/default/grub
-    sed -i "/^GRUB_CMDLINE_LINUX_DEFAULT=.*$/s/ quiet//" /etc/default/grub
-
-    # Enable hibernation only if there is a swap device larger than 8G.
-    blkid | grep "TYPE=\"swap\"" | cut -d " " -f1 | sed "s/://" | xargs lsblk -no SIZE | sed "s/\s\+//;s/.$//;s/\..*//" | xargs test 8 -le && {
-        grep -q resume /etc/mkinitcpio.conf || {
-            sed -i "/^HOOKS=(.*)$/s/)$/ resume)/" /etc/mkinitcpio.conf
-            mkinitcpio -P
-        }
-        grep -q resume /etc/default/grub || {
-            swapuuid=$(blkid | grep swap | grep -Po " UUID=\".*?\"" | sed "s/ //;s/UUID=//;s/\"//g")
-            sed -i "/^GRUB_CMDLINE_LINUX_DEFAULT=.*$/s/.$/ resume=UUID=$swapuuid\"/" /etc/default/grub
-            grub-mkconfig -o /boot/grub/grub.cfg
-            unset swapuuid
-        }
-    }
+isRoot() {
+    if "$verbose"; then
+        if [ "$(id -u)" == 0 ]; then
+            nprint "Running as root."
+            return 0
+        else
+            wprint "Not running as root."
+            return 1
+        fi
+    else
+        [ "$(id -u)" == 0 ] && return 0
+        return 1
+    fi
 }
 
-check_internet_connection() { curl -sSf http://www.google.com >/dev/null; }
+isArch() {
+    if "$verbose"; then
+        if check_installed "pacman"; then
+            nprint "Running ArchLinux."
+            return 0
+        else
+            wprint "Not running ArchLinux."
+            return 1
+        fi
+    else
+        check_installed "pacman" && return 0
+        return 1
+    fi
+}
 
 check_installation_environment() {
-    # The 'X' is special! 
-    check_installed "pacman"  && echo -e "${BOLD}${WHITE}[${RESET}${BOLD}${GREEN}X${RESET}${BOLD}${WHITE}] 'pacman' binary found.${RESET}"         || eprint "'pacman' binary not found."
-    [ "$(id -u)" == 0 ]       && echo -e "${BOLD}${WHITE}[${RESET}${BOLD}${GREEN}X${RESET}${BOLD}${WHITE}] Running as root.${RESET}"               || eprint "Should be run as root."
-    check_internet_connection && echo -e "${BOLD}${WHITE}[${RESET}${BOLD}${GREEN}X${RESET}${BOLD}${WHITE}] Internet connection available.${RESET}" || eprint "Can't reach the web."
+    verbose=true isArch
+    verbose=true isRoot
+    verbose=true check_internet_connection
 }
 
 invalid_option() {
@@ -483,6 +562,11 @@ while [[ $# -gt 0 ]]; do
             print_help
             shift # Technically no need to shift since we're exiting.
             exit 0
+            ;;
+        "-v"|"--verbose")
+            # TODO: Complete verbosifing the script. 
+            verbose=true
+            shift
             ;;
         "-n"|"--username")
             [ -z "$2" ] && eprint "You should provide a username."
@@ -539,7 +623,7 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         "-g"|"--configure-grub")
-            configure-grub
+            configure_grub
             shift
             ;;
         "-d"|"--debug")
