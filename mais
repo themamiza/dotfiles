@@ -456,6 +456,7 @@ check_installed() {
 }
 
 wheel_can_sudo() {
+    isRoot
     if "$verbose"; then
         rm -f /etc/sudoers.d/*mais*
 
