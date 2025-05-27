@@ -443,7 +443,7 @@ wheel_can_sudo() {
 install_essentials() {
     if "$verbose"; then
         nprint "Installing essential programs."
-        for p in "base-devel" "git"; do
+        for p in "base-devel" "git" "rsync"; do
             if check_installed "$p"; then
                 nprint "'$p' is already installed."
             else
@@ -613,6 +613,7 @@ while [[ $# -gt 0 ]]; do
         "-u"|"--install-dotfiles")
             ask_username
             wheel_can_sudo
+            install_essentials
             install_dotfiles
             shift
             ;;
