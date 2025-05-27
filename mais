@@ -22,11 +22,10 @@ dotfiles_name="$(basename $dotfiles_url)"
 programs_file="programs.csv"
 programs_to_install="/tmp/programs.tmp"
 
-
-nprint(){ printf "${BOLD}${BLUE}%s:${RESET} %s\n" "$program_name" "$1"; }
-wprint(){ printf "${BOLD}${YELLOW}%s:${RESET} %s\n" "$program_name" "$1" >&2; }
-eprint(){ printf "${BOLD}${RED}%s:${RESET} %s\n" "$program_name" "$1" >&2; exit 1; }
-print_prompt() { echo -en "${BOLD}$1${RESET}"; }
+nprint() { printf "${BOLD}${BLUE}%s:${RESET} %s\n" "$program_name" "$1"; }
+wprint() { printf "${BOLD}${YELLOW}%s:${RESET} %s\n" "$program_name" "$1" >&2; }
+eprint() { printf "${BOLD}${RED}%s:${RESET} %s\n" "$program_name" "$1" >&2; exit 1; }
+pprint() { printf "${BOLD}%s${RESET}" "$1"; }
 print_help() {
     printf "Usage: %s [Options]
 
@@ -196,35 +195,35 @@ arch_install() {
 2. synchronized system clock. (timedatectl set-ntp true)
 3. configured your filesystem and mounted your root at /mnt (fdisk).\n
 SHOULD NOT BE RAN ON AN EXISTING ARCH INSTALLAION!\n\n"
-    print_prompt "Continue (Y/N): " && read -r continue && [[ "$continue" == [yY] ]] || exit 0
+    pprint "Continue (Y/N): " && read -r continue && [[ "$continue" == [yY] ]] || exit 0
 
     ask_username
 
-    print_prompt "Enter a password for $username: " && read -rs pass1
+    pprint "Enter a password for $username: " && read -rs pass1
     printf "\n"
-    print_prompt "Retype password: " && read -rs pass2
+    pprint "Retype password: " && read -rs pass2
     printf "\n"
     while ! [ "$pass1" = "$pass2" ]; do
         unset pass2
-        print_warn "Passwords do not match. Enter password again: " && read -rs pass1
+        wprint "Passwords do not match. Enter password again: " && read -rs pass1
         printf "\n"
-        print_prompt "Retype password: " && read -rs pass2
+        pprint "Retype password: " && read -rs pass2
         printf "\n"
     done
 
     [ -z "$hostname" ] && {
-        print_prompt "Hostname: " && read -r hostname
+        pprint "Hostname: " && read -r hostname
         while ! echo "$hostname" | grep -q "^[a-z_][a-z0-9_-]*$"; do
-            print_warn "Hostname not valid. Give a hostname beginning with a letter, with only lowercase letters, - or _."
-            print_prompt "Hostname: " && read -r hostname
+            wprint "Hostname not valid. Give a hostname beginning with a letter, with only lowercase letters, - or _."
+            pprint "Hostname: " && read -r hostname
         done
     }
 
     # Change this so it uses fzf for easier access.
-    print_prompt "Timezone (Region/City): " && read -r timezone
+    pprint "Timezone (Region/City): " && read -r timezone
     while ! find /usr/share/zoneinfo | grep -q "$timezone"; do
-        print_warn "Timezone not valid. A valid timezone looks like -> \"US/Eastern\""
-        print_prompt "Timezone (Region/City): " && read -r timezone
+        wprint "Timezone not valid. A valid timezone looks like -> \"US/Eastern\""
+        pprint "Timezone (Region/City): " && read -r timezone
     done
 
     # TODO: Print configuration before installing.
@@ -247,7 +246,7 @@ SHOULD NOT BE RAN ON AN EXISTING ARCH INSTALLAION!\n\n"
     arch-chroot /mnt /bin/sh -c "arch_install_run_in_chroot $username $pass1 $hostname $timezone $bios_or_uefi $bootloader_id $efi_directory $disk_to_install"
     unset pass1 pass2
     unset -f arch_install_run_in_chroot
-    print_prompt "The system should be ready to reboot, Continue (Y/N): " && read -r continue && [[ "$continue" == [yY] ]] || exit 0
+    pprint "The system should be ready to reboot, Continue (Y/N): " && read -r continue && [[ "$continue" == [yY] ]] || exit 0
     reboot
 }
 
@@ -304,7 +303,7 @@ update_package_descriptions() {
 
     done <"$programs_file"
 
-    print_info "Updated package descriptions."
+    nprint "Updated package descriptions."
 }
 
 install_package() {
@@ -318,7 +317,6 @@ install_package() {
             "DoomEmacs") doomemacs_install "$1" "$description";;
         esac
     done <<<"$package_info"
-
 }
 
 install_aurhelper() {
@@ -383,13 +381,13 @@ install_environment() {
 }
 
 install_dotfiles() {
-    print_info "Installing dotfiles."
+    nprint "Installing dotfiles."
     # Mainly for my convenience.
     if [ -d "/home/$username/rp/dotfiles" ]; then
-        print_info "Found local dotfiles."
+        nprint "Found local dotfiles."
         srcdir="/home/$username/rp/dotfiles/"
     else
-        print_info "Cloning remote repository."
+        nprint "Cloning remote repository."
         srcdir="/home/$username/.local/src/$dotfiles_name/"
         sudo -u "$username" mkdir -p "/home/$username/.local/src"
         sudo -u "$username" git clone --depth 1 --single-branch --no-tags "$dotfiles_url" "/home/$username/.local/src/$dotfiles_name" ||
@@ -414,10 +412,10 @@ install_dotfiles() {
 
 ask_username() {
     [ -z "$username" ] || return
-    print_prompt "Username: " && read -r username
+    pprint "Username: " && read -r username
     while ! echo "$username" | grep -q "^[a-z_][a-z0-9_-]*$"; do
-        print_warn "Username not valid. Give a username beginning with a letter, with only lowercase letters, - or _."
-        print_prompt "Username: " && read -r username
+        wprint "Username not valid. Give a username beginning with a letter, with only lowercase letters, - or _."
+        pprint "Username: " && read -r username
     done
 }
 
