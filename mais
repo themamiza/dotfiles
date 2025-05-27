@@ -34,6 +34,7 @@ print_help() {
 
     -h|--help                               Print this help message and exit.
     -v|--verbose                            Print everything that's happening.
+    -c|--color                              Use ANSI escape codes to display colored output.
     -n|--username                           Set username so it won't be asked interactively.
     -H|--hostname                           Set hostname so it won't be asked interactively.
     -a|--arch-install                       Run through installation of ArchLinux.
@@ -82,7 +83,7 @@ enable_color() {
 # label -> label type: dos/gpt
 # size  -> measured in sectors; each sector being 512 bytes.
 partition_main() {
-    eprint "NOT IMPLEMENTED!"
+    eprint "Not implemented!"
 }
 
 partition_x220() {
@@ -350,11 +351,11 @@ aur_install() {
 }
 
 suckless_install() {
-    eprint "NOT IMPLEMENTED!"
+    eprint "Not implemented!"
 }
 
 doomemacs_install() {
-    eprint "NOT IMPLEMENTED!"
+    eprint "Not implemented!"
 }
 
 install_environment() {
@@ -380,34 +381,60 @@ install_environment() {
     done <"$programs_to_install"
 }
 
+# TODO: Check if this function is fully verbosified.
 install_dotfiles() {
-    nprint "Installing dotfiles."
-    # Mainly for my convenience.
-    if [ -d "/home/$username/rp/dotfiles" ]; then
-        nprint "Found local dotfiles."
-        srcdir="/home/$username/rp/dotfiles/"
+    if "$verbose"; then
+        nprint "Installing dotfiles."
+        # Mainly for my convenience.
+        if [ -d "/home/$username/rp/dotfiles" ]; then
+            nprint "Found local dotfiles."
+            srcdir="/home/$username/rp/dotfiles/"
+        else
+            nprint "Cloning remote repository."
+            srcdir="/home/$username/.local/src/$dotfiles_name/"
+            sudo -u "$username" mkdir -p "/home/$username/.local/src"
+            sudo -u "$username" git clone --depth 1 --single-branch --no-tags "$dotfiles_url" "/home/$username/.local/src/$dotfiles_name" ||
+                {
+                    cd "/home/$username/.local/src/$dotfiles_name" || exit 1
+                    sudo -u "$username" git pull --force origin master
+                }
+            cd "/home/$username/.local/src/$dotfiles_name" || exit 1
+        fi
+
+        sudo -u "$username" rsync -a "$srcdir" "/home/$username"
+        # Remove extra files
+        rm "/home/$username/LICENSE" "/home/$username/README.md" "/home/$username/programs.csv" "/home/$username/mais" 
+
+        rm -rf "/home/$username/.git"
     else
-        nprint "Cloning remote repository."
-        srcdir="/home/$username/.local/src/$dotfiles_name/"
-        sudo -u "$username" mkdir -p "/home/$username/.local/src"
-        sudo -u "$username" git clone --depth 1 --single-branch --no-tags "$dotfiles_url" "/home/$username/.local/src/$dotfiles_name" ||
-            {
-                cd "/home/$username/.local/src/$dotfiles_name" || exit 1
-                sudo -u "$username" git pull --force origin master
-            }
-        cd "/home/$username/.local/src/$dotfiles_name" || exit 1
+        if [ -d "/home/$username/rp/dotfiles" ]; then
+            srcdir="/home/$username/rp/dotfiles/"
+        else
+            srcdir="/home/$username/.local/src/$dotfiles_name/"
+            sudo -u "$username" mkdir -p "/home/$username/.local/src" >/dev/null 2>&1
+            sudo -u "$username" git clone --depth 1 --single-branch --no-tags "$dotfiles_url" "/home/$username/.local/src/$dotfiles_name" >/dev/null 2>&1 ||
+                {
+                    cd "/home/$username/.local/src/$dotfiles_name" >/dev/null 2>&1 || exit 1
+                    sudo -u "$username" git pull --force origin master >/dev/null 2>&1
+                }
+            cd "/home/$username/.local/src/$dotfiles_name" >/dev/null 2>&1 || exit 1
+        fi
+        sudo -u "$username" rsync -a "$srcdir" "/home/$username" >/dev/null 2>&1
+
+        rm "/home/$username/LICENSE" "/home/$username/README.md" "/home/$username/programs.csv" "/home/$username/mais" >/dev/null 2>&1
+
+        rm -rf "/home/$username/.git" >/dev/null 2>&1
     fi
 
-    sudo -u "$username" cp -rfT "$srcdir" "/home/$username"
-    # Remove extra files
-    rm "/home/$username/LICENSE" "/home/$username/README.md" "/home/$username/programs.csv" "/home/$username/mais" 
-
-    rm -rf "/home/$username/.git"
-
-    # TODO: Do not create link if it already exists.
-    sudo -u "$username" ln -sf "/home/$username/.config/bash/.bashrc"  "/home/$username/.bashrc"
-    sudo -u "$username" ln -sf "/home/$username/.config/shell/profile" "/home/$username/.zprofile"
-    sudo -u "$username" ln -sf "/home/$username/.config/x11/xprofile"  "/home/$username/.xprofile"
+    if [ ! -L "/home/$username/.bashrc" ] || [ "$(readlink -f "/home/$username/.bashrc")" != "/home/$username/.config/bash/.bashrc" ]; then
+        sudo -u "$username" ln -sf "/home/$username/.config/bash/.bashrc"  "/home/$username/.bashrc"
+    fi
+    if [ ! -L "/home/$username/.zprofile" ] || [ "$(readlink -f "/home/$username/.zprofile")" != "/home/$username/.config/shell/profile" ]; then
+        sudo -u "$username" ln -sf "/home/$username/.config/shell/profile" "/home/$username/.zprofile"
+    fi
+    if [ ! -L "/home/$username/.xprofile" ] || [ "$(readlink -f "/home/$username/.xprofile")" != "/home/$username/.config/x11/.xprofile" ]; then
+        sudo -u "$username" ln -sf "/home/$username/.config/x11/xprofile"  "/home/$username/.xprofile"
+    fi
 }
 
 ask_username() {
@@ -429,15 +456,27 @@ check_installed() {
 }
 
 wheel_can_sudo() {
-    rm -f /etc/sudoers.d/*mais*
+    if "$verbose"; then
+        rm -f /etc/sudoers.d/*mais*
 
-    # Remove tmp file and restore normal functionality on exit.
-    trap 'rm -f /etc/sudoers.d/mais-tmp;
-          echo "%wheel ALL=(ALL:ALL) ALL" >/etc/sudoers.d/00-mais-wheel-can-sudo;
-          echo "%wheel ALL=(ALL:ALL) NOPASSWD: /usr/bin/shutdown,/usr/bin/reboot,/usr/bin/systemctl suspend,/usr/bin/mount,/usr/bin/umount,/usr/bin/pacman -Syu,/usr/bin/pacman -Syyu,/usr/bin/pacman -Syyu --noconfirm" >/etc/sudoers.d/01-mais-cmds-without-password;
-          echo "Defaults editor=/usr/bin/nvim" > /etc/sudoers.d/02-mais-visudo-editor;' HUP INT QUIT TERM PWR EXIT ILL
+        # Remove tmp file and restore normal functionality on exit.
+        trap 'rm -f /etc/sudoers.d/mais-tmp;
+              echo "%wheel ALL=(ALL:ALL) ALL" >/etc/sudoers.d/00-mais-wheel-can-sudo;
+              echo "%wheel ALL=(ALL:ALL) NOPASSWD: /usr/bin/shutdown,/usr/bin/reboot,/usr/bin/systemctl suspend,/usr/bin/mount,/usr/bin/umount,/usr/bin/pacman -Syu,/usr/bin/pacman -Syyu,/usr/bin/pacman -Syyu --noconfirm" >/etc/sudoers.d/01-mais-cmds-without-password;
+              echo "Defaults editor=/usr/bin/nvim" >/etc/sudoers.d/02-mais-visudo-editor;' HUP INT QUIT TERM PWR EXIT ILL
 
-    echo "%wheel ALL=(ALL) NOPASSWD: ALL" >/etc/sudoers.d/mais-tmp
+        echo "%wheel ALL=(ALL) NOPASSWD: ALL" >/etc/sudoers.d/mais-tmp
+    else
+        rm -f /etc/sudoers.d/*mais* >/dev/null 2>&1
+
+        # Remove tmp file and restore normal functionality on exit.
+        trap 'rm -f /etc/sudoers.d/mais-tmp >/dev/null 2>&1;
+              echo "%wheel ALL=(ALL:ALL) ALL" | tee /etc/sudoers.d/00-mais-wheel-can-sudo >/dev/null 2>&1;
+              echo "%wheel ALL=(ALL:ALL) NOPASSWD: /usr/bin/shutdown,/usr/bin/reboot,/usr/bin/systemctl suspend,/usr/bin/mount,/usr/bin/umount,/usr/bin/pacman -Syu,/usr/bin/pacman -Syyu,/usr/bin/pacman -Syyu --noconfirm" | tee /etc/sudoers.d/01-mais-cmds-without-password >/dev/null 2>&1;
+              echo "Defaults editor=/usr/bin/nvim" | tee /etc/sudoers.d/02-mais-visudo-editor >/dev/null 2>&1;' HUP INT QUIT TERM PWR EXIT ILL
+
+        echo "%wheel ALL=(ALL) NOPASSWD: ALL" | tee /etc/sudoers.d/mais-tmp >/dev/null 2>&1
+    fi
 }
 
 install_essentials() {
