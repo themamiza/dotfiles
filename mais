@@ -10,14 +10,14 @@ efi_directory="/efi"
 disk_to_install="/dev/vda" # Only matters when using "BIOS".
 aurhelper="paru"
 
-# Default script behavior.
+# Default script behavior
 verbose=false
 
 dotfiles_url="https://github.com/themamiza/dotfiles"
 dotfiles_name="$(basename $dotfiles_url)"
-# The script expects a 'programs.csv' file present in the same efi_directory
+# The script expects a 'programs.csv' file present in the same efi_directory.
 # TODO: Download the file if not present.
-# programs_file_url="https://raw.githubusercontent.com/themamiza/dotfiles/refs/heads/master/programs.csv"
+#programs_file_url="https://raw.githubusercontent.com/themamiza/dotfiles/refs/heads/master/programs.csv"
 
 programs_file="programs.csv"
 programs_to_install="/tmp/programs.tmp"
@@ -145,7 +145,7 @@ start=,size=\n" | sfdisk /dev/vda --wipe always
     esac
 }
 
-# Why do I pass all the variables as arguments? Explained in `arch_install` 
+# Why do I pass all the variables as arguments? Explained in `arch_install`.
 # args: username pass1 hostname timezone bios_or_uefi bootloader_id efi_directory disk_to_install
 # TODO: Fix `arch_install_run_in_chroot` not executing.
 arch_install_run_in_chroot() {
@@ -186,15 +186,16 @@ arch_install_run_in_chroot() {
 
     systemctl enable NetworkManager
 
+    # TODO: Check and if warn the user if already exists.
     # This should be the last thing done.
     date >> /etc/installation.date
 }
 
 arch_install() {
     printf "The rest of the installation assumes you have
-1. an internet connection (iwctl).
-2. synchronized system clock. (timedatectl set-ntp true)
-3. configured your filesystem and mounted your root at /mnt (fdisk).\n
+1. an internet connection. \`iwctl\`
+2. synchronized system clock. \`timedatectl set-ntp true\`
+3. configured your filesystem and mounted your root at '/mnt'. \`fdisk\`\n
 SHOULD NOT BE RAN ON AN EXISTING ARCH INSTALLAION!\n\n"
     pprint "Continue (Y/N): " && read -r continue && [[ "$continue" == [yY] ]] || exit 0
 
@@ -596,7 +597,7 @@ invalid_option() {
     eprint "Invalid option '$1'
 Try '$program_name --help' for more information."
 }
-    
+
 while [[ $# -gt 0 ]]; do
     case "$1" in
         "-h"|"--help")
