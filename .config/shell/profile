@@ -7,7 +7,7 @@ export PATH="$PATH$(find ~/.local/bin -type d -printf ":%p")"
 
 # Default programs:
 export EDITOR="nvim"
-export TERMINAL="alacritty"
+export TERMINAL="kitty"
 export BROWSER="brave"
 export WM="hyprland"
 
