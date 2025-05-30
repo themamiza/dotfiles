@@ -21,6 +21,9 @@ for command in mount umount pacman su fdisk dd systemctl; do
 	alias $command="sudo $command"
 done; unset command
 
+# Use kitty's own ssh when using kitty:
+[ "$TERM" = "xterm-kitty" ] && alias ssh="kitten ssh"
+
 # Unnecessary bling:
 alias clear='echo -en "\x1b[2J\x1b[1;1H"; echo; echo; seq 1 $(tput cols) | sort -R | spark | lolcat; echo; echo'
 
@@ -30,7 +33,6 @@ alias \
 	mv="mv -iv" \
 	rm="rm -vI" \
 	nsxiv="nsxiv -b" \
-	mkd="mkdir -pv" \
 	history="history 0" \
 	up="uptime -p" \
 	cw="wc -w" \
@@ -47,38 +49,12 @@ alias \
 
 # These common commands are just too long! Abbreviate them:
 alias \
-	ka="killall" \
 	c="clear" \
-	sdn="shutdown -h now" \
-	p="pacman" \
-	pp="paru" \
 	v="vim" \
-	sv="sudo vim" \
-	e="emacs" \
-	s="nsxiv" \
 	z="zathura" \
 	lf="lfub" \
-	sys="systemctl" \
-	ssys="sudo systemctl" \
 	dmesg="sudo dmesg -H" \
 	unrar="unrar-free" \
 	ug="sudo grub-mkconfig -o /boot/grub/grub.cfg" \
 	m="sudo make clean install" \
 	pong="ping 4.2.2.4"
-
-# Git commands:
-alias \
-	g="git" \
-	gd="git diff" \
-	gs="git status" \
-	ga="git add -A" \
-	gc="git commit" \
-	gp="git push" \
-	ggc="git gc"
-
-# Tmux commands:
-alias \
-	t="tmux" \
-	tn="tmux new -s" \
-	tl="tmux ls" \
-	ta="tmux attach -t"
