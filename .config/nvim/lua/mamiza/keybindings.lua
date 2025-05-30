@@ -22,7 +22,7 @@ vim.keymap.set("n", "<leader>:", ":Telescope commands<CR>", { silent = true })
 vim.keymap.set("n", "<leader>bb", ":Telescope buffers<CR>", { silent = true })
 
 -- Compile:
-vim.keymap.set("n", "<leader>cc", ":!")
+vim.keymap.set("n", "<leader>cc", ":!<up>")
 
 -- Neogit
 vim.keymap.set("n", "<leader>gg", ":Neogit<CR>", { silent = true })
