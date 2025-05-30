@@ -69,18 +69,20 @@ preexec()
 	echo -ne "\e[5 q"	# Use beam shaped cursor for each new prompt.
 }
 
-lfcd()
-{
-	tmp="$(mktemp)"
-	lf -last-dir-path="$tmp" "$@"
-	[ -f "$tmp" ] && {
-		dir="$(cat "$tmp")"
-		rm -f "$tmp" >/dev/null
-		[ -d "$dir" ] && [ "$dir" != "$pwd" ] && cd "$dir"
+if [ -x "$(command -v lf)" ]; then
+	lfcd()
+	{
+		tmp="$(mktemp)"
+		lf -last-dir-path="$tmp" "$@"
+		[ -f "$tmp" ] && {
+			dir="$(cat "$tmp")"
+			rm -f "$tmp" >/dev/null
+			[ -d "$dir" ] && [ "$dir" != "$pwd" ] && cd "$dir"
+		}
 	}
-}
 
-bindkey -s "^o" "lfcd\n"
+	bindkey -s "^o" "lfcd\n"
+fi
 
 autoload edit-command-line
 zle -N edit-command-line
