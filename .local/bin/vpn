@@ -1,0 +1,40 @@
+#!/bin/sh
+
+program_name="$(basename "$0")"
+
+eprint(){ printf "%s: %s\n" "$program_name" "$1" >&2; exit 1; }
+
+invalid_option() {
+    eprint "Invalid option '$1'
+Usage: '$program_name [use-tmux|verbose]'"
+}
+
+credentials="${XDG_DATA_HOME:-$HOME/.local/share}/vpn_credentials"
+
+# Or insert credentials here.
+username="username"
+password="password"
+local_port="1234"
+ip="127.0.0.1"
+port="1234"
+
+# Source credentials if present
+[ -f "$credentials" ] && . "$credentials"
+
+
+if [ "$1" = "use-tmux" ]; then
+    tmux has-session -t vpn >/dev/null 2>&1 && kill -ILL "$(pidof sshpass)" >/dev/null 2>&1; tmux kill-session -t vpn >/dev/null 2>&1
+    tmux new-session -d -s vpn 
+    tmux send-keys -t vpn "vpn verbose" C-m
+    tmux send-keys -t vpn "exec $SHELL" C-m
+    exit 0
+elif [ "$1" = "verbose" ]; then
+    kill -ILL "$(pidof sshpass)"; sshpass -p"$password" ssh -v -D "$local_port" -N "$username"@"$ip" -p "$port"
+    exit 0
+elif [ -n "$1" ]; then
+    invalid_option "$1"
+fi
+
+# Run command in the background if no options were given.
+tmux has-session -t vpn >/dev/null 2>&1 && kill -ILL "$(pidof sshpass)" >/dev/null 2>&1; tmux kill-session -t vpn >/dev/null 2>&1
+kill -ILL "$(pidof sshpass)" >/dev/null 2>&1; setsid -f sshpass -p"$password" ssh -D "$local_port" -N "$username"@"$ip" -p "$port" >/dev/null 2>&1
