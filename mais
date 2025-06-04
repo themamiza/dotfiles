@@ -54,9 +54,16 @@ print_help() {
         Hyprland                                Only install packages used in hyprland.
         DWM                                     Only install packages used in dwm.
         All                                     Install all packages.
+
     -u|--install-dotfiles                   Install dotfiles to user's home directory.
     -p|--install-aurhelper                  Install AUR helper (Can be one of 'paru/yay': defaults to 'paru')
-    -g|--configure-grub                     Configure grub. # TODO: Expand on this
+    -g|--configure-grub                     Configure grub to do the following:
+                                                Set grub timeout to 3s,
+                                                Enable \`os-prober\`,
+                                                Save previous choice,
+                                                Print everything to console while booting,
+                                                Enable hibernation only if there's a swap partition larger than 8GBs.
+
     -d|--debug                              Debug options, mainly for testing purposes.
         -e|--install-essentials                 Install essential packages needed to install and configure other packages. 
         -u|--update-package-descriptions    Update package descriptions in '%s'.
