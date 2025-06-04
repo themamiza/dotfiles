@@ -38,6 +38,7 @@ print_help() {
     -c|--color                              Use ANSI escape codes to display colored output.
     -n|--username                           Set username so it won't be asked interactively.
     -H|--hostname                           Set hostname so it won't be asked interactively.
+    -t|--timezone                           Set timezone so it won't be asked interactively.
     -a|--arch-install                       Run through installation of ArchLinux.
 
         vm                                      Pre-Configured partitioning for a virtual machine.
@@ -716,6 +717,16 @@ while [[ $# -gt 0 ]]; do
             [ -z "$2" ] && eprint "You should provide a hostname."
             hostname="$2"
             echo "$hostname" | grep -q "^[a-z_][a-z0-9_-]*$" || eprint "Hostname not valid. Give a hostname beginning with a letter, with only lowercase letters, - or _."
+            shift 2
+            ;;
+        "-t"|"--timezone")
+            [ -z "$2" ] && eprint "You should provide a timezone."
+            timezone="$2"
+            # TODO: Fix condition as it is not correct.
+            while ! find /usr/share/zoneinfo | grep -q "$timezone"; do
+                wprint "Timezone not valid. A valid timezone looks like -> \"US/Eastern\""
+                pprint "Timezone (Region/City): " && read -r timezone
+            done
             shift 2
             ;;
         "-a"|"--arch-install")
