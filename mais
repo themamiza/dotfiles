@@ -169,36 +169,85 @@ arch_install_run_in_chroot() {
     efi_directory="$7"
     disk_to_install="$8"
 
-    ln -sf /usr/bin/nvim /usr/bin/vim
-    ln -sf /usr/bin/nvim /usr/bin/vi
+    if "$verbose"; then
+        if [ ! -L "/usr/bin/vim" ] || [ "$(readlink -f "/usr/bin/vim")" != "/usr/bin/nvim" ]; then
+            ln -sf /usr/bin/nvim /usr/bin/vim
+        fi
+        if [ ! -L "/usr/bin/vi" ] || [ "$(readlink -f "/usr/bin/vi")" != "/usr/bin/nvim" ]; then
+            ln -sf /usr/bin/nvim /usr/bin/vi
+        fi
 
-    ln -sf "/usr/share/zoneinfo/$timezone" /etc/localtime
-    hwclock --systohc
+        if [ ! -L "/etc/localtime" ] || [ "$(readlink -f "/etc/localtime")" != "/usr/share/zoneinfo/$timezone" ]; then
+            ln -sf "/usr/share/zoneinfo/$timezone" /etc/localtime
+        fi
 
-    sed -i '/en_US.UTF-8/s/^#//g' /etc/locale.gen
-    locale-gen
-    printf "LANG=en_US.UTF-8\n" > /etc/locale.conf
-    printf "%s\n" "$hostname" > /etc/hostname
+        hwclock --systohc
 
-    mkinitcpio -P
+        sed -i '/en_US.UTF-8/s/^#//g' /etc/locale.gen
+        locale-gen
+        printf "LANG=en_US.UTF-8\n" > /etc/locale.conf
+        printf "%s\n" "$hostname" > /etc/hostname
 
-    case "$bios_or_uefi" in
-        "UEFI") grub-install --target=x86_64-efi --efi-directory="$efi_directory" --bootloader-id="$bootloader_id";;
-        "BIOS") grub-install --target=i386-pc "$disk_to_install";;
-    esac
-    grub-mkconfig -o /boot/grub/grub.cfg
+        mkinitcpio -P
 
-    useradd --create-home --groups wheel --shell /bin/bash "$username"
-    echo "$username:$pass1" | chpasswd
-    unset pass1 pass2
+        case "$bios_or_uefi" in
+            "UEFI") grub-install --target=x86_64-efi --efi-directory="$efi_directory" --bootloader-id="$bootloader_id";;
+            "BIOS") grub-install --target=i386-pc "$disk_to_install";;
+        esac
+        grub-mkconfig -o /boot/grub/grub.cfg
 
-    wheel_can_sudo
+        if ! id "$username" >/dev/null 2>&1; then
+            useradd --create-home --groups wheel --shell /bin/bash "$username"
+        fi
+        echo "$username:$pass1" | chpasswd
+        unset pass1 pass2
 
-    systemctl enable NetworkManager
+        wheel_can_sudo
 
-    # TODO: Check and if warn the user if already exists.
-    # This should be the last thing done.
-    date >> /etc/installation.date
+        systemctl enable NetworkManager
+
+        # This should be the last thing done.
+        if [ -f "/etc/installation.date" ]; then
+            wprint "'/etc/installation.date' already exists."
+            pprint "Do you wish to overwrite it? (Y/N): " && read -r continue && [[ "$continue" == [yY] ]] && date > /etc/installation.date
+        fi
+    else
+        if [ ! -L "/usr/bin/vim" ] || [ "$(readlink -f "/usr/bin/vim")" != "/usr/bin/nvim" ]; then
+            ln -sf /usr/bin/nvim /usr/bin/vim >/dev/null 2>&1
+        fi
+        if [ ! -L "/usr/bin/vi" ]  || [ "$(readlink -f "/usr/bin/vi")"  != "/usr/bin/nvim" ]; then
+            ln -sf /usr/bin/nvim /usr/bin/vi >/dev/null 2>&1
+        fi
+
+        if [ ! -L "/etc/localtime" ] || [ "$(readlink -f "/etc/localtime")" != "/usr/share/zoneinfo/$timezone" ]; then
+            ln -sf "/usr/share/zoneinfo/$timezone" /etc/localtime >/dev/null 2>&1
+        fi
+
+        hwclock --systohc >/dev/null 2>&1
+
+        sed -i '/en_US.UTF-8/s/^#//g' /etc/locale.gen 
+        locale-gen >/dev/null 2>&1
+        printf "LANG=en_US.UTF-8\n" > /etc/locale.conf
+        printf "%s\n" "$hostname" > /etc/hostname
+
+        mkinitcpio -P >/dev/null 2>&1
+
+        case "$bios_or_uefi" in
+            "UEFI") grub-install --target=x86_64-efi --efi-directory="$efi_directory" --bootloader-id="$bootloader_id" >/dev/null 2>&1;;
+            "BIOS") grub-install --target=i386-pc "$disk_to_install" >/dev/null 2>&1;;
+        esac
+        grub-mkconfig -o /boot/grub/grub.cfg >/dev/null 2>&1
+
+        id "$username" >/dev/null 2>&1 || useradd --create-home --groups wheel --shell /bin/bash "$username"
+        echo "$username:$pass1" | chpasswd
+        unset pass1 pass2
+
+        wheel_can_sudo
+
+        systemctl enable NetworkManager >/dev/null 2>&1
+
+        date > /etc/installation.date
+    fi
 }
 
 arch_install() {
