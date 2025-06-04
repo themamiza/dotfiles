@@ -491,9 +491,10 @@ wheel_can_sudo() {
 }
 
 install_essentials() {
+    local essential_programs=("base-devel" "git" "rsync")
     if "$verbose"; then
         nprint "Installing essential programs."
-        for p in "base-devel" "git" "rsync"; do
+        for p in "${essential_programs[@]}"; do
             if check_installed "$p"; then
                 nprint "'$p' is already installed."
             else
@@ -501,7 +502,7 @@ install_essentials() {
             fi
         done
     else
-        for p in "base-devel" "git"; do
+        for p in "${essential_programs[@]}"; do
             check_installed "$p" || pacman_install "$p" "Installing $p which is required to install and configure other packages."
         done
     fi
