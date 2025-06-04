@@ -12,6 +12,7 @@ aurhelper="paru"
 
 # Default script behavior
 verbose=false
+color=false
 
 dotfiles_url="https://github.com/themamiza/dotfiles"
 dotfiles_name="$(basename $dotfiles_url)"
@@ -63,6 +64,7 @@ print_help() {
 }
 
 enable_color() {
+    color=true
     # ANSI escape codes
     if [ -t 1 ]; then
         BOLD='\033[1m'
