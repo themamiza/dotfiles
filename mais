@@ -333,14 +333,25 @@ install_package() {
 
 install_aurhelper() {
     check_installed "$aurhelper" && return 0
-    sudo -u "$username" mkdir -p "/home/$username/.local/src"
-    sudo -u "$username" git clone --depth 1 --single-branch --no-tags "https://aur.archlinux.org/$aurhelper.git" "/home/$username/.local/src/$aurhelper" ||
-        {
-            cd "/home/$username/.local/src/$aurhelper" || exit 1
-            sudo -u "$username" git pull --force origin master
-        }
-    cd "/home/$username/.local/src/$aurhelper" || exit 1
-    sudo -u "$username" makepkg --noconfirm -si
+    if "$verbose"; then
+        sudo -u "$username" mkdir -p "/home/$username/.local/src"
+        sudo -u "$username" git clone --depth 1 --single-branch --no-tags "https://aur.archlinux.org/$aurhelper.git" "/home/$username/.local/src/$aurhelper" ||
+            {
+                cd "/home/$username/.local/src/$aurhelper" || exit 1
+                sudo -u "$username" git pull --force origin master
+            }
+        cd "/home/$username/.local/src/$aurhelper" || exit 1
+        sudo -u "$username" makepkg --noconfirm -si
+    else
+        sudo -u "$username" mkdir -p "/home/$username/.local/src"
+        sudo -u "$username" git clone --depth 1 --single-branch --no-tags "https://aur.archlinux.org/$aurhelper.git" "/home/$username/.local/src/$aurhelper" >/dev/null 2>&1 ||
+            {
+                cd "/home/$username/.local/src/$aurhelper" >/dev/null 2>&1 || exit 1
+                sudo -u "$username" git pull --force origin master >/dev/null 2>&1
+            }
+        cd "/home/$username/.local/src/$aurhelper" >/dev/null 2>&1 || exit 1
+        sudo -u "$username" makepkg --noconfirm -si >/dev/null 2>&1
+    fi
 }
 
 pacman_install() {
