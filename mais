@@ -413,7 +413,7 @@ install_dotfiles() {
 
         sudo -u "$username" rsync -a "$srcdir" "/home/$username"
         # Remove extra files
-        rm "/home/$username/LICENSE" "/home/$username/README.md" "/home/$username/programs.csv" "/home/$username/mais" 
+        rm "/home/$username/.gitignore" "/home/$username/LICENSE" "/home/$username/README.md" "/home/$username/programs.csv" "/home/$username/mais"
 
         rm -rf "/home/$username/.git"
     else
