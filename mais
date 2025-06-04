@@ -39,6 +39,7 @@ print_help() {
     -n|--username                           Set username so it won't be asked interactively.
     -H|--hostname                           Set hostname so it won't be asked interactively.
     -t|--timezone                           Set timezone so it won't be asked interactively.
+    -I|--print-configuration                Print configuration before going through the install.
     -a|--arch-install                       Run through installation of ArchLinux.
 
         vm                                      Pre-Configured partitioning for a virtual machine.
@@ -686,6 +687,29 @@ check_installation_environment() {
     verbose=true check_internet_connection
 }
 
+# TODO: Implement function to report system configuration (similar to a fetch program)
+print_configuration() {
+    printf "${BOLD} -- The command will run with these in mind --${RESET}
+${BOLD}Verbose: ${RESET}%s
+${BOLD}Color: ${RESET}%s
+${BOLD}BIOS or UEFI: ${RESET}%s
+${BOLD}Bootloader ID: ${RESET}%s
+${BOLD}EFI Directory: ${RESET}%s
+${BOLD}Disk to Install: ${RESET}%s
+${BOLD}Username: ${RESET}%s
+${BOLD}Hostname: ${RESET}%s
+${BOLD}Timezone: ${RESET}%s\n"\
+    "$verbose"\
+    "$color"\
+    "$bios_or_uefi"\
+    "$bootloader_id"\
+    "$efi_directory"\
+    "$disk_to_install"\
+    "$username"\
+    "$hostname"\
+    "$timezone"
+}
+
 invalid_option() {
     eprint "Invalid option '$1'
 Try '$program_name --help' for more information."
@@ -728,6 +752,10 @@ while [[ $# -gt 0 ]]; do
                 pprint "Timezone (Region/City): " && read -r timezone
             done
             shift 2
+            ;;
+        "-I"|"--print-configuration")
+            print_configuration
+            shift
             ;;
         "-a"|"--arch-install")
             case "$2" in
