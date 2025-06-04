@@ -89,6 +89,7 @@ enable_color() {
 }
 
 # TODO: Make sure device is not mounted before going through the install.
+# TODO: Thinking this partitioning function should go inside the configuration file to be made.
 # label -> label type: dos/gpt
 # size  -> measured in sectors; each sector being 512 bytes.
 partition_main() {
@@ -361,7 +362,28 @@ aur_install() {
 }
 
 suckless_install() {
-    eprint "Not implemented!"
+    check_installed "$1" && return 0
+    if "$verbose"; then
+        sudo -u "$username" mkdir -p "/home/$username/.local/src"
+        sudo -u "$username" git clone --depth 1 --single-branch --no-tags "https://github.com/$1.git" "/home/$username/.local/src/$1" ||
+            {
+                cd "/home/$username/.local/src/$1" || exit 1
+                sudo -u "$username" git pull --force origin master
+            }
+        cd "/home/$username/.local/src/$1" || exit 1
+        make
+        make install
+    else
+        sudo -u "$username" mkdir -p "/home/$username/.local/src"
+        sudo -u "$username" git clone --depth 1 --single-branch --no-tags "https://github.com/$1.git" "/home/$username/.local/src/$1" >/dev/null 2>&1 ||
+            {
+                cd "/home/$username/.local/src/$1" >/dev/null 2>&1 || exit 1
+                sudo -u "$username" git pull --force origin master >/dev/null 2>&1
+            }
+        cd "/home/$username/.local/src/$1" >/dev/null 2>&1 || exit 1
+        make >/dev/null 2>&1
+        make install >/dev/null 2>&1
+    fi
 }
 
 doomemacs_install() {
