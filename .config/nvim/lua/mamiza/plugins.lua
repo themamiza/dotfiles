@@ -67,4 +67,8 @@ require("lazy").setup({
                 },
                 config = true
         },
+        {
+                "OXY2DEV/markview.nvim",
+                lazy = false,
+        },
 })
