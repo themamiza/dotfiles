@@ -7,7 +7,8 @@
 # 4. Description. # TODO: Bring all descriptions from the arch repositories.
 
 # Terminal Emulator
-                |            | alacritty                        | "A cross-platform, GPU-accelerated terminal emulator."
+                | Extra      | alacritty                        | "A cross-platform, GPU-accelerated terminal emulator."
+                |            | kitty                            | "A cross-platform, GPU-accelerated terminal emulator."
 Suckless        | DWM        | st                               | "N/A."
 
 # Browser
@@ -71,18 +72,18 @@ Suckless        | DWM        | dwmblocks                        | "N/A."
 
 # Image Viewer
                 | X11        | nsxiv                            | "Neo (or New or Not) Simple (or Small or Suckless) X Image Viewer."
+                | Wayland    | swayimg                          | "Neo (or New or Not) Simple (or Small or Suckless) X Image Viewer."
 
 # Video Player
                 |            | mpv                              | "a free, open source, and cross-platform media player."
 
 # Image Manipulation
                 |            | imagemagick                      | "An image viewing/manipulation program."
-                | Extra      | gimp                             | "GNU Image Manipulation Program."
-                |            | ueberzug                         | "Command line util which allows to display images in combination with X11."
                 |            | ffmpegthumbnailer                | "Lightweight video thumbnailer that can be used by file managers."
+                | Extra      | gimp                             | "GNU Image Manipulation Program."
 
 # Video Manipulation
-                |            | obs-studio                       | "Free, open source software for live streaming and recording."
+                | Extra      | obs-studio                       | "Free, open source software for live streaming and recording."
                 |            | ffmpeg                           | "Complete solution to record, convert and stream audio and video."
 
 # Bluetooth
@@ -127,23 +128,29 @@ AUR             |            | zsh-fast-syntax-highlighting-git | "N/A."
                 |            | bash-language-server             | "Bash language server implementation based on Tree Sitter and its grammar for Bash."
                 |            | shellcheck                       | "Shell script analysis tool."
 
-# CLI Tools
-                |            | bat                              | "Cat clone with syntax highlighting and git integration."
-                |            | eza                              | "A modern replacement for ls (community fork of exa)."
-                |            | fd                               | "Simple, fast and user-friendly alternative to find."
-                |            | fzf                              | "Command-line fuzzy finder."
+### CLI Tools
+# Archive Management
                 |            | 7zip                             | "File archiver for extremely high compression."
+                |            | unrar-free                       | "File archiver for extremely high compression."
+
+# Misc.
+                |            | fzf                              | "Command-line fuzzy finder."
                 |            | pass                             | "Stores, retrieves, generates, and synchronizes passwords securely."
-                |            | ripgrep                          | "A search tool that combines the usability of ag with the raw speed of grep."
                 |            | tmux                             | "Terminal multiplexer."
                 |            | brightnessctl                    | "Lightweight brightness control tool."
                 |            | man-db                           | "A utility for reading man pages."
                 |            | man-pages                        | "Linux man pages."
-                |            | unzip                            | "For extracting and viewing files in .zip archives."
-                |            | entr                             | "Run arbitrary commands when files change."
-                |            | yt-dlp                           | "A youtube-dl fork with additional features and fixes."
-#                |            | vidir                            | Description
-                |            | htop                              | "Interactive process viewer."
+                |            | htop                             | "Interactive process viewer."
+                |            | rsync                            | "Interactive process viewer."
+
+# Extras
+                | Extra      | bat                              | "Cat clone with syntax highlighting and git integration."
+                | Extra      | eza                              | "A modern replacement for ls (community fork of exa)."
+                | Extra      | fd                               | "Simple, fast and user-friendly alternative to find."
+                | Extra      | ripgrep                          | "A search tool that combines the usability of ag with the raw speed of grep."
+                | Extra      | yt-dlp                           | "A youtube-dl fork with additional features and fixes."
+                | Extra      | inxi                             |
+
 
 # Filesystem
                 |            | dosfstools                       | "DOS filesystem utilities."
@@ -151,12 +158,12 @@ AUR             |            | zsh-fast-syntax-highlighting-git | "N/A."
 AUR             |            | simple-mtpfs                     | "N/A."
 
 # Virtual Machine
-                |            | qemu-full                        | "A full QEMU setup."
-                |            | libvirt                          | "API for controlling virtualization engines (openvz,kvm,qemu,virtualbox,xen,etc)."
-                |            | dnsmasq                          | "Lightweight, easy to configure DNS forwarder and DHCP server."
-                |            | iptables-nft                     | "Linux kernel packet control tool (using nft interface)."
-                |            | openbsd-netcat                   | "TCP/IP swiss army knife. OpenBSD variant.."
-                |            | virt-manager                     | "Desktop user interface for managing virtual machines."
+                | Extra      | qemu-full                        | "A full QEMU setup."
+                | Extra      | libvirt                          | "API for controlling virtualization engines (openvz,kvm,qemu,virtualbox,xen,etc)."
+                | Extra      | dnsmasq                          | "Lightweight, easy to configure DNS forwarder and DHCP server."
+                | Extra      | iptables-nft                     | "Linux kernel packet control tool (using nft interface)."
+                | Extra      | openbsd-netcat                   | "TCP/IP swiss army knife. OpenBSD variant.."
+                | Extra      | virt-manager                     | "Desktop user interface for managing virtual machines."
 
 
 # Font
