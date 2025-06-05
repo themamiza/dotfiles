@@ -1,0 +1,3 @@
+#!/bin/sh
+
+setsid -f prime-run java -jar "${XDG_DATA_HOME:-$HOME/.local/share}/applications/minecraft.jar"
