@@ -71,4 +71,5 @@ require("lazy").setup({
                 -- To use with `nvim-treesitter`
                 priority = 49,
         },
+        { "numToStr/Comment.nvim" }
 })
