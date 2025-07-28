@@ -11,7 +11,7 @@ export TERMINAL="kitty"
 export BROWSER="brave"
 export PRIVATE_BROWSER="brave --incognito"
 export GUIFM="thunar"
-export TUIFM="ranger"
+export TUIFM="yazi"
 export WM="hyprland"
 
 # bat as manpager:
