@@ -49,7 +49,6 @@ require("lazy").setup({
         },
         {
                 "folke/tokyonight.nvim",
-                lazy = false,
                 priority = 1000,
                 opts = {},
         },
@@ -69,7 +68,6 @@ require("lazy").setup({
         },
         {
                 "OXY2DEV/markview.nvim",
-                lazy = false,
                 -- To use with `nvim-treesitter`
                 priority = 49,
         },
