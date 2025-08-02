@@ -104,3 +104,10 @@ vim.api.nvim_create_autocmd("BufWritePost", {
                 end
         end,
 })
+
+vim.api.nvim_create_autocmd("BufWritePost", {
+        pattern = "hyprland.conf",
+        callback = function()
+                vim.fn.system("hyprctl reload")
+        end,
+})
