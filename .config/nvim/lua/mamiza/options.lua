@@ -93,3 +93,14 @@ vim.api.nvim_create_autocmd({ "CursorHold" }, {
         command = "lua OpenDiagnosticIfNoFloat()",
         group = "lsp_diagnostics_hold",
 })
+
+vim.api.nvim_create_autocmd("BufWritePost", {
+        callback = function()
+                local target_dir = "/home/mamiza/rp/dotfiles"
+                local filepath = vim.fn.expand("%:p")
+
+                if vim.startswith(filepath, target_dir) then
+                        vim.fn.system("mais install-dotfiles")
+                end
+        end,
+})
