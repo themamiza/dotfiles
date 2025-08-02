@@ -1,0 +1,16 @@
+[general]
+decoration = yes
+
+[info]
+show = no
+
+[keys.viewer]
+w = exec setbg %
+
+[keys.gallery]
+h = step_left
+j = step_down
+k = step_up
+l = step_right
+w = exec setbg %
+
