@@ -1,4 +1,4 @@
 [Desktop Entry]
 Type=Application
 Name=Image Viewer
-Exec=/usr/bin/nsxiv -b %f
+Exec=/usr/bin/ristretto %f
