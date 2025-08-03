@@ -2,8 +2,29 @@
 # Author: Iahwaacz
 # https://raw.githubusercontent.com/lahwaacz/Scripts/master/toggle-touchpad.sh
 
-device="$(xinput list | grep -P '(?<= )[\w\s:]*(?i)(touchpad|synaptics)(?-i).*?(?=\s*id)' -o | head -n1)"
+case "$WM" in
+    "dwm")
+        device="$(xinput list | grep -P '(?<= )[\w\s:]*(?i)(touchpad|synaptics)(?-i).*?(?=\s*id)' -o | head -n1)"
 
-[[ "$(xinput list-props "$device" | grep -P ".*Device Enabled.*\K.(?=$)" -o )" == "1" ]] &&
-    xinput disable "$device" ||
-    xinput enable "$device"
+        [[ "$(xinput list-props "$device" | grep -P ".*Device Enabled.*\K.(?=$)" -o )" == "1" ]] &&
+            xinput disable "$device" ||
+            xinput enable "$device"
+        ;;
+    "hyprland")
+        device="$(hyprctl devices | grep touchpad | tr -d "\t")"
+        status_file="${XDG_CACHE_HOME:-$HOME/.cache}/$device:status"
+        
+        [ -f "$status_file" ] || printf "true\n" > "$status_file"
+
+        status="$(cat $status_file)"
+
+        if [ "$status" = "true" ]; then
+            # Turn off the touchpad
+            hyprctl keyword "device[$device]:enabled" "false"
+            printf "false\n" > "$status_file"
+        else
+            # Turn on the touchpad
+            hyprctl keyword "device[$device]:enabled" "true"
+            printf "true\n" > "$status_file"
+        fi
+esac
