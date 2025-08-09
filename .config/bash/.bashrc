@@ -18,6 +18,9 @@ HISTFILE=~/.cache/bash/history
 # Bash completion:
 [ -f /usr/share/bash-completion/bash_completion ] && source /usr/share/bash-completion/bash_completion
 
+# command_not_found:
+[ -f /usr/share/doc/pkgfile/command-not-found.bash ] && source /usr/share/doc/pkgfile/command-not-found.bash
+
 # Some keybindings:
 bind '"\e[3;5": kill-word'
 bind '"\C-H": backward-kill-word'

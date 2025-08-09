@@ -87,11 +87,13 @@ autoload edit-command-line
 zle -N edit-command-line
 bindkey "^e" edit-command-line
 
+# Load command_not_found handler.
+source /usr/share/doc/pkgfile/command-not-found.zsh 2>/dev/null || {
+	source "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/command-not-found.zsh" 2>/dev/null
+}
+
 # Load syntax highlighting; should be last; unless using autosuggestions.
 source /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh 2>/dev/null
 
 # Load fish like autosuggestions; should be last.
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh 2>/dev/null
-
-# Load command_not_found handler.
-source "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/command-not-found.zsh" 2>/dev/null
