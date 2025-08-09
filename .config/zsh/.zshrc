@@ -11,6 +11,7 @@ stty stop undef		# Disable ctrl-s to freeze terminal.
 HISTSIZE=1000000
 SAVEHIST=1000000
 HISTFILE=~/.cache/zsh/history
+[ -d "$(dirname $HISTFILE)" ] || mkdir -p "$(dirname $HISTFILE)"
 
 # Load aliases and shortcuts if existent:
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc" ] && source "${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc"

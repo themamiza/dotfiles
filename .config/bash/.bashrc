@@ -2,13 +2,14 @@
 
 # Change prompt:
 PS1="\[$(tput bold)\]\[$(tput setaf 1)\][\[$(tput setaf 3)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h \[$(tput setaf 5)\]\W\[$(tput setaf 1)\]]\[$(tput setaf 7)\]\\$ \[$(tput sgr0)\]"
-stty  -ixon     # Disable ctrl-s to freeze terminal.
+stty -ixon      # Disable ctrl-s to freeze terminal.
 shopt -s autocd # Automatically cd into typed directory.
 
 # History in cache directory:
 HISTSIZE=
 HISTFILESIZE=
 HISTFILE=~/.cache/bash/history
+[ -d "$(dirname $HISTFILE)" ] || mkdir -p "$(dirname $HISTFILE)"
 
 # Load aliases and shortcuts if existent:
 # shellcheck disable=1091
