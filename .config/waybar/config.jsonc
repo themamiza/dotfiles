@@ -6,24 +6,13 @@
     ],
     "modules-right": [
         "custom/uptime",
-        "custom/spacer",
         "custom/volume",
-        "custom/spacer",
         "custom/nettraf",
-        "custom/spacer",
         "custom/memory",
-        "custom/spacer",
         "custom/battery",
-        "custom/spacer",
         "custom/clock",
-        "custom/spacer",
         "tray",
     ],
-
-    "custom/spacer": {
-        "format": "/",
-        "tooltip": false
-    },
 
     "hyprland/workspaces": {
         "on-scroll-up": "hyprctl dispatch workspace r+1",

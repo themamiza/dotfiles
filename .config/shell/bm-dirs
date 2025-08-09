@@ -1,9 +1,0 @@
-cac ${XDG_CACHE_HOME:-$HOME/.cache}
-rp  $HOME/rp
-cf  ${XDG_CONFIG_HOME:-$HOME/.config}
-fl  $HOME/fl
-dl  $HOME/dl
-rr  $HOME/.local/src
-src $HOME/.local/src
-mnt /mnt
-bin $HOME/.local/bin

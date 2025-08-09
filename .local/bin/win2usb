@@ -15,7 +15,6 @@ normal="$(tput sgr0)"
 scriptpath="$(readlink -f -- "$0")"
 dirpath="$(dirname "$scriptpath")"
 
-
 function check_requirements() {
     local reqs=(awk lsblk 7zz mkfs.vfat mkfs.ntfs sfdisk ms-sys mktemp wimsplit)
 
