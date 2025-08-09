@@ -75,9 +75,9 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-(setq doom-font (font-spec :family "Iosevka" :size 20 :weight 'medium)
-      doom-variable-pitch-font (font-spec :family "Iosevka" :size 22)
-      doom-serif-font (font-spec :family "Iosevka" :size 20))
+(setq doom-font (font-spec :family "FiraCode Nerd Font" :size 20 :weight 'medium)
+      doom-variable-pitch-font (font-spec :family "FiraCode Nerd Font" :size 22)
+      doom-serif-font (font-spec :family "FiraCode Nerd Font" :size 20))
 
 (add-to-list 'default-frame-alist '(alpha-background . 90))
 
