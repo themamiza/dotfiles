@@ -14,7 +14,7 @@ HISTFILE=~/.cache/zsh/history
 [ -d "$(dirname $HISTFILE)" ] || mkdir -p "$(dirname $HISTFILE)"
 
 # Use `fzf` for reverse history search and completion
-source <(fzf --zsh) >/dev/null 2>&1
+source <(fzf --zsh 2>/dev/null)
 
 # Load aliases and shortcuts if existent:
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc" ] && source "${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc"

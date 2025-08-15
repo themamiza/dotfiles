@@ -11,6 +11,9 @@ HISTFILESIZE=
 HISTFILE=~/.cache/bash/history
 [ -d "$(dirname $HISTFILE)" ] || mkdir -p "$(dirname $HISTFILE)"
 
+# Use `fzf` for reverse history search and completion
+eval "$(fzf --bash 2>/dev/null)"
+
 # Load aliases and shortcuts if existent:
 # shellcheck disable=1091
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc" ] && source "${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc"
