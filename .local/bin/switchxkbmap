@@ -1,5 +1,12 @@
 #!/bin/sh
 
-[ "$(setxkbmap -query | awk 'NR==3 {print $2}')" = us ] && setxkbmap ir && exit 1
-setxkbmap us
+# For some reason the keyboard repeat rate breaks when switching
+# keyboard layouts. I re-run the command to correct it here.
+# TODO: Find a proper solution for this.
 
+if [ "$(setxkbmap -query | awk 'NR==3 {print $2}')" = us ]; then setxkbmap ir; else setxkbmap us; fi
+
+# Run keyboard tweaks again
+xset r rate 300 50
+setxkbmap -option "caps:swapescape"
+xmodmap "$HOME/.config/x11/xmodmaprc"
