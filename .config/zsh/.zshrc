@@ -7,6 +7,13 @@ setopt autocd		# Automatically cd into typed directory.
 setopt interactivecomments
 stty stop undef		# Disable ctrl-s to freeze terminal.
 
+# Better history
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_REDUCE_BLANKS
+setopt HIST_APPEND
+setopt SHARE_HISTORY
+
 # History in cache directory:
 HISTSIZE=1000000
 SAVEHIST=1000000
