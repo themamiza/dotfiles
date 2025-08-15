@@ -1,11 +1,12 @@
 #!/bin/bash
-# Author: Iahwaacz
+# Original author: Iahwaacz
 # https://raw.githubusercontent.com/lahwaacz/Scripts/master/toggle-touchpad.sh
 
 case "$WM" in
     "dwm")
         device="$(xinput list | grep -P '(?<= )[\w\s:]*(?i)(touchpad|synaptics)(?-i).*?(?=\s*id)' -o | head -n1)"
 
+        # shellcheck disable=2015
         [[ "$(xinput list-props "$device" | grep -P ".*Device Enabled.*\K.(?=$)" -o )" == "1" ]] &&
             xinput disable "$device" ||
             xinput enable "$device"
@@ -16,7 +17,7 @@ case "$WM" in
         
         [ -f "$status_file" ] || printf "true\n" > "$status_file"
 
-        status="$(cat $status_file)"
+        status="$(cat "$status_file")"
 
         if [ "$status" = "true" ]; then
             # Turn off the touchpad
