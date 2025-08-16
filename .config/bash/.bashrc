@@ -1,7 +1,12 @@
 # Mamiza's bash config
 
 # Change prompt:
-PS1="\[$(tput bold)\]\[$(tput setaf 1)\][\[$(tput setaf 3)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h \[$(tput setaf 5)\]\W\[$(tput setaf 1)\]]\[$(tput setaf 7)\]\\$ \[$(tput sgr0)\]"
+if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/bash/prompt.bash" ]; then
+	source "$HOME/.config/bash/prompt.bash"
+else
+    PS1="\[$(tput bold)\]\[$(tput setaf 1)\][\[$(tput setaf 3)\]\u\[$(tput setaf 2)\]@\[$(tput setaf 4)\]\h \[$(tput setaf 5)\]\W\[$(tput setaf 1)\]]\[$(tput setaf 7)\]\\$ \[$(tput sgr0)\]"
+fi
+
 stty -ixon      # Disable ctrl-s to freeze terminal.
 shopt -s autocd # Automatically cd into typed directory.
 

@@ -2,7 +2,12 @@
 
 # Enable colors and change prompt:
 autoload -U colors && colors	# Load colors
-PS1="%B%{$fg[red]%}[%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%~%{$fg[red]%}]%{$reset_color%}$%b "
+if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/prompt.zsh" ]; then
+	source "$HOME/.config/zsh/prompt.zsh"
+else
+	PS1="%B%{$fg[red]%}[%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%~%{$fg[red]%}]%{$reset_color%}$%b "
+fi
+
 setopt autocd		# Automatically cd into typed directory.
 setopt interactivecomments
 stty stop undef		# Disable ctrl-s to freeze terminal.
