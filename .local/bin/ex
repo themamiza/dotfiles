@@ -1,39 +1,172 @@
 #!/bin/sh
 
-help()
-{
-    printf "Usage: ex <file>\n"
-}
+set -eu
 
-extract()
-{
-    [ -z "$1" ] && help && exit 1
-    for f in "$@"; do
-        if [ -f "$f" ]; then
-            case "${f%,}" in
-                *.7z|*.arj|*.cab|*.cb7|*.chm|*.deb|*.dmg|*.iso|*.lzh|*.msi|*.pkg|*.rpm|*.udf|*.wim|*.xar) 7zz x "$f";;
-                *.tar.bz2|*.tar.gz|*.tar.xz|*.tbz2|*.tgz|*.txz|*.tar) tar xfv "$f";;
-                *.rar|*.cbr) unrar-free x -ad "$f";;
-                *.zip|*.epub|*.cbz) unzip "$f";;
-                *.Z) uncompress "$f";;
-                *.bz2) bunzip2 "$f";;
-                *.gz) gunzip "$1";;
-                *.xz) unxz "$f";;
-                *) printf "ERROR: Unrecognized file format\n" && exit 1
-            esac
-        else
-            printf "ERROR: '%s' does not exist" "$f"
-        fi
-    done
+program_name="$(basename "$0")"
+
+help() { printf "Usage: %s <archive> [dest_dir]\n" "$program_name" 1>&2; }
+
+# Checks a binary name against executables
+is_installed() {
+    # Check if a command is available
+    command -v "$1" >/dev/null 2>&1 && return 0
+    # Return false otherwise
+    return 1
 }
 
 while getopts "hu" o; do
-    case "${o}" in
-        h) help && exit 1;;
-        u) help && exit 1;;
-        *) printf "See \`ex -h\` for help\n" && exit 1;;
-
+    case "$o" in
+        h|u) help; exit 0;;
+        *) printf "See \`%s -h\` for help\n" "$program_name" 1>&2; exit 1;;
     esac
 done
+shift $((OPTIND - 1))
+[ "$#" -ge 1 ] || { help; exit 1; }
 
-extract "$@"
+# Exit if can't find archive
+f="$1"
+if [ ! -f "$f" ]; then
+    printf "%s: \"%s\": no such file.\n" "$program_name" "$f"
+    exit 1
+fi
+
+# Default destination to current directory
+dest="${2:-.}"
+mkdir -p "$dest"
+
+# Convert file name to lowercase for more POSIX compliance
+f_lc="$(printf "%s" "$f" | tr '[:upper:]' '[:lower:]')"
+
+# Fallback to 7z if no suitable tool found
+ex_fallback() {
+    if is_installed 7z; then
+        printf "Using 7z...\n"
+        7z x -y -o"$dest" -- "$f"
+    else
+        printf "No suitable tool found (and 7z missing)." 1>&2
+        exit 2
+    fi
+}
+
+case "$f_lc" in
+    *.zip)
+        if is_installed unzip; then
+            unzip -d "$dest" -- "$f"
+        else
+            ex_fallback
+        fi
+        ;;
+
+    ##### Not using 'unrar'
+    *.7z|*.rar) ex_fallback;;
+
+    *.tar) tar -xvf "$f" -C "$dest";;
+
+    ##### Tar variations
+    *.tar.gz|*.tgz) tar -xzf "$f" -C "$dest";;
+    *.tar.bz2|*.tbz2) tar -xjf "$f" -C "$dest";;
+    *.tar.xz|*.txz) tar -xJf "$f" -C "$dest";;
+    *.tar.zst) 
+        if tar --help 2>/dev/null | grep -i zstd >/dev/null 2>&1; then
+            tar --zstd -xf "$f" -C "$dest"
+        else
+            if is_installed zstd; then
+                zstd -dc -- "$f" | tar -x -C "$dest"
+            else
+                ex_fallback
+            fi
+        fi
+        ;;
+    *.tar.lz4)
+        if tar --help 2>/dev/null | grep -i lz4 >/dev/null 2>&1; then
+            tar --lz4 -xf "$f" -C "$dest"
+        else
+            if is_installed lz4; then
+                lz4 -dc -- "$f" | tar -x -C "$dest"
+            else
+                ex_fallback
+            fi
+        fi
+        ;;
+    *.tar.lz)
+        if is_installed lzip; then
+            lzip -dc -- "$f" | tar -x -C "$dest"
+        else
+            ex_fallback
+        fi
+        ;;
+
+    *.xz)
+        if is_installed unxz; then
+            unxz -c -- "$f" > "$dest/$(basename "$f" .xz)"
+        else
+            ex_fallback
+        fi
+        ;;
+    *.zst)
+        if is_installed unzstd; then
+            unzstd -c -- "$f" > "$dest/$(basename "$f" .zst)"
+        else
+            ex_fallback
+        fi
+        ;;
+    *.lz4)
+        if is_installed lz4; then
+            lz4 -dc -- "$f" > "$dest/$(basename "$f" .lz4)"
+        else
+            ex_fallback
+        fi
+        ;;
+    *.lz)
+        if is_installed lzip; then
+            lzip -dc -- "$f" > "$dest/$(basename "$f" .lz)"
+        else
+            ex_fallback
+        fi
+        ;;
+    *.deb)
+        if command -v dpkg-deb >/dev/null 2>&1; then
+            dpkg-deb -x "$f" "$dest"
+        else
+            ex_fallback
+        fi
+        ;;
+    *.rpm)
+        if is_installed rpm2cpio; then
+            oldpwd="$(pwd)"
+            cd "$dest" && rpm2cpio "$oldpwd/$f" | cpio -idmv
+        else
+            ex_fallback
+        fi
+        ;;
+    *.apk|*.jar|*.war)
+        if is_installed unzip; then
+            unzip -d "$dest" -- "$f"
+        else
+            ex_fallback
+        fi
+        ;;
+    *.iso)
+        if is_installed bsdtar; then
+            bsdtar -xf "$f" -C "$dest"
+        else
+            ex_fallback
+        fi
+        ;;
+    *.cpio)
+        if is_installed cpio; then
+            oldpwd="$(pwd)"
+            cd "$dest" && cpio -idmv < "$oldpwd/$f"
+        else
+            ex_fallback
+        fi
+        ;;
+    *.cab)
+        if is_installed cabextract; then
+            cabextract -d "$dest" -- "$f"
+        else
+            ex_fallback
+        fi
+        ;;
+    *) ex_fallback;;
+esac
