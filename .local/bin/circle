@@ -1,0 +1,50 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import math
+import termios
+import tty
+import shutil
+
+def get_key():
+    """Read a single keypress without Enter."""
+    fd = sys.stdin.fileno()
+    # Save previous attributes to restore later
+    previous_attr = termios.tcgetattr(fd)
+    try:
+        tty.setraw(fd)
+        char = sys.stdin.read(1)
+    finally:
+        # Reset terminal attributes
+        termios.tcsetattr(fd, termios.TCSADRAIN, previous_attr)
+    return char
+
+def draw_circle(radius):
+    # `clear -x` -> keep terminal history if terminal emulator supports it
+    os.system('clear -x')
+    cols, rows = shutil.get_terminal_size()
+    center_x, center_y = cols // 2, rows // 2
+
+    for y in range(rows):
+        line = ""
+        for x in range(cols):
+            dx = x - center_x
+            dy = y - center_y
+            distance = math.sqrt(dx * dx + dy * dy)
+            if abs(distance - radius) < 1:
+                line += "o"
+            else:
+                line += " "
+        print(line)
+
+radius = 5
+while True:
+    draw_circle(radius)
+    key = get_key()
+    if key == '+':
+        radius += 1
+    elif key == '-' and radius > 1:
+        radius -= 1
+    elif key.lower() == 'q':
+        break
