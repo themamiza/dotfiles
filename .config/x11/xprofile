@@ -7,7 +7,6 @@ setsid -f xrdb "$HOME/.config/x11/xresources"
 
 # Keyboard tweaks:
 xset r rate 300 50
-setxkbmap -option "caps:swapescape"
 xmodmap "$HOME/.config/x11/xmodmaprc"
 
 autostart="xcompmgr screenres nm-applet blueman-applet bluemon numlockx taptoclick unclutter dunst setbg"
