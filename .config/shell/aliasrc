@@ -52,6 +52,7 @@ alias \
 	v="vim" \
 	z="zathura" \
 	lf="lfub" \
+	ll="ls -la" \
 	unrar="unrar-free" \
 	update-grub="sudo grub-mkconfig -o /boot/grub/grub.cfg" \
 	pong="ping 4.2.2.4"
