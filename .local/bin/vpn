@@ -19,8 +19,8 @@ ip="127.0.0.1"
 port="1234"
 
 # Source credentials if present
+# shellcheck disable=1090
 [ -f "$credentials" ] && . "$credentials"
-
 
 if [ "$1" = "use-tmux" ]; then
     tmux has-session -t vpn >/dev/null 2>&1 && kill -ILL "$(pidof sshpass)" >/dev/null 2>&1; tmux kill-session -t vpn >/dev/null 2>&1
