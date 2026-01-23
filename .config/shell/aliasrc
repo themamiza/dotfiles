@@ -55,4 +55,6 @@ alias \
 	ll="ls -la" \
 	unrar="unrar-free" \
 	update-grub="sudo grub-mkconfig -o /boot/grub/grub.cfg" \
-	pong="ping 4.2.2.4"
+	pong="ping 4.2.2.4" \
+	qq="proxychains -q"
+	
