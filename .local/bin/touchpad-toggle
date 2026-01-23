@@ -13,7 +13,8 @@ case "$WM" in
         ;;
     "hyprland")
         device="$(hyprctl devices | grep touchpad | tr -d "\t")"
-        status_file="${XDG_CACHE_HOME:-$HOME/.cache}/$device:status"
+        safe_device_name="$(echo "$device" | tr '/' '_')"
+        status_file="${XDG_CACHE_HOME:-$HOME/.cache}/$safe_device_name:status"
         
         [ -f "$status_file" ] || printf "true\n" > "$status_file"
 
