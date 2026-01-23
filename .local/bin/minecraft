@@ -1,3 +1,12 @@
 #!/bin/sh
 
-setsid -f prime-run java -jar "${XDG_DATA_HOME:-$HOME/.local/share}/applications/minecraft.jar"
+ifinstalled java || notify-send "Java is not found!"
+
+ifinstalled sklauncher && { setsid -f prime-run sklauncher; exit; }
+
+[ -f "${XDG_DATA_HOME:-$HOME/.local/share}/applications/minecraft.jar" ] && { 
+    setsid -f prime-run java -jar "${XDG_DATA_HOME:-$HOME/.local/share}/applications/minecraft.jar"
+    exit
+}
+
+notify-send "Neither \`sklauncher\` nor a '.jar' file found!"
