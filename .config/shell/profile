@@ -62,5 +62,5 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 # Start graphical server on user's first tty if not already running.
 case "$WM" in
     "dwm")      [ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg     >/dev/null 2>&1 && export STATUSBAR="dwmblocks" && exec startx "$XINITRC";;
-    "hyprland") [ "$(tty)" = "/dev/tty1" ] && ! pidof -s hyprland >/dev/null 2>&1 && export STATUSBAR="waybar"    && exec hyprland;;
+    "hyprland") [ "$(tty)" = "/dev/tty1" ] && ! pidof -s hyprland >/dev/null 2>&1 && export STATUSBAR="waybar"    && exec start-hyprland;;
 esac
