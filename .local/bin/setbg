@@ -46,7 +46,7 @@ command -v identify 2>/dev/null 1>&2 && identify -format '%w %h\n' -- "$bgloc" |
 				"hyprland")
 					monitors="$(hyprctl monitors list | grep "Monitor" | awk '{print $2}')"
 					for monitor in $monitors; do
-						hyprctl hyprpaper reload "$monitor,contain:$bgloc"
+						hyprctl hyprpaper wallpaper "$monitor,contain:$bgloc"
 					done
 					;;
 			esac
@@ -56,7 +56,7 @@ command -v identify 2>/dev/null 1>&2 && identify -format '%w %h\n' -- "$bgloc" |
 				"hyprland")
 					monitors="$(hyprctl monitors list | grep "Monitor" | awk '{print $2}')"
 					for monitor in $monitors; do
-						hyprctl hyprpaper reload "$monitor,$bgloc"
+						hyprctl hyprpaper wallpaper "$monitor,$bgloc"
 					done
 					;;
 			esac
@@ -67,7 +67,7 @@ command -v identify 2>/dev/null 1>&2 && identify -format '%w %h\n' -- "$bgloc" |
 			"hyprland")
 				monitors="$(hyprctl monitors list | grep "Monitor" | awk '{print $2}')"
 				for monitor in $monitors; do
-					hyprctl hyprpaper reload "$monitor,$bgloc"
+					hyprctl hyprpaper wallpaper "$monitor,$bgloc"
 				done
 				;;
 		esac
