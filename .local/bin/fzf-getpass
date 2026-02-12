@@ -1,0 +1,13 @@
+#!/bin/sh
+
+password_store_path="${PASSWORD_STORE_DIR:-$HOME/.local/share/pass}"
+# shellcheck disable=2038
+choice="$(find "$password_store_path" -regex ".*.gpg$" | xargs basename -s ".gpg" | sort | fzf)"
+
+[ -z "$choice" ] && exit 0
+
+if pass -c "$choice" >/dev/null 2>&1; then
+    notify-send "Copied '$choice' to clipboard!" "Will clear in 45 seconds."
+else
+    notify-send "Failed to retrieve password!"
+fi
