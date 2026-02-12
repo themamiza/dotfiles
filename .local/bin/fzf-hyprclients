@@ -1,0 +1,5 @@
+#!/bin/sh
+
+client="$(hyprctl clients | grep ^Window | sort | fzf)"
+
+hyprctl clients | awk -v RS= "/$client/"
