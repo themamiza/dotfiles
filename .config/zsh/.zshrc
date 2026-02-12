@@ -17,7 +17,6 @@ setopt HIST_IGNORE_DUPS
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
 setopt HIST_APPEND
-setopt SHARE_HISTORY
 
 # History in cache directory:
 HISTSIZE=1000000
