@@ -100,7 +100,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
                 local filepath = vim.fn.expand("%:p")
 
                 if vim.startswith(filepath, target_dir) then
-                        vim.fn.system("mais install-dotfiles")
+                        vim.fn.jobstart({ "mais", "install-dotfiles" }, { detach = true })
                 end
         end,
 })
@@ -108,6 +108,6 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 vim.api.nvim_create_autocmd("BufWritePost", {
         pattern = "hyprland.conf",
         callback = function()
-                vim.fn.system("hyprctl reload")
+                vim.fn.jobstart({ "hyprctl", "reload" }, { detach = true })
         end,
 })
