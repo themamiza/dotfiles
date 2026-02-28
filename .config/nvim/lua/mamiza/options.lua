@@ -111,3 +111,10 @@ vim.api.nvim_create_autocmd("BufWritePost", {
                 vim.fn.jobstart({ "hyprctl", "reload" }, { detach = true })
         end,
 })
+
+vim.api.nvim_create_autocmd("BufWritePost", {
+        pattern = "*/waybar/*",
+        callback = function()
+                vim.fn.jobstart({ "pkill", "-SIGUSR2", "waybar" }, { detach = true })
+        end,
+})
