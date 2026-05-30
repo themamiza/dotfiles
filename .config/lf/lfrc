@@ -14,10 +14,13 @@ set previewer "~/.config/lf/scope"
 # Functions:
 cmd open ${{
     case $(file --mime-type "$(readlink -f $f)" -b) in
-         application/pdf)                       setsid -f zathura "$fx" >/dev/null 2>&1;;
-         text/*|application/json|inode/x-empty) "$EDITOR" "$fx";;
-         image/x-xcf)                           setsid -f gimp "$f" >/dev/null 2>&1;;
-         image/svg+xml)                         display -- "$f";;
+         application/pdf|image/vnd.djvu|application/postscript|application/epub*) setsid -f zathura "$fx" >/dev/null 2>&1;;
+
+         text/*|application/json|inode/x-empty|application/x-subrip|application/pgp-encrypted) "$EDITOR" "$fx";;
+
+         image/x-xcf) setsid -f gimp "$f" >/dev/null 2>&1;;
+         image/svg+xml) display -- "$f";;
+
          image/*)       rotdir "$f" |
                         grep -i "\.\(png\|jpg\|jpeg\|gif\|webp\)\(_large\)*$" |
                         setsid -f nsxiv -aiob 2>/dev/null |
@@ -27,7 +30,8 @@ cmd open ${{
                             lf -remote "send toggle"
                         done &
                         ;;
-        audio/*) mpv --audio-display=no "$f";;
+
+        audio/*|video/x-ms-asf) mpv --audio-display=no "$f";;
         video/*) setsid -f mpv "$f" -quiet >/dev/null 2>&1;;
     esac
 }}
@@ -44,6 +48,7 @@ cmd extract ${{
     tput sgr0
     read ans
     [ "$ans" = "y" ] && ex $fx
+    clear
 }}
 
 cmd delete ${{
@@ -56,6 +61,7 @@ cmd delete ${{
     printf "${RED}Delete?${NC} [${RED}y${NC}/N] "
     read ans
     [ "$ans" = "y" ] && rm -rf -- $fx
+    clear
 }}
 
 cmd du ${{
@@ -66,6 +72,7 @@ cmd du ${{
     size=$(du -hs $fx | cut -f1)
     printf "${BLUE}%s${NC}: %s\n" "$fx" "$size"
     read _
+    clear
 }}
 
 cmd chmod ${{
@@ -78,6 +85,7 @@ cmd chmod ${{
     printf "mod: "
     read -r mod
     chmod $mod $fx
+    clear
 }}
 
 cmd mkdir $mkdir -p "$(echo $* | tr ' ' '\ ')"

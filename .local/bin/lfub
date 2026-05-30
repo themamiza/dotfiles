@@ -2,8 +2,7 @@
 
 set -e
 
-cleanup()
-{
+cleanup() {
     exec 3>&-
     rm "$FIFO_UEBERZUG"
 }
