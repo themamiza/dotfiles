@@ -16,7 +16,7 @@ scriptpath="$(readlink -f -- "$0")"
 dirpath="$(dirname "$scriptpath")"
 
 function check_requirements() {
-    local reqs=(awk lsblk 7zz mkfs.vfat mkfs.ntfs sfdisk ms-sys mktemp wimsplit)
+    local reqs=(awk lsblk 7z mkfs.vfat mkfs.ntfs sfdisk ms-sys mktemp wimsplit)
 
     for req in ${reqs[*]}; do
         if ! command -v "$req" > /dev/null;
@@ -63,11 +63,11 @@ function format_drive() {
 }
 
 function get_iso_name() {
-    7zz l "$1" | awk '/Comment = / {print $3; exit 0}'
+    7z l "$1" | awk '/Comment = / {print $3; exit 0}'
 }
 
 function check_installwim_gt4gib() {
-    7zz l "$1" | awk 'BEGIN {doend=1} ($6 ~ /install.wim/) {if ($4 > 4294967296) {doend=0; exit 0}; doend=0; exit 1} END {if (doend) {exit 1}}'
+    7z l "$1" | awk 'BEGIN {doend=1} ($6 ~ /install.wim/) {if ($4 > 4294967296) {doend=0; exit 0}; doend=0; exit 1} END {if (doend) {exit 1}}'
 }
 
 function create_partitions() {
@@ -137,9 +137,9 @@ function extract_iso() {
     # $3 - exclude install.wim extraction flag
 
     if [[ "$3" == "skipinstallwim" ]]; then
-        7zz x "$1" -o"$2" '-x!sources/install.wim'
+        7z x "$1" -o"$2" '-x!sources/install.wim'
     else
-        7zz x "$1" -o"$2"
+        7z x "$1" -o"$2"
     fi
 }
 
@@ -162,7 +162,7 @@ function extract_bootmgfw_from_installwim() {
     [ ! -a "$fpath" ] && fpath="$2/sources/install.esd"
 
     mount -o ro "$1" "$2"
-    7zz e "$fpath" -o"$3/efi/boot/" '?/Windows/Boot/EFI/bootmgfw.efi'
+    7z e "$fpath" -o"$3/efi/boot/" '?/Windows/Boot/EFI/bootmgfw.efi'
     umount "$2"
 }
 
