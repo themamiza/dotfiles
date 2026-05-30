@@ -57,5 +57,32 @@ case "$(file --dereference --brief --mime-type -- "$1")" in
         [ ! -f "$CACHE.jpg" ] && pdftoppm -jpeg -f 1 -singlefile "$1" "$CACHE"
         image "$CACHE.jpg" "$2" "$3" "$4" "$5" "$1"
         ;;
+
+    application/zip|\
+    application/x-7z-compressed|\
+    application/vnd.rar|application/x-rar|\
+    application/x-tar|\
+    application/gzip|application/x-gzip|\
+    application/x-bzip2|\
+    application/x-xz|\
+    application/zstd|application/x-zstd|\
+    application/x-lz4|\
+    application/x-lzip|\
+    application/vnd.debian.binary-package|application/x-debian-package|\
+    application/x-rpm|\
+    application/vnd.android.package-archive|\
+    application/java-archive|\
+    application/x-iso9660-image|\
+    application/x-cpio|\
+    application/vnd.ms-cab-compressed|application/x-cab)
+        # list contents but only grab the list and not the copyright notice
+        7z l "$1" | awk '/^\s*Date[[:space:]]+Time[[:space:]]+Attr/ {p=1; print; next}
+                          p && /^-------------------/ {d++; if (d<=2) print; next
+                          p && /^[0-9]{4}-[0-9]{2}-[0-9]{2}/ {print}
+                          d>=2 {exit}'
+        ;;
+    *)
+        mediainfo "$1"
+        ;;
 esac
 exit 1
