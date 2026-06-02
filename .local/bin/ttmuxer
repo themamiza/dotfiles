@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# shellcheck disable=2015
+! tmux ls >/dev/null 2>&1 && $TERMINAL -e tmux new -s main || $TERMINAL -e tmux att
