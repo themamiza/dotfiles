@@ -8,5 +8,3 @@ if [ "$(setxkbmap -query | awk 'NR==3 {print $2}')" = us ]; then setxkbmap ir; e
 
 # Run keyboard tweaks again
 xset r rate 300 50
-setxkbmap -option "caps:swapescape"
-xmodmap "$HOME/.config/x11/xmodmaprc"
