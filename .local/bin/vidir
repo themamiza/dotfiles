@@ -1,0 +1,112 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import subprocess
+import tempfile
+
+def get_editor():
+    return os.environ.get('EDITOR', 'vim')
+
+def main():
+    # Get target directories/files from arguments, default to current directory
+    targets = sys.argv[1:] if len(sys.argv) > 1 else ['.']
+    
+    # Collect all files to be edited
+    files = []
+    for target in targets:
+        if os.path.isdir(target):
+            for entry in os.listdir(target):
+                files.append(os.path.normpath(os.path.join(target, entry)))
+        elif os.path.exists(target):
+            files.append(os.path.normpath(target))
+    
+    if not files:
+        print("No files found to edit.")
+        sys.exit(0)
+
+    # Sort files and create a mapping of ID -> original filepath
+    files.sort()
+    original_mapping = {i + 1: filepath for i, filepath in enumerate(files)}
+
+    # Create the content for the temporary file
+    lines = []
+    for fid, filepath in original_mapping.items():
+        lines.append(f"{fid}\t{filepath}")
+    content = "\n".join(lines) + "\n"
+
+    # Write to a temporary file and open it in the editor
+    with tempfile.NamedTemporaryFile(mode='w+', suffix='.tmp', delete=False) as tf:
+        temp_filename = tf.name
+        tf.write(content)
+        tf.flush()
+
+    editor = get_editor()
+    try:
+        subprocess.call([editor, temp_filename])
+    except Exception as e:
+        print(f"Error opening editor '{editor}': {e}")
+        os.remove(temp_filename)
+        sys.exit(1)
+
+    # Read back the edited content
+    with open(temp_filename, 'r') as tf:
+        edited_lines = tf.readlines()
+    
+    os.remove(temp_filename)
+
+    # Parse the edited lines
+    new_mapping = {}
+    for line in edited_lines:
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            # Split by the first whitespace/tab
+            parts = line.split(maxsplit=1)
+            fid = int(parts[0])
+            new_path = parts[1] if len(parts) > 1 else ""
+            new_mapping[fid] = new_path
+        except ValueError:
+            print(f"Warning: Ignoring invalid line format: '{line}'")
+
+    # Determine actions: Deletions and Renames
+    to_delete = []
+    to_rename = []
+
+    for fid, original_path in original_mapping.items():
+        if fid not in new_mapping:
+            to_delete.append(original_path)
+        else:
+            new_path = new_mapping[fid]
+            if new_path and new_path != original_path:
+                to_rename.append((original_path, new_path))
+
+    # Execute Deletions
+    for filepath in to_delete:
+        try:
+            if os.path.isdir(filepath):
+                os.rmdir(filepath) # Only removes empty directories for safety
+            else:
+                os.remove(filepath)
+            print(f"Removed: '{filepath}'")
+        except OSError as e:
+            print(f"Error removing '{filepath}': {e}")
+
+    # Execute Renames
+    # Note: To avoid issues with swapping names, we do a direct rename.
+    # In a production script, cycle detection (e.g., A->B, B->A) is recommended.
+    for original_path, new_path in to_rename:
+        try:
+            # Create target directory if it doesn't exist
+            target_dir = os.path.dirname(new_path)
+            if target_dir and not os.path.exists(target_dir):
+                os.makedirs(target_dir)
+                
+            os.rename(original_path, new_path)
+            print(f"Renamed: '{original_path}' -> '{new_path}'")
+        except OSError as e:
+            print(f"Error renaming '{original_path}' to '{new_path}': {e}")
+
+if __name__ == "__main__":
+    main()
