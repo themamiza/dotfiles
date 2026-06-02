@@ -1,0 +1,3 @@
+[indicator]
+preview = { underline = false }
+padding = { open = "█", close = "█" }
