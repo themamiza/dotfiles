@@ -57,7 +57,6 @@ require("lazy").setup({
                 build = ":TSUpdate"
 
         },
-        { "VonHeikemen/lsp-zero.nvim", branch = "v3.x" },
         { "airblade/vim-gitgutter" },
         {
                 "NeogitOrg/neogit",

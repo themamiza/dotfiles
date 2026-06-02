@@ -1,7 +1,34 @@
-local lsp_zero = require("lsp-zero")
+-- lus_ls setup
+vim.lsp.config('lua_ls', {
+  on_init = function(client)
+    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+      runtime = {
+        version = 'LuaJIT',
+        path = {
+          'lua/?.lua',
+          'lua/?/init.lua',
+        },
+      },
+      -- Make the server aware of Neovim runtime files
+      workspace = {
+        checkThirdParty = false,
+        library = {
+          vim.env.VIMRUNTIME,
+          -- For LSP Settings Type Annotations: https://github.com/neovim/nvim-lspconfig#lsp-settings-type-annotations
+          vim.api.nvim_get_runtime_file("lua/lspconfig", false)[1],
+          "/usr/share/hypr/stubs",
+        },
+      },
+    })
+  end,
 
-lsp_zero.on_attach(function(client, bufnr)
-        lsp_zero.default_keymaps({bufnr = bufnr})
-end)
+  -- Empty out the default settings
+  settings = { Lua = {}, },
+})
+vim.lsp.enable("lua_ls")
 
-lsp_zero.setup_servers({ "lua_ls", "clangd", "pylsp", "bashls" })
+-- simple lsp setups
+vim.lsp.enable("bashls")
+vim.lsp.enable("clangd")
+vim.lsp.enable("pylsp")
+
