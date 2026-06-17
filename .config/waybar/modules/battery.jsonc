@@ -1,0 +1,16 @@
+{
+    "battery": {
+        "full-at": 99,
+
+        "format": "{icon} {capacity}%",
+        "format-icons": {
+            "default": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+            "charging": [ "󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅" ],
+            "discharging": [ "󱟤" ]
+        },
+
+        //"design-capacity": true // enable to see the truth
+
+        "tooltip": false
+    }
+}
