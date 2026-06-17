@@ -106,6 +106,17 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 })
 
 vim.api.nvim_create_autocmd("BufWritePost", {
+        callback = function()
+                local target_dir = "/home/mamiza/rp/dotfiles/.config/waybar"
+                local filepath = vim.fn.expand("%:p")
+
+                if vim.startswith(filepath, target_dir) and filepath ~= "/home/mamiza/rp/dotfiles/.config/waybar/style.css" then
+                        vim.fn.system("pkill waybar; setsid -f waybar 2>&1 >/dev/null")
+                end
+        end,
+})
+
+vim.api.nvim_create_autocmd("BufWritePost", {
         pattern = "hyprland.conf",
         callback = function()
                 vim.fn.system("hyprctl reload")
