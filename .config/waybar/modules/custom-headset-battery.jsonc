@@ -1,0 +1,10 @@
+{
+    "custom/headset-battery": {
+        "exec": "bluebat -j",
+        "return-type": "json",
+        "interval": 5,
+
+        "format": "󰂯{icon} {text}",
+        "format-icons": [ "󰁻", "󰁽", "󰂀", "󰂂", "󰁹" ]
+    }
+}

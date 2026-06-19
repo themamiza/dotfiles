@@ -1,0 +1,14 @@
+{
+    "wireplumber": {
+        "format": "{icon}  {volume}%",
+        "format-muted": " ",
+        "format-icons": ["", "", ""],
+
+        "max-volume": 1000000,
+
+        "on-click": "wpctl set-mute @DEFAULT_SINK@ toggle",
+
+        "tooltip": false
+    }
+}
+

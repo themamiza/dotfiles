@@ -1,0 +1,19 @@
+{
+    "hyprland/window": {
+        "format": "{class} - {title}",
+
+        "max-length": 32,
+
+        "rewrite": {
+            "brave-browser(.*)": "Brave",
+            "kitty(.*)": "Kitty",
+            "org.telegram.desktop(.*)": "Telegram",
+            " - ": "" // Don't write " - " on empty workspaces
+        },
+
+        "icon": true,
+        "icon-size": 24,
+
+        "tooltip": false
+    }
+}

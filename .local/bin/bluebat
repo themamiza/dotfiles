@@ -1,0 +1,43 @@
+#!/bin/sh
+
+# device name
+device="soundcore R50i"
+
+# get device capacity and return the integer value
+capacity=$(upower -d | awk -v id="$device" '
+/Device:/ {f=0}
+$0 ~ id {f=1}
+f && /percentage:/ {
+    gsub(/%/, "", $2)
+    print $2
+    exit
+}
+')
+
+# exit if device is not connected
+if [ -z "$capacity" ]; then
+    exit 1
+fi
+
+# determine class based on capacity
+if [ "$capacity" -le 15 ]; then
+    class="critical"
+elif [ "$capacity" -le 35 ]; then
+    class="low"
+elif [ "$capacity" -le 65 ]; then
+    class="medium"
+elif [ "$capacity" -le 85 ]; then
+    class="high"
+else
+    class="full"
+fi
+
+# json mode
+if [ "$1" = "-j" ]; then
+    printf '{ "text":"%s%%", "percentage":%s, "class":"%s" }\n' "$capacity" "$capacity" "$class"
+    exit 0
+fi
+
+# normal mode
+printf "%s\n" "$capacity"
+exit 0
