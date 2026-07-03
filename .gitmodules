@@ -1,0 +1,3 @@
+[submodule ".local/bin/ex"]
+	path = .local/bin/ex
+	url = https://github.com/themamiza/ex
