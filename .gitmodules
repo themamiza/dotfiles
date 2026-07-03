@@ -1,3 +1,6 @@
 [submodule ".local/bin/ex"]
 	path = .local/bin/ex
 	url = https://github.com/themamiza/ex
+[submodule ".local/bin/win2usb"]
+	path = .local/bin/win2usb
+	url = https://github.com/themamiza/win2usb
