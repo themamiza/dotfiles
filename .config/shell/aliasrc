@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Use neovim for vi/vim if present:
-[ -x "$(command -v nvim)" ] && alias vi="nvim" vim="nvim" vimdiff="nvim -d" neogit="nvim +Neogit"
+[ -x "$(command -v nvim)" ] && alias vi="nvim" vim="nvim" vimdiff="nvim -d" neogit="nvim +Neogit" ng="neogit"
 
 # Alias magit if emacs is installed
 [ -x "$(command -v emacs)" ] && alias magit="emacs --no-window-system --execute=\"(magit-status)\""
@@ -33,6 +33,7 @@ alias \
 	mv="mv -iv" \
 	rm="rm -vI" \
 	nsxiv="nsxiv -b" \
+	sxiv="nsxiv" \
 	history="history 0" \
 	cw="wc -w" \
 	lc="wc -l" \
@@ -43,7 +44,6 @@ alias \
 alias \
 	grep="grep --color=auto" \
 	diff="diff --color=auto" \
-	ccat="highlight --out-format=ansi" \
 	ip="ip -color=auto"
 
 # These common commands are just too long! Abbreviate them:
@@ -53,6 +53,7 @@ alias \
 	z="zathura" \
 	lf="lfub" \
 	ll="ls -la" \
+	hl="rg --passthru" \
 	unrar="unrar-free" \
 	update-grub="sudo grub-mkconfig -o /boot/grub/grub.cfg" \
 	pong="ping 4.2.2.4" \
