@@ -32,3 +32,7 @@ vim.lsp.enable("bashls")
 vim.lsp.enable("clangd")
 vim.lsp.enable("pylsp")
 
+vim.lsp.config("qmlls", {
+  cmd = { "qmlls6" } -- Correct binary name
+})
+vim.lsp.enable("qmlls")
