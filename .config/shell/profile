@@ -3,7 +3,13 @@
 # profile file. Environmental variables are set here.
 
 # Adds `~/.local/bin` and it's sub-directories to $PATH
-export PATH="$PATH$(find ~/.local/bin -type d -printf ":%p")"
+if command -v fd >/dev/null 2>&1; then
+    SUBDIRS="$(fd -t d . "$HOME/.local/bin" --exclude '.git' | sed 's|/$||' | paste -sd: -)"
+else
+    SUBDIRS="$(find "$HOME/.local/bin" -mindepth 1 -type d -name .git -prune -o -type d -print | paste -sd: -)"
+fi
+
+export PATH="$HOME/.local/bin:${SUBDIRS:+$SUBDIRS:}$PATH"
 
 # Default programs:
 export EDITOR="nvim"
