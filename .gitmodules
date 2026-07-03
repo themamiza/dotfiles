@@ -4,3 +4,6 @@
 [submodule ".local/bin/win2usb"]
 	path = .local/bin/win2usb
 	url = https://github.com/themamiza/win2usb
+[submodule ".local/bin/vidir"]
+	path = .local/bin/vidir
+	url = https://github.com/themamiza/vidir
