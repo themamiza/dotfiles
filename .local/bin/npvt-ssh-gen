@@ -1,0 +1,57 @@
+#!/usr/bin/env python3
+
+import base64
+import json
+
+print("--- NPV Tunnel SSH Config Generator ---\n")
+
+username = input("Enter SSH Username: ").strip()
+password = input("Enter SSH Password: ").strip()
+
+# 2. Gather IP and Port with Fallbacks
+ip_input = input("Enter SSH Host/IP [Fallback: wepnx.xyz]: ").strip()
+host = ip_input if ip_input else "wepnx.xyz"
+
+port_input = input("Enter SSH Port [Fallback: 22]: ").strip()
+try:
+    port = int(port_input) if port_input else 22
+except ValueError:
+    print("⚠️ Invalid port entered. Falling back to 22.")
+    port = 22
+
+# 3. Populate the JSON Template
+config_dict = {
+    "sshConfigType": "SSH-Direct",
+    "remarks": f"ssh {username}",
+    "sshHost": host,
+    "sshPort": port,
+    "sshUsername": username,
+    "sshPassword": password,
+    "sni": "",
+    "tlsVersion": "DEFAULT",
+    "httpProxy": "",
+    "authenticateProxy": False,
+    "proxyUsername": "",
+    "proxyPassword": "",
+    "payload": "",
+    "dnsTTMode": "UDP",
+    "dnsServer": "",
+    "nameserver": "",
+    "publicKey": "",
+    "udpgwPort": 7300,
+    "udpgwTransparentDNS": True,
+}
+
+# 4. Convert JSON to a compact string (no whitespace/newlines)
+# Note: Based on your request, we Base64 *encode* the JSON data to build the link
+json_string = json.dumps(config_dict, separators=(",", ":"))
+
+# 5. Base64 Encode the string
+encoded_bytes = base64.b64encode(json_string.encode("utf-8"))
+encoded_string = encoded_bytes.decode("utf-8")
+
+# 6. Generate and print the single-line output
+final_url = f"npvt-ssh://{encoded_string}"
+
+print("\n--- Generated Link (Copy below) ---")
+print(final_url)
