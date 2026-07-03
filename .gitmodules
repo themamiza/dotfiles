@@ -1,9 +1,9 @@
-[submodule ".local/bin/ex"]
-	path = .local/bin/ex
+[submodule ".local/bin/utils/ex"]
+	path = .local/bin/utils/ex
 	url = https://github.com/themamiza/ex
-[submodule ".local/bin/win2usb"]
-	path = .local/bin/win2usb
-	url = https://github.com/themamiza/win2usb
-[submodule ".local/bin/vidir"]
-	path = .local/bin/vidir
+[submodule ".local/bin/utils/vidir"]
+	path = .local/bin/utils/vidir
 	url = https://github.com/themamiza/vidir
+[submodule ".local/bin/utils/win2usb"]
+	path = .local/bin/utils/win2usb
+	url = https://github.com/themamiza/win2usb
