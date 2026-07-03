@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# default mode (see wttr.in/:help)
+q="?0&m"
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        "-f") q="?m"; shift;;
+        *) loc="$1"; shift;;
+    esac
+done
+
+curl -s "wttr.in/${loc}${q}"
