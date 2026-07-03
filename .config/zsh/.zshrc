@@ -82,6 +82,39 @@ preexec()
 	echo -ne "\e[5 q"	# Use beam shaped cursor for each new prompt.
 }
 
+# Fully expand aliases 
+zmodload zsh/parameter
+
+expand-aliases-to-history() {
+    local full_buffer=$BUFFER
+    local cmd=${full_buffer%% *}
+    local rest=${full_buffer#$cmd}
+    
+    # Recursive expansion loop
+    while [[ -n "$aliases[$cmd]" ]]; do
+        local expansion=${aliases[$cmd]}
+        
+        # Prevent infinite recursion if alias points to itself
+        if [[ "$expansion" == "$cmd" ]]; then break; fi
+
+        local next_cmd=${expansion%% *}
+        local next_rest=${expansion#$next_cmd}
+        
+        cmd=$next_cmd
+        # Concatenate directly: the alias definition and the command line 
+        # already contain the necessary spaces.
+        rest="${next_rest}${rest}"
+    done
+    
+    BUFFER="${cmd}${rest}"
+    zle accept-line
+}
+
+# Ensure the widget is registered (if you haven't already)
+zle -N expand-aliases-to-history
+# Uncomment to enable
+#bindkey '^M' expand-aliases-to-history
+
 if [ -x "$(command -v lf)" ]; then
 	lfcd()
 	{
