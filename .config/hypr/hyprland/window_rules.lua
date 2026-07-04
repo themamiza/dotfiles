@@ -11,6 +11,17 @@ hl.window_rule({
     stay_focused = true
 })
 
+hl.window_rule({
+    name = "thunar",
+    match = {
+        class = "thunar",
+        title = "Rename.*"
+    },
+    float = true,
+    size = { 512, 128 },
+    center = true
+})
+
 -- BROKEN: Investigate why the opacity does not apply
 hl.window_rule({
   name = "SKLauncher",
