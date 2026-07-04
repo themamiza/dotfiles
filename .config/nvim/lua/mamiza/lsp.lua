@@ -1,5 +1,7 @@
--- lus_ls setup
-vim.lsp.config('lua_ls', {
+-- lua_ls setup
+vim.lsp.config("lua_ls", {
+  capabilities = require("cmp_nvim_lsp").default_capabilities(),
+
   on_init = function(client)
     client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
       runtime = {
@@ -23,7 +25,7 @@ vim.lsp.config('lua_ls', {
   end,
 
   -- Empty out the default settings
-  settings = { Lua = {}, },
+  settings = { Lua = {}, }
 })
 vim.lsp.enable("lua_ls")
 
