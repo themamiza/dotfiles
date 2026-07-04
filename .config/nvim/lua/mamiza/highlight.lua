@@ -9,4 +9,3 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 vim.opt.colorcolumn = "128,129"
-vim.cmd [[ highlight ColorColumn guibg=lightgray ]] 
