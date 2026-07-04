@@ -30,6 +30,29 @@ source <(fzf --zsh 2>/dev/null)
 # Load aliases and shortcuts if existent:
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc" ] && source "${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc"
 
+# Hide directories and non-executable files inside PATH entries from command completion.
+_path_ignored=()
+for _dir in $path; do
+    [[ -d "$_dir" ]] || continue
+
+    _path_ignored+=( "$_dir"/*(/N:t) )
+
+    for _file in "$_dir"/*(N.); do
+        [[ -x "$_file" ]] || _path_ignored+=( "${_file:t}" )
+    done
+done
+
+if (( $#_path_ignored )); then
+    _path_ignored=( ${(u)_path_ignored} )
+    zstyle ':completion:*:*:-command-:*:commands' ignored-patterns ${(b)_path_ignored}
+fi
+
+unset _path_ignored _dir _file
+zstyle ':completion:*' completer _complete
+# This mostly solves the issue where the directories inside '~/.local/bin' show up as executables.
+# But `zsh-fast-syntax-highlighting-git` still highlights them green when written at the command line.
+# TODO: Investigate to fix.
+
 # Basic auto/tab completion:
 autoload -U compinit
 zstyle ":completion:*" menu select
