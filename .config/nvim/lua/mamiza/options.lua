@@ -53,6 +53,10 @@ set.completeopt = "menuone,noselect"
 -- Don't show intro message:
 set.shortmess = "atI"
 
+-- Highlight line with cursor:
+set.cursorline = true
+set.cursorlineopt = "both"
+
 vim.cmd [[
         augroup RestoreCursor
         autocmd!
