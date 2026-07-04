@@ -64,7 +64,7 @@ hl.bind("SUPER + SHIFT + space", hl.dsp.window.float())
 hl.bind("SUPER + H", hl.dsp.focus({ direction = "l" }))
 hl.bind("SUPER + J", hl.dsp.focus({ direction = "d" }))
 hl.bind("SUPER + K", hl.dsp.focus({ direction = "u" }))
-hl.bind("SUPER + L", hl.dsp.focus({ direction = "l" }))
+hl.bind("SUPER + L", hl.dsp.focus({ direction = "r" }))
 
 hl.bind("SUPER + LEFT",  hl.dsp.window.move({ x = -25, y = 0, relative = true }), { repeating = true })
 hl.bind("SUPER + RIGHT", hl.dsp.window.move({ x = 25, y = 0, relative = true }), { repeating = true })
