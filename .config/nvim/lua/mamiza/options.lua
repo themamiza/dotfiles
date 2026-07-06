@@ -53,6 +53,9 @@ set.completeopt = "menuone,noselect"
 -- Don't show intro message:
 set.shortmess = "atI"
 
+-- Don't put "~" on empty lines
+set.fillchars:append({ eob = " " })
+
 -- Highlight line with cursor:
 set.cursorline = true
 set.cursorlineopt = "both"
