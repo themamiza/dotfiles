@@ -15,7 +15,7 @@ hl.window_rule({
     name = "thunar",
     match = {
         class = "thunar",
-        title = "Rename.*"
+        title = "Rename.*|File Operation Progress"
     },
     float = true,
     size = { 512, 128 },
@@ -32,6 +32,27 @@ hl.window_rule({
   float = true,
   center = true,
   opacity = "1.0 override",
+})
+
+hl.window_rule({
+    name = "kdenlive",
+    match = {
+        class = "org.kde.kdenlive",
+        title = "Kdenlive"
+    },
+    float = true,
+    center = true
+})
+
+hl.window_rule({
+    name = "xdg_portal",
+    match = {
+        class = "xdg-desktop-portal-gtk",
+        title = ".*wants to save"
+    },
+    float = true,
+    size = { 1080, 720 },
+    center = true
 })
 
 hl.window_rule({
