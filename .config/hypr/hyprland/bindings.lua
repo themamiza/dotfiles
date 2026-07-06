@@ -7,6 +7,9 @@ hl.bind("SUPER +         G", hl.dsp.exec_cmd("$GUIFM"))
 hl.bind("SUPER +         E", hl.dsp.exec_cmd("emacs"))
 hl.bind("SUPER +         T", hl.dsp.exec_cmd("Telegram"))
 
+-- Eco mode
+hl.bind("SUPER + GRAVE", hl.dsp.exec_cmd("hypreco toggle"))
+
 -- Volume control --
 hl.bind("SUPER + minus",          hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_SINK@ 5%-; pkill --signal 44 waybar"), { repeating = true })
 hl.bind("SUPER + equal",          hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_SINK@ 5%+; pkill --signal 44 waybar"), { repeating = true })
@@ -89,5 +92,3 @@ for workspace = 1, 9 do
     hl.bind("SUPER + " .. key, hl.dsp.focus({ workspace = tostring(workspace) }))
     hl.bind("SUPER + SHIFT + " .. key, hl.dsp.window.move({ workspace = tostring(workspace), follow = false }))
 end
-
-

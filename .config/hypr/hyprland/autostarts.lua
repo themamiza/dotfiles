@@ -5,6 +5,7 @@ end)
 
 -- Autostarts
 hl.on("hyprland.start", function ()
+    hl.exec_cmd("hypreco")
     hl.exec_cmd("hyprpaper")
     hl.exec_cmd("blueman-applet")
     hl.exec_cmd("bluemon")
