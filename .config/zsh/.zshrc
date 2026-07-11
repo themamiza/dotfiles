@@ -18,6 +18,10 @@ setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
 setopt HIST_APPEND
 
+# Command and Path corrections
+setopt CORRECT
+setopt CORRECT_ALL
+
 # History in cache directory:
 HISTSIZE=1000000
 SAVEHIST=1000000
