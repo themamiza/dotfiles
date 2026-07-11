@@ -6,6 +6,7 @@ hl.bind("SUPER + SHIFT + W", hl.dsp.exec_cmd("$PRIVATE_BROWSER"))
 hl.bind("SUPER +         G", hl.dsp.exec_cmd("$GUIFM"))
 hl.bind("SUPER +         E", hl.dsp.exec_cmd("emacs"))
 hl.bind("SUPER +         T", hl.dsp.exec_cmd("Telegram"))
+hl.bind("SUPER + SHIFT + T", hl.dsp.exec_cmd("$TERMINAL -e tux"))
 
 -- Eco mode
 hl.bind("SUPER + GRAVE", hl.dsp.exec_cmd("hypreco toggle"))
