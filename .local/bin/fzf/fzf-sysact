@@ -18,7 +18,7 @@ case "$WM" in
 	"hyprland")
 		case "$(printf "🔒 lockdown\n🚪 leave hyprland\n🪟 restart hyprland\n💤 suspend\n🐻 hibernate\n🔃 reboot\n💻 shutdown\n📺 display off\n⏰ uptime" | fzf)" in
 			"🔒 lockdown") notify-send "locking down" && sleep 2 && setsid -f hyprlock;;
-			"🚪 leave hyprland") hyprctl dispatch exit;;
+			"🚪 leave hyprland") hyprctl dispatch "hl.dsp.exit()";;
 			"🪟 restart hyprland") hyprctl reload;;
 			"💤 suspend") setsid -f hyprlock; systemctl suspend -i;;
 			"🐻 hibernate") setsid -f hyprlock; systemctl hibernate -i;;
