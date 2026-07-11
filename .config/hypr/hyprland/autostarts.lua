@@ -13,4 +13,5 @@ hl.on("hyprland.start", function ()
     hl.exec_cmd("hyprctl setcursor Breeze_Light 24")
     -- Execute `waybar` last
     hl.exec_cmd("waybar")
+    hl.exec_cmd("v2rayn")
 end)
