@@ -34,6 +34,9 @@ hl.bind("SUPER + SHIFT + bracketright", hl.dsp.exec_cmd("brightnessctl set 25%+;
 hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd("brightnessctl set 10%+; pkill --signal 37 waybar"), { repeating = true })
 hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl set 10%-; pkill --signal 37 waybar"), { repeating = true })
 
+-- Touchpad toggle --
+hl.bind("F6", hl.dsp.exec_cmd("touchpad-toggle"))
+
 -- Screenshot --
 hl.bind("Print",         hl.dsp.exec_cmd("grim               ~/pix/$(date '+%y%m%d-%H%M-%S').png"))
 hl.bind("SHIFT + Print", hl.dsp.exec_cmd('grim -g "$(slurp)" ~/pix/$(date "+%y%m%d-%H%M-%S").png'))
