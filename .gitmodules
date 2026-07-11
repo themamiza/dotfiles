@@ -7,3 +7,6 @@
 [submodule ".local/bin/utils/win2usb"]
 	path = .local/bin/utils/win2usb
 	url = https://github.com/themamiza/win2usb
+[submodule ".local/bin/utils/wallc"]
+	path = .local/bin/utils/wallc
+	url = https://github.com/themamiza/wallc
