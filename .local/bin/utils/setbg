@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # This script does the following:
-# 	Run by itself, set the wallpaper (at X start).
+# 	Run by itself, set the wallpaper (at startup).
 # 	If given a file, set that as the new wallpaper.
 # 	If given a directory, choose random file in it.
 # 	If wal is installed, also generates a colorscheme.
@@ -38,7 +38,8 @@ else
 fi
 
 # Maximize wallpaper only when it's portrait.
-command -v identify 2>/dev/null 1>&2 && identify -format '%w %h\n' -- "$bgloc" | \
+if command -v identify 2>/dev/null 1>&2; then
+	identify -format '%w %h\n' -- "$bgloc" | \
 	while read -r W H; do
 		if [ "$W" -lt "$H" ]; then
 			case "$WM" in
@@ -46,7 +47,7 @@ command -v identify 2>/dev/null 1>&2 && identify -format '%w %h\n' -- "$bgloc" |
 				"hyprland")
 					monitors="$(hyprctl monitors list | grep "Monitor" | awk '{print $2}')"
 					for monitor in $monitors; do
-						hyprctl hyprpaper wallpaper "$monitor,contain:$bgloc"
+						hyprctl hyprpaper wallpaper "$monitor,$bgloc,contain"
 					done
 					;;
 			esac
@@ -61,17 +62,18 @@ command -v identify 2>/dev/null 1>&2 && identify -format '%w %h\n' -- "$bgloc" |
 					;;
 			esac
 		fi
-	done || {
-		case "$WM" in
-			"dwm") xwallpaper --zoom "$bgloc";;
-			"hyprland")
-				monitors="$(hyprctl monitors list | grep "Monitor" | awk '{print $2}')"
-				for monitor in $monitors; do
-					hyprctl hyprpaper wallpaper "$monitor,$bgloc"
-				done
-				;;
-		esac
-	}
+	done
+else
+	case "$WM" in
+		"dwm") xwallpaper --zoom "$bgloc";;
+		"hyprland")
+			monitors="$(hyprctl monitors list | grep "Monitor" | awk '{print $2}')"
+			for monitor in $monitors; do
+				hyprctl hyprpaper wallpaper "$monitor,$bgloc"
+			done
+			;;
+	esac
+fi
 
 # If running dwm, hit the key to refresh the color scheme.
 pidof dwm >/dev/null && xdotool key super+F5

@@ -1,0 +1,18 @@
+#!/bin/sh
+
+for target in "$@"; do
+
+    [ -e "$target" ] || { printf "'%s' does not exist" "$target" >&2; continue; }
+
+    case "$(file --dereference --brief --mime-type -- "$target")" in
+        image/*) ristretto "$target";;
+
+        text/* | inode/x-empty) "${EDITOR:-vim}" "$target";;
+
+        audio/* | video/*) mpv "$target";;
+
+        */pdf) zathura "$target";;
+
+        *) printf " <%s> is not handled\n" "$(file --dereference --brief --mime-type -- "$target")"
+    esac
+done

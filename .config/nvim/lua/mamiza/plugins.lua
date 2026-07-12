@@ -1,6 +1,6 @@
 -- Bootstrap Lazy:
-local lazypath = vim.fn.stdpath("data") .. "lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
         vim.fn.system({
                 "git",
                 "clone",
@@ -18,7 +18,16 @@ require("lazy").setup({
                 "neovim/nvim-lspconfig",
                 dependencies = {
                         { "j-hui/fidget.nvim", opts = {} },
-                        "folke/neodev.nvim",
+                }
+        },
+        {
+                "folke/lazydev.nvim",
+                ft = "lua",
+                opts = {
+                        library = {
+                                { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+
+                        }
                 }
         },
         {
@@ -44,7 +53,8 @@ require("lazy").setup({
                 }
         },
         {
-                "nvim-telescope/telescope.nvim", tag = "0.1.3",
+                "nvim-telescope/telescope.nvim",
+                branch = "master",
                 dependencies = { "nvim-lua/plenary.nvim" }
         },
         {
@@ -54,10 +64,10 @@ require("lazy").setup({
         },
         {
                 "nvim-treesitter/nvim-treesitter",
+                branch = "main",
                 build = ":TSUpdate"
 
         },
-        { "VonHeikemen/lsp-zero.nvim", branch = "v3.x" },
         { "airblade/vim-gitgutter" },
         {
                 "NeogitOrg/neogit",
@@ -71,5 +81,8 @@ require("lazy").setup({
                 -- To use with `nvim-treesitter`
                 priority = 49,
         },
-        { "numToStr/Comment.nvim" }
+        {
+                "folke/snacks.nvim",
+                priority = 1000
+        }
 })

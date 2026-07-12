@@ -1,0 +1,9 @@
+[mgr]
+    ratio = [1, 2, 3]
+    show_hidden = true
+    show_symlink = false
+
+[opener]
+    play = [{ run = "open %s", block = true }]
+    edit = [{ run = "open %s", block = true }]
+    open = [{ run = "open %s", block = true }]

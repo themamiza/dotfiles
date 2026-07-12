@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Usage: ./define.sh <word>
+
+if [ -z "$1" ]; then
+    echo "Usage: $0 <word>"
+    exit 1
+fi
+
+curl -s "dict://dict.org/d:$1" | \
+sed -n '/^151/,/^250/p' | \
+sed '1d;$d' | \
+sed 's/^151 [^ ]* [^ ]* //' | \
+sed 's/^\.[[:space:]]*$/ /'

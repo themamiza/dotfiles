@@ -1,0 +1,16 @@
+[mgr]
+    prepend_keymap = [
+        # Proper enter
+        { on = [ "l" ],       run = "plugin smart-enter --sync", desc = "Enter the child directory, or open file." },
+        { on = [ "<Enter>" ], run = "plugin smart-enter --sync", desc = "Enter the child directory, or open file." },
+        { on = [ "<Right>" ], run = "plugin smart-enter --sync", desc = "Enter the child directory, or open file." },
+
+        # Drop to $SHELL
+        { on = [ "w" ], for = "unix", run = 'shell "$SHELL" --block', desc = "Open $SHELL here." },
+
+        # Set wallpaper
+        { on = [ "b" ], for = "linux", run = "shell -- setbg %h", desc = "Set hovered file as wallpaper." },
+
+        # mkdir
+        { on = [ "+" ], for = "linux", run = "create --dir", desc = "Create a directory." },
+    ]

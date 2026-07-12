@@ -1,0 +1,26 @@
+#!/bin/sh
+
+status_file="$XDG_CONFIG_HOME/hypr/hypreco_status"
+
+[ ! -f "$status_file" ] && echo "0" > "$status_file"
+current_status=$(cat "$status_file")
+
+[ "$1" = "toggle" ] && { [ "$current_status" = "0" ] && current_status="1" || current_status="0"; }
+[ "$1" = "eco" ] && current_status="1"
+[ "$1" = "default" ] && current_status="0"
+
+if [ "$current_status" = "1" ]; then
+    hyprctl eval 'hl.config({
+        animations = { enabled = 0 },
+        general = { gaps_in = 0, gaps_out = 0 },
+        decoration = { blur = { enabled = false }, rounding = 0 }
+    })' >/dev/null 2>&1
+    echo "1" > "$status_file"
+else
+    hyprctl eval 'hl.config({
+        animations = { enabled = 1 },
+        general = { gaps_in = 10, gaps_out = 10 },
+        decoration = { blur = { enabled = true }, rounding = 12 }
+    })' >/dev/null 2>&1
+    echo "0" > "$status_file"
+fi

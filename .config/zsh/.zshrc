@@ -18,6 +18,10 @@ setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
 setopt HIST_APPEND
 
+# Command and Path corrections
+setopt CORRECT
+setopt CORRECT_ALL
+
 # History in cache directory:
 HISTSIZE=1000000
 SAVEHIST=1000000
@@ -29,6 +33,29 @@ source <(fzf --zsh 2>/dev/null)
 
 # Load aliases and shortcuts if existent:
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc" ] && source "${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc"
+
+# Hide directories and non-executable files inside PATH entries from command completion.
+_path_ignored=()
+for _dir in $path; do
+    [[ -d "$_dir" ]] || continue
+
+    _path_ignored+=( "$_dir"/*(/N:t) )
+
+    for _file in "$_dir"/*(N.); do
+        [[ -x "$_file" ]] || _path_ignored+=( "${_file:t}" )
+    done
+done
+
+if (( $#_path_ignored )); then
+    _path_ignored=( ${(u)_path_ignored} )
+    zstyle ':completion:*:*:-command-:*:commands' ignored-patterns ${(b)_path_ignored}
+fi
+
+unset _path_ignored _dir _file
+zstyle ':completion:*' completer _complete
+# This mostly solves the issue where the directories inside '~/.local/bin' show up as executables.
+# But `zsh-fast-syntax-highlighting-git` still highlights them green when written at the command line.
+# TODO: Investigate to fix.
 
 # Basic auto/tab completion:
 autoload -U compinit
@@ -81,6 +108,39 @@ preexec()
 {
 	echo -ne "\e[5 q"	# Use beam shaped cursor for each new prompt.
 }
+
+# Fully expand aliases 
+zmodload zsh/parameter
+
+expand-aliases-to-history() {
+    local full_buffer=$BUFFER
+    local cmd=${full_buffer%% *}
+    local rest=${full_buffer#$cmd}
+    
+    # Recursive expansion loop
+    while [[ -n "$aliases[$cmd]" ]]; do
+        local expansion=${aliases[$cmd]}
+        
+        # Prevent infinite recursion if alias points to itself
+        if [[ "$expansion" == "$cmd" ]]; then break; fi
+
+        local next_cmd=${expansion%% *}
+        local next_rest=${expansion#$next_cmd}
+        
+        cmd=$next_cmd
+        # Concatenate directly: the alias definition and the command line 
+        # already contain the necessary spaces.
+        rest="${next_rest}${rest}"
+    done
+    
+    BUFFER="${cmd}${rest}"
+    zle accept-line
+}
+
+# Ensure the widget is registered (if you haven't already)
+zle -N expand-aliases-to-history
+# Uncomment to enable
+#bindkey '^M' expand-aliases-to-history
 
 if [ -x "$(command -v lf)" ]; then
 	lfcd()

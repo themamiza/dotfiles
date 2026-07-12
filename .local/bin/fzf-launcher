@@ -1,4 +1,0 @@
-#!/bin/sh
-
-# shellcheck disable=SC2046
-basename -a $(echo "$PATH" | tr ":" "\n" | xargs find) | uniq | sort | fzf | xargs setsid -f

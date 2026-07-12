@@ -53,6 +53,13 @@ set.completeopt = "menuone,noselect"
 -- Don't show intro message:
 set.shortmess = "atI"
 
+-- Don't put "~" on empty lines
+set.fillchars:append({ eob = " " })
+
+-- Highlight line with cursor:
+set.cursorline = true
+set.cursorlineopt = "both"
+
 vim.cmd [[
         augroup RestoreCursor
         autocmd!
@@ -100,7 +107,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
                 local filepath = vim.fn.expand("%:p")
 
                 if vim.startswith(filepath, target_dir) then
-                        vim.fn.system("mais install-dotfiles")
+                        vim.fn.jobstart({ "mais", "install-dotfiles" }, { detach = true })
                 end
         end,
 })
@@ -119,6 +126,13 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 vim.api.nvim_create_autocmd("BufWritePost", {
         pattern = "hyprland.conf",
         callback = function()
-                vim.fn.system("hyprctl reload")
+                vim.fn.jobstart({ "hyprctl", "reload" }, { detach = true })
+        end,
+})
+
+vim.api.nvim_create_autocmd("BufWritePost", {
+        pattern = "*/waybar/*",
+        callback = function()
+                vim.fn.jobstart({ "pkill", "-SIGUSR2", "waybar" }, { detach = true })
         end,
 })

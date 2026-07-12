@@ -1,0 +1,3 @@
+#!/bin/sh
+
+printf '%s\n' "$PATH" | tr ':' '\n' | while IFS= read -r dir; do [ -d "$dir" ] && find "$dir" -mindepth 1 -type f,l -executable -printf '%f\n' 2>/dev/null; done | sort -u | fzf | xargs -r setsid -f
