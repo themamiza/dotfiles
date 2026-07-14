@@ -1,0 +1,41 @@
+{
+    "layer": "top",
+    "height": 32,
+
+    "include": [ 
+        // configuring mode
+        "~/.config/waybar/mode.jsonc",
+
+        // configuring modules
+        "~/.config/waybar/modules/hyprland-workspaces.jsonc",
+        "~/.config/waybar/modules/hyprland-window.jsonc",
+        "~/.config/waybar/modules/clock.jsonc",
+        "~/.config/waybar/modules/battery.jsonc",
+        "~/.config/waybar/modules/custom-headset-battery.jsonc",
+        "~/.config/waybar/modules/wireplumber.jsonc",
+        "~/.config/waybar/modules/hyprland-language.jsonc",
+        "~/.config/waybar/modules/tray.jsonc",
+        "~/.config/waybar/modules/group-tray.jsonc"
+    ],
+
+    // module placements
+    "modules-left": [
+        "hyprland/workspaces",
+        "hyprland/window"
+    ],
+
+    "modules-center": [
+        "clock"
+    ],
+
+    "modules-right": [
+        "group/tray",
+        "battery",
+        "custom/headset-battery",
+        "wireplumber",
+        "hyprland/language"
+    ],
+
+    // auto reload style
+    "reload_style_on_change": true
+}

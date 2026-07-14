@@ -62,6 +62,7 @@ hl.bind("CONTROL + ALT + SHIFT + M", hl.dsp.exec_cmd("dmenuumount"))
 
 -- Toggle `waybar`
 hl.bind("SUPER + B", hl.dsp.exec_cmd("pkill -SIGUSR1 waybar"))
+hl.bind("SUPER + SHIFT + B", hl.dsp.exec_cmd("fzf-waybar-mode toggle-layout"))
 
 -- Window actions --
 hl.bind("SUPER + Q", hl.dsp.window.close())

@@ -1,0 +1,96 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+### Global variables ###
+
+# Saving to a variable for easy use in messages.
+program_name="$(basename "$0")"
+
+waybar_directory="${XDG_CONFIG_HOME:-$HOME/.config}/waybar"
+profiles_directory="${XDG_CONFIG_HOME:-$HOME/.config}/waybar-profiles"
+
+config_name="config.jsonc"
+style_name="style.css"
+
+### Functions ###
+
+# ErrorPRINT: Print error to stderr and exit with code (second argument).
+eprint() {
+    local code="${2:-1}"
+    printf "%s: %b\n" "$program_name" "$1" >&2
+    exit "$code"
+}
+
+# Return 0 if a command is available, otherwise return 1.
+check_installed() {
+    command -v "$1" >/dev/null 2>&1 && return 0
+    return 1
+}
+
+# Print the name of the currently active profile.
+get_active_profile() {
+    local profile_path
+
+    [ -L "$waybar_directory" ] || return 0
+
+    profile_path="$(readlink -f "$waybar_directory" 2>/dev/null)" || return 0
+    basename "$profile_path"
+}
+
+# Print all available profiles, marking the active one with '*'.
+list_profiles() {
+    local active_profile
+    local profile
+    local profiles_found=false
+
+    active_profile="$(get_active_profile)"
+
+    while IFS= read -r profile; do
+        profiles_found=true
+        [ "$profile" == "$active_profile" ] && printf "* %s\n" "$profile" || printf "  %s\n" "$profile"
+    done < <(find "$profiles_directory" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | sort)
+
+    $profiles_found || eprint "No profiles found in '$profiles_directory'."
+}
+
+# Use `fzf` to interactively select a `waybar` profile.
+select_profile() {
+    local selection
+
+    selection="$(list_profiles | fzf --prompt="Waybar profile: " --header="'*' marks the active profile")" || exit 0
+
+    # Remove the two-character active/inactive marker.
+    printf "%s\n" "${selection#??}"
+}
+
+# Validate and activate the selected profile.
+switch_profile() {
+    local profile="$1"
+    local profile_directory="$profiles_directory/$profile"
+
+    [ -d "$profile_directory" ] || eprint "Profile '$profile' does not exist."
+
+    [ -f "$profile_directory/$config_name" ] || eprint "'$profile' does not contain '$config_name'."
+
+    [ -f "$profile_directory/$style_name" ] || eprint "'$profile' does not contain '$style_name'."
+
+    # Replace the current `waybar` symlink with the selected profile.
+    ln -sfnT "$profile_directory" "$waybar_directory"
+}
+
+# Reload `waybar` or start it when it is not already running.
+reload_waybar() { pkill -SIGUSR2 -x waybar || setsid -f waybar >/dev/null 2>&1; }
+
+### Main ###
+
+check_installed fzf || eprint "'fzf' is not installed."
+
+check_installed waybar || eprint "'waybar' is not installed."
+
+profile="${1:-}"
+[ -z "$profile" ] && profile="$(select_profile)"
+
+[ "$profile" == "$(get_active_profile)" ] && exit 0
+switch_profile "$profile"
+reload_waybar

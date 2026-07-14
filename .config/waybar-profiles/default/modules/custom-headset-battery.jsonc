@@ -4,7 +4,6 @@
         "return-type": "json",
         "interval": 5,
 
-        "format": "󰂯{icon} {text}",
-        "format-icons": [ "󰁻", "󰁽", "󰂀", "󰂂", "󰁹" ]
+        "format": "[󰥉 {text}]"
     }
 }

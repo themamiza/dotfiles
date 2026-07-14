@@ -1,0 +1,22 @@
+{
+    "clock": {
+        "format": "{:%A, %B %d, %Y - %I:%M%p}",
+        "format-alt": "{:%I:%M%p}",
+
+        "tooltip-format": "<span font='FiraCodeNerdFont' size='14pt'>{calendar}</span>",
+
+        "calendar": {
+            "mode": "year",
+            "mode-mon-col": 3,
+            "first-day-of-week": 6,
+
+            "format": {
+                "months":     "<span color='#ffead3'><b>{}</b></span>",
+                "days":       "<span color='#ecc6d9'><b>{}</b></span>",
+                "weeks":      "<span color='#99ffdd'><b>W{}</b></span>",
+                "weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
+                "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
+            }
+        }
+    }
+}
