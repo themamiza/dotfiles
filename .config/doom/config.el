@@ -102,3 +102,12 @@
 
 (after! elfeed
   (setq-default elfeed-search-filter ""))
+
+(spacious-padding-mode)
+(setq spacious-padding-widths
+      '( :internal-border-width 16
+         :header-line-width 4
+         :mode-line-width 6
+         :tab-width 4
+         :right-divider-width 30
+         :scroll-bar-width 0))
