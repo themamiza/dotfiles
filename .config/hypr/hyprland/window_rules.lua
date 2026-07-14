@@ -4,7 +4,7 @@ hl.window_rule({
         class = "fzf-.*"
     },
     float = true,
-    size = { 1080, 720 },
+    size = { "(monitor_w*0.5)", "(monitor_h*0.5)"},
     center = true,
     pin = true,
 
