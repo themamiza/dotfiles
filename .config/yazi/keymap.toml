@@ -1,16 +1,30 @@
 [mgr]
     prepend_keymap = [
         # Proper enter
-        { on = [ "l" ],       run = "plugin smart-enter --sync", desc = "Enter the child directory, or open file." },
-        { on = [ "<Enter>" ], run = "plugin smart-enter --sync", desc = "Enter the child directory, or open file." },
-        { on = [ "<Right>" ], run = "plugin smart-enter --sync", desc = "Enter the child directory, or open file." },
+        { on = [ "l" ],       run = "plugin smart-enter --sync", desc = "Enter the child directory, or open file" },
+        { on = [ "<Enter>" ], run = "plugin smart-enter --sync", desc = "Enter the child directory, or open file" },
+        { on = [ "<Right>" ], run = "plugin smart-enter --sync", desc = "Enter the child directory, or open file" },
 
         # Drop to $SHELL
-        { on = [ "w" ], for = "unix", run = 'shell --block -- "$SHELL"; clear', desc = "Open $SHELL here." },
+        { on = [ "w" ], for = "unix", run = 'shell --block -- "$SHELL"; clear', desc = "Open $SHELL here" },
 
-        # Set wallpaper
-        { on = [ "b" ], for = "linux", run = "shell -- setbg %h; clear", desc = "Set hovered file as wallpaper." },
+        # Wallpaper
+        { on = [ "b" ], for = "linux", run = "shell -- setbg %h; clear", desc = "Set hovered file as wallpaper" },
 
-        # mkdir
-        { on = [ "+" ], for = "linux", run = "create --dir", desc = "Create a directory." },
+        # `mkdir`
+        { on = [ "+" ], for = "linux", run = "create --dir", desc = "Create a directory" },
+
+        # Movement
+        { on = [ "~" ], for = "unix", run = 'cd ~', desc = "Go home" },
+        { on = [ "-" ], for = "unix", run = 'cd ..', desc = "Go up a directory" },
+
+        # Rename
+        { on = [ "i" ], for = "unix", run = 'rename --cursor="before_ext"', desc = "Rename selected file(s)" },
+        { on = [ "I" ], for = "unix", run = 'rename --cursor="start"', desc = "Rename from the start" },
+        { on = [ "a" ], for = "unix", run = 'rename --cursor="end"', desc = "Rename from the end" },
+
+        { on = [ "c", "w" ], for = "unix", run = 'rename --cursor="start" --empty="stem"', desc = "Change name (preserve extention)" },
+        { on = [ "c", "W" ], for = "unix", run = 'rename --empty="all"', desc = "Change whole name" },
+
+        { on = [ "<C-b>" ], for = "unix", run = 'shell --block vidir; clear', desc = "Bulk rename" },
     ]
