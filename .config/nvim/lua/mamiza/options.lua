@@ -118,6 +118,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
                 local filepath = vim.fn.expand("%:p")
 
                 if vim.startswith(filepath, target_dir) and filepath ~= "/home/mamiza/rp/dotfiles/.config/waybar/style.css" then
+                        -- Not using SIGUSR2 in case `waybar` fails and need to be launched again:
                         vim.fn.system("pkill waybar; setsid -f waybar 2>&1 >/dev/null")
                 end
         end,
@@ -127,12 +128,5 @@ vim.api.nvim_create_autocmd("BufWritePost", {
         pattern = "hyprland.conf",
         callback = function()
                 vim.fn.jobstart({ "hyprctl", "reload" }, { detach = true })
-        end,
-})
-
-vim.api.nvim_create_autocmd("BufWritePost", {
-        pattern = "*/waybar/*",
-        callback = function()
-                vim.fn.jobstart({ "pkill", "-SIGUSR2", "waybar" }, { detach = true })
         end,
 })
