@@ -4,6 +4,6 @@
     show_symlink = false
 
 [opener]
-    play = [{ run = "open %s", block = true }]
-    edit = [{ run = "open %s", block = true }]
-    open = [{ run = "open %s", block = true }]
+    play = [{ run = "open %s; clear", block = true }]
+    edit = [{ run = "open %s; clear", block = true }]
+    open = [{ run = "open %s; clear", block = true }]
