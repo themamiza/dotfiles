@@ -16,7 +16,7 @@ case "$WM" in
 		esac
 		;;
 	"hyprland")
-		case "$(printf "🔒 lockdown\n🚪 leave hyprland\n🪟 restart hyprland\n💤 suspend\n🐻 hibernate\n🔃 reboot\n💻 shutdown\n📺 display off\n⏰ uptime" | fzf)" in
+		case "$(printf "🔒 lockdown\n🚪 leave hyprland\n🪟 restart hyprland\n💤 suspend\n🐻 hibernate\n🔃 reboot\n💻 shutdown\n📺 display off\n⏰ uptime" | fzf --prompt "Action: " --margin 1,4%)" in
 			"🔒 lockdown") notify-send "locking down" && setsid -f bash -c "sleep 2; hyprlock --grace 5";;
 			"🚪 leave hyprland") hyprctl dispatch "hl.dsp.exit()";;
 			"🪟 restart hyprland") hyprctl reload;;
