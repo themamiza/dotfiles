@@ -1,0 +1,156 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+### Global variables ###
+
+# Saving to a variable for easy use in messages.
+program_name="$(basename "$0")"
+
+waybar_directory="${XDG_CONFIG_HOME:-$HOME/.config}/waybar"
+modes_directory="$waybar_directory/modes"
+mode_link="$waybar_directory/mode.jsonc"
+
+modes=(
+    "top-floating"
+    "top-docked"
+    "bottom-floating"
+    "bottom-docked"
+)
+
+### Functions ###
+
+# ErrorPRINT: Print error to stderr and exit with code (second argument).
+eprint() {
+    local code="${2:-1}"
+    printf "%s: %b\n" "$program_name" "$1" >&2
+    exit "$code"
+}
+
+# Return 0 if a command is available, otherwise return 1.
+check_installed() {
+    command -v "$1" >/dev/null 2>&1 && return 0
+    return 1
+}
+
+# Print the name of the currently active mode.
+get_active_mode() {
+    local mode_path
+
+    [ -L "$mode_link" ] || return 0
+
+    mode_path="$(readlink -f "$mode_link" 2>/dev/null)" || return 0
+    basename "$mode_path" .jsonc
+}
+
+# Print all available modes, marking the active one with '*'.
+list_modes() {
+    local active_mode
+    local mode
+    local modes_found=false
+
+    active_mode="$(get_active_mode)"
+
+    for mode in "${modes[@]}"; do
+        [ -f "$modes_directory/$mode.jsonc" ] || continue
+
+        modes_found=true
+
+        [ "$mode" == "$active_mode" ] && printf "* %s\n" "$mode" || printf "  %s\n" "$mode"
+    done
+
+    $modes_found || eprint "No Waybar modes found in '$modes_directory'."
+}
+
+# Use `fzf` to interactively select a `waybar` mode.
+select_mode() {
+    local selection
+
+    selection="$(list_modes | fzf --prompt="Waybar mode: " --header="'*' marks the active mode")" || return 1
+
+    # Remove the two-character active/inactive marker.
+    printf "%s\n" "${selection#??}"
+}
+
+# Validate and activate the selected mode.
+set_mode() {
+    local mode="$1"
+    local mode_file="$modes_directory/$mode.jsonc"
+
+    [ -f "$mode_file" ] ||
+        eprint "Mode '$mode' does not exist."
+
+    # Do not overwrite an actual configuration file by accident.
+    [ ! -e "$mode_link" ] || [ -L "$mode_link" ] ||
+        eprint "'$mode_link' exists and is not a symbolic link."
+
+    # The target is relative to the directory containing the symbolic link.
+    ln -sfnT "modes/$mode.jsonc" "$mode_link"
+}
+
+# Toggle the position while preserving the current layout.
+toggle_position() {
+    local active_mode
+
+    active_mode="$(get_active_mode)"
+
+    case "$active_mode" in
+        "top-floating")    set_mode "bottom-floating";;
+        "top-docked")      set_mode "bottom-docked";;
+        "bottom-floating") set_mode "top-floating";;
+        "bottom-docked")   set_mode "top-docked";;
+        "")                eprint "No active Waybar mode found.";;
+        *)                 eprint "Unknown active mode '$active_mode'.";;
+    esac
+}
+
+# Toggle the layout while preserving the current position.
+toggle_layout() {
+    local active_mode
+
+    active_mode="$(get_active_mode)"
+
+    case "$active_mode" in
+        "top-floating")    set_mode "top-docked";;
+        "top-docked")      set_mode "top-floating";;
+        "bottom-floating") set_mode "bottom-docked";;
+        "bottom-docked")   set_mode "bottom-floating";;
+        "")                eprint "No active Waybar mode found.";;
+        *)                 eprint "Unknown active mode '$active_mode'.";;
+    esac
+}
+
+# Reload `waybar` or start it when it is not already running.
+reload_waybar() { pkill -USR2 -x waybar || setsid -f waybar >/dev/null 2>&1; }
+
+### Main ###
+
+check_installed waybar || eprint "'waybar' is not installed."
+
+[ -d "$waybar_directory" ] || eprint "Waybar directory not found: '$waybar_directory'."
+
+[ -d "$modes_directory" ] || eprint "Current Waybar profile does not support modes."
+
+action="${1:-}"
+if [ -z "$action" ]; then
+    check_installed fzf || eprint "'fzf' is not installed."
+
+    action="$(select_mode)" || exit 0
+fi
+
+case "$action" in
+    "top-floating"|"top-docked"|"bottom-floating"|"bottom-docked")
+        set_mode "$action"
+        ;;
+    "toggle-position")
+        toggle_position
+        ;;
+    "toggle-layout")
+        toggle_layout
+        ;;
+    *)
+        eprint "Invalid action '$action'."
+        ;;
+esac
+
+reload_waybar

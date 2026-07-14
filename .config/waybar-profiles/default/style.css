@@ -1,0 +1,264 @@
+@define-color base     #1e1e2e;
+@define-color mantle   #181825;
+@define-color surface0 #313244;
+@define-color surface1 #45475a;
+@define-color surface2 #585b70;
+@define-color overlay0 #6c7086;
+@define-color subtext0 #a6adc8;
+@define-color text     #cdd6f4;
+@define-color blue     #89b4fa;
+@define-color teal     #94e2d5;
+@define-color green    #a6e3a1;
+@define-color yellow   #f9e2af;
+@define-color mauve    #cba6f7;
+@define-color red      #f38ba8;
+
+/* Base */
+
+* {
+    font-family: "CaskaydiaCoveNerdFont", monospace;
+    font-size: 14px;
+}
+
+window#waybar {
+    background-color: transparent;
+    color: @text;
+    border: none;
+    border-radius: 0;
+}
+
+window#waybar > box {
+    background-color: @base;
+    margin: 0;
+    padding: 0 8px;
+    border-radius: 16px;
+}
+
+/*
+
+ * Floating mode
+ *
+ * The distance from the monitor edges is controlled by the margin value
+ * inside top-floating.jsonc and bottom-floating.jsonc.
+ */
+window#waybar.floating > box,
+window#waybar.floating.top > box,
+window#waybar.floating.bottom > box {
+    background-color: @base;
+    border-radius: 12px;
+}
+
+/*
+
+ * Docked mode
+ *
+ * top-docked.jsonc and bottom-docked.jsonc must use margin 0.
+ */
+window#waybar.docked > box,
+window#waybar.docked.top > box,
+window#waybar.docked.bottom > box {
+    background-color: @base;
+    border-radius: 0;
+}
+
+/* Modules */
+#window,
+#clock,
+#battery,
+#custom-headset-battery,
+#wireplumber,
+#language,
+#custom-tray-icon,
+#tray {
+    background-color: transparent;
+    margin: 0 4px;
+    padding: 0 4px;
+}
+
+/* Workspaces */
+#workspaces {
+    background-color: transparent;
+    padding: 0;
+    margin: 0 10px 0 0;
+}
+
+#workspaces button {
+    background-color: transparent;
+    color: @blue;
+    padding: 0 2px;
+    padding-right: 4px;
+    margin: 0;
+}
+
+#workspaces button:hover {
+    background-color: transparent;
+    color: @teal;
+    box-shadow: none;
+}
+
+#workspaces button.active {
+    background-color: transparent;
+    color: @blue;
+    padding-right: 0px;
+}
+
+#workspaces button.urgent {
+    background-color: transparent;
+    color: @red;
+}
+
+#workspaces button.empty {
+    color: @surface1;
+}
+
+/* Window title */
+#window {
+    color: @subtext0;
+    margin-left: 3px;
+}
+
+window#waybar.empty #window {
+    padding: 0;
+}
+
+/* Clock */
+#clock {
+    color: @mauve;
+    font-weight: 600;
+}
+
+/* Batteries */
+#battery,
+#custom-headset-battery {
+    color: @green;
+}
+
+#battery.charging,
+#battery.plugged {
+    color: @green;
+}
+
+#battery.warning:not(.charging) {
+    color: @yellow;
+}
+
+#battery.critical:not(.charging) {
+    color: @red;
+}
+
+/* Audio */
+#wireplumber {
+    color: @teal;
+}
+
+#wireplumber.muted {
+    color: @red;
+}
+
+/* Keyboard language */
+#language {
+    color: @yellow;
+}
+
+/* Tray */
+#custom-tray-icon {
+    color: @blue;
+    font-size: 18px;
+    font-weight: 900;
+    padding: 0px;
+}
+
+#tray {
+    padding: 0px;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+    background-color: @surface0;
+}
+
+/* Tooltips */
+tooltip {
+    background-color: @mantle;
+    border: 1px solid @surface1;
+    border-radius: 8px;
+}
+
+tooltip label {
+    color: @text;
+    padding: 5px 7px;
+}
+
+/* Popup menus */
+menu {
+    background-color: @mantle;
+    color: @text;
+    border: 1px solid @surface1;
+    border-radius: 8px;
+    padding: 5px;
+}
+
+menu menuitem {
+    background-color: transparent;
+    color: @text;
+    border-radius: 6px;
+    padding: 7px 12px;
+}
+
+menu menuitem:hover {
+    background-color: @surface0;
+    color: @text;
+}
+
+menu menuitem:disabled {
+    color: @overlay0;
+}
+
+menu menuitem label,
+menu menuitem arrow,
+menu menuitem image {
+    color: inherit;
+}
+
+menu menuitem:hover label,
+menu menuitem:hover arrow {
+    color: @text;
+}
+
+menu menuitem:disabled label,
+menu menuitem:disabled arrow {
+    color: @overlay0;
+}
+
+menu menuitem check,
+menu menuitem radio {
+    color: @blue;
+    min-width: 14px;
+    min-height: 14px;
+    margin-right: 8px;
+}
+
+menu separator {
+    background-color: @surface1;
+    min-height: 1px;
+    margin: 5px 8px;
+}
+
+tooltip {
+    background: rgba(20, 22, 30, 0.97);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+}
+
+tooltip box {
+    padding: 12px 14px;
+}
+
+tooltip label {
+    font-size: 15px;
+    text-shadow: none;
+}
