@@ -5,9 +5,11 @@ status_file="$XDG_CONFIG_HOME/hypr/hypreco_status"
 [ ! -f "$status_file" ] && echo "0" > "$status_file"
 current_status=$(cat "$status_file")
 
-[ "$1" = "toggle" ] && { [ "$current_status" = "0" ] && current_status="1" || current_status="0"; }
-[ "$1" = "eco" ] && current_status="1"
-[ "$1" = "default" ] && current_status="0"
+case "$1" in
+    "toggle") [ "$current_status" = "0" ] && current_status="1" || current_status="0";;
+    "eco") current_status="1";;
+    "default") current_status="1";;
+esac
 
 if [ "$current_status" = "1" ]; then
     hyprctl eval 'hl.config({
