@@ -1,0 +1,13 @@
+{
+    "memory": {
+        "format": "{icon} {percentage}%",
+        "format-alt": "{icon} {used:0.2f}/{total:0.1f}GB",
+        "format-icons": ["_", "", "󰗉", "!󰗉"],
+ 
+        "unit": "GiB",
+        "interval": 10,
+
+        "tooltip-format": "{icon} {used:0.2f}/{total:0.1f}GB"
+    }
+}
+

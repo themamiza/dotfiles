@@ -11,12 +11,25 @@
         "~/.config/waybar/modules/hyprland-window.jsonc",
         "~/.config/waybar/modules/clock.jsonc",
         "~/.config/waybar/modules/battery.jsonc",
+        "~/.config/waybar/modules/memory.jsonc",
+        "~/.config/waybar/modules/backlight.jsonc",
         "~/.config/waybar/modules/custom-headset-battery.jsonc",
         "~/.config/waybar/modules/wireplumber.jsonc",
         "~/.config/waybar/modules/hyprland-language.jsonc",
         "~/.config/waybar/modules/tray.jsonc",
         "~/.config/waybar/modules/group-tray.jsonc"
     ],
+
+    "custom/uptime": {
+        "exec": "sb-uptime",
+        "on-click":         "BLOCK_BUTTON=1 sb-uptime",
+        "on-click-middle":  "BLOCK_BUTTON=2 sb-uptime",
+        "on-click-right":   "BLOCK_BUTTON=3 sb-uptime",
+        "on-scroll-up":     "BLOCK_BUTTON=4 sb-uptime",
+        "on-scroll-down":   "BLOCK_BUTTON=5 sb-uptime",
+        "interval": 60,
+        "tooltip": false
+    },
 
     // module placements
     "modules-left": [
@@ -29,11 +42,14 @@
     ],
 
     "modules-right": [
-        "group/tray",
+        "custom/uptime",
         "battery",
-        "custom/headset-battery",
+        "memory",
+        "backlight",
         "wireplumber",
-        "hyprland/language"
+        "custom/headset-battery",
+        "hyprland/language",
+        "group/tray"
     ],
 
     // auto reload style

@@ -69,6 +69,9 @@ window#waybar.docked.bottom > box {
 #wireplumber,
 #language,
 #custom-tray-icon,
+#custom-uptime,
+#backlight,
+#memory,
 #tray {
     background-color: transparent;
     margin: 0 4px;
@@ -151,10 +154,6 @@ window#waybar.empty #window {
     color: @teal;
 }
 
-#wireplumber.muted {
-    color: @red;
-}
-
 /* Keyboard language */
 #language {
     color: @yellow;
@@ -166,6 +165,18 @@ window#waybar.empty #window {
     font-size: 18px;
     font-weight: 900;
     padding: 0px;
+}
+
+#custom-uptime {
+    color: lightgray;
+}
+
+#memory {
+    color: @red;
+}
+
+#backlight {
+    color: lightyellow;
 }
 
 #tray {
