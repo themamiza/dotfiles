@@ -70,6 +70,7 @@ window#waybar.docked.bottom > box {
 #language,
 #custom-tray-icon,
 #custom-uptime,
+#custom-notification,
 #backlight,
 #memory,
 #tray {
@@ -156,6 +157,30 @@ window#waybar.empty #window {
 
 /* Keyboard language */
 #language {
+    color: @yellow;
+}
+
+/* Notification center */
+#custom-notification {
+    color: @blue;
+    font-size: 18px;
+    font-weight: 900;
+    padding: 0;
+}
+
+#custom-notification.notification {
+    color: @mauve;
+}
+
+#custom-notification.dnd-notification,
+#custom-notification.dnd-none {
+    color: @overlay0;
+}
+
+#custom-notification.inhibited-notification,
+#custom-notification.inhibited-none,
+#custom-notification.dnd-inhibited-notification,
+#custom-notification.dnd-inhibited-none {
     color: @yellow;
 }
 

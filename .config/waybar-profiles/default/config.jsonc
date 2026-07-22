@@ -2,7 +2,7 @@
     "layer": "top",
     "height": 32,
 
-    "include": [ 
+    "include": [
         // configuring mode
         "~/.config/waybar/mode.jsonc",
 
@@ -17,7 +17,8 @@
         "~/.config/waybar/modules/wireplumber.jsonc",
         "~/.config/waybar/modules/hyprland-language.jsonc",
         "~/.config/waybar/modules/tray.jsonc",
-        "~/.config/waybar/modules/group-tray.jsonc"
+        "~/.config/waybar/modules/group-tray.jsonc",
+        "~/.config/waybar/modules/custom-notification.jsonc"
     ],
 
     "custom/uptime": {
@@ -49,7 +50,8 @@
         "wireplumber",
         "custom/headset-battery",
         "hyprland/language",
-        "group/tray"
+        "group/tray",
+        "custom/notification"
     ],
 
     // auto reload style

@@ -1,0 +1,50 @@
+{
+  "cssPriority": "user",
+
+  "control-center-margin-top": 16,
+  "control-center-margin-bottom": 16,
+  "control-center-margin-right": 16,
+  "control-center-margin-left": 8,
+
+  "notification-window-width": 430,
+  "control-center-width": 430,
+  "control-center-height": 600,
+
+
+  "timeout": 8,
+
+  "transition-time": 180,
+
+  "image-visibility": "when-available",
+
+  "notification-inline-replies": true,
+
+  "widgets": [
+    "inhibitors",
+    "title",
+    "dnd",
+    "notifications"
+  ],
+
+  "widget-config": {
+    "inhibitors": {
+      "text": "Notifications Paused",
+      "clear-all-button": true,
+      "button-text": "Resume"
+    },
+
+    "title": {
+      "text": "Notifications",
+      "clear-all-button": true,
+      "button-text": "Clear"
+    },
+
+    "dnd": {
+      "text": "Do Not Disturb"
+    },
+    
+    "notifications": {
+      "vexpand": true
+    }
+  }
+}

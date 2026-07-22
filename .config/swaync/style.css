@@ -1,0 +1,287 @@
+@define-color base     #1e1e2e;
+@define-color mantle   #181825;
+@define-color surface0 #313244;
+@define-color surface1 #45475a;
+@define-color surface2 #585b70;
+@define-color overlay0 #6c7086;
+@define-color subtext0 #a6adc8;
+@define-color text     #cdd6f4;
+@define-color blue     #89b4fa;
+@define-color teal     #94e2d5;
+@define-color green    #a6e3a1;
+@define-color yellow   #f9e2af;
+@define-color mauve    #cba6f7;
+@define-color red      #f38ba8;
+
+* {
+    font-family: "CaskaydiaCoveNerdFont", "Noto Sans Arabic", "Vazirmatn", sans-serif;
+    font-size: 15px;
+    color: @text;
+    text-shadow: none;
+    box-shadow: none;
+}
+
+notificationwindow,
+blankwindow,
+.blank-window,
+.floating-notifications {
+    background: transparent;
+}
+
+/* Notification center */
+.control-center {
+    background: @base;
+    color: @text;
+    border: 1px solid @surface1;
+    border-radius: 16px;
+    padding: 8px;
+}
+
+.control-center-list {
+    background: transparent;
+}
+
+.control-center-list-placeholder {
+    color: @overlay0;
+    opacity: 1;
+}
+
+/* Shared widgets */
+.widget {
+    background: transparent;
+    margin: 4px;
+    padding: 8px;
+    border-radius: 12px;
+}
+
+/* Header */
+.widget-title {
+    margin-bottom: 2px;
+}
+
+.widget-title > label {
+    color: @mauve;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.widget-title > button,
+.widget-inhibitors > button {
+    background: @surface0;
+    color: @text;
+    border: 1px solid @surface1;
+    border-radius: 8px;
+    padding: 7px 11px;
+}
+
+.widget-title > button:hover,
+.widget-inhibitors > button:hover {
+    background: @surface1;
+    color: @red;
+}
+
+/* Notification inhibition */
+.widget-inhibitors {
+    background: @surface0;
+    border: 1px solid @yellow;
+    padding: 10px 12px;
+}
+
+.widget-inhibitors > label {
+    color: @yellow;
+    font-weight: 600;
+}
+
+/* Do Not Disturb */
+.widget-dnd {
+    background: @surface0;
+    border: 1px solid @surface1;
+    padding: 11px 13px;
+}
+
+.widget-dnd label {
+    color: @text;
+    font-weight: 500;
+}
+
+.widget-dnd switch {
+    background: @surface1;
+    border: none;
+    border-radius: 999px;
+    min-width: 44px;
+    min-height: 25px;
+}
+
+.widget-dnd switch slider {
+    background: @text;
+    border: none;
+    border-radius: 999px;
+    min-width: 19px;
+    min-height: 19px;
+    margin: 3px;
+}
+
+.widget-dnd switch:checked {
+    background: @blue;
+}
+
+.widget-dnd switch:checked slider {
+    background: @mantle;
+}
+
+/* Notification cards */
+.notification-row {
+    background: transparent;
+    outline: none;
+}
+
+.notification-row:focus {
+    background: transparent;
+}
+
+.notification-background {
+    padding: 4px;
+}
+
+.notification {
+    background: @surface0;
+    border: 1px solid @surface1;
+    border-radius: 12px;
+    padding: 0;
+}
+
+.notification.low,
+.notification.normal {
+    border-color: @surface1;
+}
+
+.notification.critical {
+    border-color: @red;
+}
+
+.notification-default-action,
+.notification-action {
+    background: transparent;
+    color: @text;
+    border: none;
+    border-radius: 11px;
+}
+
+.notification-default-action {
+    padding: 9px;
+}
+
+.notification-default-action:hover,
+.notification-action:hover {
+    background: @surface1;
+}
+
+.notification-content,
+.notification-content .text-box {
+    background: transparent;
+}
+
+.notification-content .image {
+    -gtk-icon-filter: none;
+    border-radius: 8px;
+    margin-right: 9px;
+}
+
+.notification-content .app-icon {
+    -gtk-icon-filter: none;
+}
+
+.notification-content .summary {
+    color: @text;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.notification-content .time {
+    color: @overlay0;
+    font-size: 13px;
+    font-weight: 400;
+    margin-right: 28px;
+}
+
+.notification-content .body {
+    color: @subtext0;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.close-button {
+    background: @surface1;
+    color: @text;
+    border: none;
+    border-radius: 999px;
+    min-width: 25px;
+    min-height: 25px;
+    margin-top: 8px;
+    margin-right: 8px;
+    padding: 0;
+}
+
+.close-button:hover {
+    background: @red;
+    color: @mantle;
+}
+
+.notification-alt-actions {
+    background: transparent;
+    padding: 4px;
+}
+
+.notification-action {
+    background: @surface1;
+    margin: 4px;
+    padding: 7px;
+}
+
+.notification-action:hover {
+    background: @surface2;
+}
+
+/* Notification progress */
+progressbar trough {
+    background: @surface1;
+    border-radius: 999px;
+    min-height: 6px;
+}
+
+progressbar progress {
+    background: @blue;
+    border-radius: 999px;
+}
+
+/* Grouped notifications */
+.notification-group {
+    background: transparent;
+}
+
+.notification-group-headers,
+.notification-group-buttons {
+    color: @subtext0;
+    margin: 0 12px;
+}
+
+.notification-group-icon,
+.notification-group-header {
+    color: @subtext0;
+}
+
+/* Scrollbar */
+scrollbar {
+    background: transparent;
+}
+
+scrollbar slider {
+    background: @surface2;
+    border-radius: 999px;
+    min-width: 6px;
+    min-height: 24px;
+}
+
+scrollbar slider:hover {
+    background: @overlay0;
+}

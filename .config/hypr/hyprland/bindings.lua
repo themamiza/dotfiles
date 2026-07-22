@@ -64,6 +64,10 @@ hl.bind("CONTROL + ALT + SHIFT + M", hl.dsp.exec_cmd("dmenuumount"))
 hl.bind("SUPER + B", hl.dsp.exec_cmd("pkill -SIGUSR1 waybar"))
 hl.bind("SUPER + SHIFT + B", hl.dsp.exec_cmd("fzf-waybar-mode toggle-layout"))
 
+-- Notification center
+hl.bind("SUPER + C", hl.dsp.exec_cmd("swaync-client -t"))
+hl.bind("SUPER + SHIFT + C", hl.dsp.exec_cmd("swaync-client -d"))
+
 -- Window actions --
 hl.bind("SUPER + Q", hl.dsp.window.close())
 hl.bind("SUPER + F", hl.dsp.window.fullscreen())
