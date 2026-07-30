@@ -161,6 +161,12 @@ autoload edit-command-line
 zle -N edit-command-line
 bindkey "^e" edit-command-line
 
+# tetris in `zsh` (only loaded when called upon)
+ztetris() {
+	autoload -Uz tetriscurses
+	tetriscurses
+}
+
 # Load command_not_found handler.
 source /usr/share/doc/pkgfile/command-not-found.zsh 2>/dev/null || {
 	source "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/command-not-found.zsh" 2>/dev/null
