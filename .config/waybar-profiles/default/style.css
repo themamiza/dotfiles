@@ -64,6 +64,7 @@ window#waybar.docked.bottom > box {
 /* Modules */
 #window,
 #clock,
+#temperature,
 #battery,
 #custom-headset-battery,
 #wireplumber,
@@ -129,6 +130,19 @@ window#waybar.empty #window {
 #clock {
     color: @mauve;
     font-weight: 600;
+}
+
+/* Temperature */
+#temperature {
+    color: @teal;
+}
+
+#temperature.warning {
+    color: @yellow;
+}
+
+#temperature.critical {
+    color: @red;
 }
 
 /* Batteries */

@@ -1,0 +1,16 @@
+{
+    "temperature": {
+        "interval": 5,
+
+        "warning-threshold": 70,
+        "critical-threshold": 85,
+
+        "format": "{icon} {temperatureC}°C",
+        "format-warning": "{icon} {temperatureC}°C",
+        "format-critical": "{icon} {temperatureC}°C",
+
+        "format-icons": ["", "", "", "", "" ],
+
+        "tooltip-format": "CPU temperature: {temperatureC}°C"
+    }
+}

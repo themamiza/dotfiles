@@ -10,6 +10,7 @@
         "~/.config/waybar/modules/hyprland-workspaces.jsonc",
         "~/.config/waybar/modules/hyprland-window.jsonc",
         "~/.config/waybar/modules/clock.jsonc",
+        "~/.config/waybar/modules/temperature.jsonc",
         "~/.config/waybar/modules/battery.jsonc",
         "~/.config/waybar/modules/memory.jsonc",
         "~/.config/waybar/modules/backlight.jsonc",
@@ -29,7 +30,7 @@
         "on-scroll-up":     "BLOCK_BUTTON=4 sb-uptime",
         "on-scroll-down":   "BLOCK_BUTTON=5 sb-uptime",
         "interval": 60,
-        "tooltip": false
+        "tooltip-format": "Up for: {text}"
     },
 
     // module placements
@@ -44,6 +45,7 @@
 
     "modules-right": [
         "custom/uptime",
+        "temperature",
         "battery",
         "memory",
         "backlight",
