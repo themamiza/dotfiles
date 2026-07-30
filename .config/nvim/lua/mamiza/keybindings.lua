@@ -22,6 +22,7 @@ vim.keymap.set("n", "<leader>bk", ":q!<CR>", silent)
 vim.keymap.set("n", "<leader>.", ":Telescope find_files<CR>", silent)
 vim.keymap.set("n", "<leader>f", ":Telescope git_files<CR>", silent)
 vim.keymap.set("n", "<leader>:", ":Telescope commands<CR>", silent)
+vim.keymap.set("n", "<leader>/", ":Telescope live_grep<CR>", silent)
 vim.keymap.set("n", "<leader>bb", ":Telescope buffers<CR>", silent)
 
 -- Compile
