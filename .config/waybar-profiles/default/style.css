@@ -81,14 +81,20 @@ window#waybar.docked.bottom > box {
 }
 
 /* Workspaces */
-#workspaces {
-    background-color: transparent;
-    padding: 0;
-    margin: 0 10px 0 0;
+#workspaces button,
+#workspaces button:hover,
+#workspaces button:focus,
+#workspaces button:active,
+#workspaces button:checked,
+#workspaces button.active {
+    background: transparent;
+    background-image: none;
+    border: none;
+    box-shadow: none;
+    text-shadow: none;
 }
 
 #workspaces button {
-    background-color: transparent;
     color: @blue;
     padding: 0 2px;
     padding-right: 4px;
@@ -96,19 +102,15 @@ window#waybar.docked.bottom > box {
 }
 
 #workspaces button:hover {
-    background-color: transparent;
     color: @teal;
-    box-shadow: none;
 }
 
 #workspaces button.active {
-    background-color: transparent;
     color: @blue;
-    padding-right: 0px;
+    padding-right: 0;
 }
 
 #workspaces button.urgent {
-    background-color: transparent;
     color: @red;
 }
 
