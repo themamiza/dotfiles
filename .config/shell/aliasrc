@@ -56,6 +56,6 @@ alias \
 	hl="rg --passthru" \
 	unrar="unrar-free" \
 	update-grub="sudo grub-mkconfig -o /boot/grub/grub.cfg" \
+	cget="curl -LO -C -" \
 	pong="ping 4.2.2.4" \
 	qq="proxychains -q"
-	
