@@ -103,3 +103,51 @@
 (after! elfeed
   (setq-default elfeed-search-filter ""))
 
+;; Run `mais install-dotfiles` after saving anything inside the dotfiles repo.
+(add-hook! 'after-save-hook
+  (defun +mamiza/install-dotfiles-after-save ()
+    (when (and buffer-file-name
+               (string-prefix-p
+                "/home/mamiza/rp/dotfiles/"
+                (expand-file-name buffer-file-name)))
+      (start-process
+       "install-dotfiles"
+       nil
+       "mais"
+       "install-dotfiles"))))
+
+
+;; Restart Waybar after saving anything inside its config directory,
+;; except style.css.
+(add-hook! 'after-save-hook
+  (defun +mamiza/restart-waybar-after-save ()
+    (when buffer-file-name
+      (let ((filepath (expand-file-name buffer-file-name)))
+        (when (and
+               (string-prefix-p
+                "/home/mamiza/rp/dotfiles/.config/waybar/"
+                filepath)
+               (not
+                (string-equal
+                 filepath
+                 "/home/mamiza/rp/dotfiles/.config/waybar/style.css")))
+          ;; Don't use SIGUSR2 in case Waybar has crashed
+          ;; and needs to be launched again.
+          (start-process-shell-command
+           "restart-waybar"
+           nil
+           "pkill waybar; setsid -f waybar >/dev/null 2>&1"))))))
+
+
+;; Reload Hyprland after saving any file named hyprland.conf.
+(add-hook! 'after-save-hook
+  (defun +mamiza/reload-hyprland-after-save ()
+    (when (and buffer-file-name
+               (string-equal
+                (file-name-nondirectory buffer-file-name)
+                "hyprland.conf"))
+      (start-process
+       "hyprland-reload"
+       nil
+       "hyprctl"
+       "reload"))))
