@@ -77,7 +77,7 @@ window#waybar.docked.bottom > box {
 #tray {
     background-color: transparent;
     margin: 0 4px;
-    padding: 0 4px;
+    padding: 0 2px;
 }
 
 /* Workspaces */
