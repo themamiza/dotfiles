@@ -4,9 +4,18 @@ hl.bind("ALT   +    RETURN", hl.dsp.exec_cmd("ttmuxer"))
 hl.bind("SUPER +         W", hl.dsp.exec_cmd("$BROWSER"))
 hl.bind("SUPER + SHIFT + W", hl.dsp.exec_cmd("$PRIVATE_BROWSER"))
 hl.bind("SUPER +         G", hl.dsp.exec_cmd("$GUIFM"))
-hl.bind("SUPER +         E", hl.dsp.exec_cmd("emacs"))
 hl.bind("SUPER +         T", hl.dsp.exec_cmd("Telegram"))
 hl.bind("SUPER + SHIFT + T", hl.dsp.exec_cmd("$TERMINAL -e tuxedo"))
+
+hl.bind("SUPER + E", hl.dsp.submap("emacs"))
+hl.define_submap("emacs", "reset", function()
+    hl.bind("e", hl.dsp.exec_cmd("emacs"))
+    hl.bind("c", hl.dsp.exec_cmd("emacsclient -c"))
+    hl.bind("r", hl.dsp.exec_cmd("emacsclient -c --eval '(dirvish)'"))
+    -- hl.bind("r", hl.dsp.exec_cmd("emacsclient -r"))
+
+    hl.bind("catchall", hl.dsp.submap("reset"))
+end)
 
 -- Eco mode
 hl.bind("SUPER + GRAVE", hl.dsp.exec_cmd("hypreco toggle"))
