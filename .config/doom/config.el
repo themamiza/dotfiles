@@ -151,3 +151,17 @@
        nil
        "hyprctl"
        "reload"))))
+
+;; Attach to the last used workspace.
+(after! persp-mode
+  (setq persp-set-last-persp-for-new-frames t
+        persp-emacsclient-init-frame-behaviour-override t))
+
+;; Server configurations:
+(after! server
+  ;; Disable Emacs's default instruction.
+  (setq server-client-instructions nil)
+
+  ;; Show custom instruction message instead.
+  (add-hook! 'server-after-make-frame-hook
+    (message "Attached to Emacs daemon")))
