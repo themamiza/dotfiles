@@ -1,0 +1,95 @@
+#!/bin/bash
+# Original author: Iahwaacz
+# https://raw.githubusercontent.com/lahwaacz/Scripts/master/toggle-touchpad.sh
+
+program_name="${0##*/}"
+
+eprint() {
+    local code="${2:-1}"
+    printf "%s: %b\n" "$program_name" "$1" >&2
+    exit "$code"
+}
+
+get_device() {
+    case "$WM" in
+        "dwm") xinput list | grep -P '(?<= )[\w\s:]*(?i)(touchpad|synaptics)(?-i).*?(?=\s*id)' -o | head -n1;;
+        "hyprland") hyprctl devices | grep touchpad | tr -d "\t";;
+    esac
+}
+
+init_touchpad() {
+    case "$WM" in
+        "dwm"|"hyprland");;
+        *) eprint "Window manager '$WM' is not supported." ;;
+    esac
+
+    device="$(get_device)"
+    [ -n "$device" ] || eprint "Touchpad not found."
+
+    if [ "$WM" = "hyprland" ]; then
+        safe_device_name="$(printf "%s\n" "$device" | tr '/' '_')"
+        status_file="${XDG_CACHE_HOME:-$HOME/.cache}/$safe_device_name:status"
+
+        [ -f "$status_file" ] || printf "true\n" > "$status_file"
+    fi
+}
+
+get_status() {
+    case "$WM" in
+        "dwm")
+            if [[ "$(xinput list-props "$device" |
+                grep -P ".*Device Enabled.*\K.(?=$)" -o)" == "1" ]]; then
+                printf "true\n"
+            else
+                printf "false\n"
+            fi
+            ;;
+        "hyprland") cat "$status_file";;
+    esac
+}
+
+set_status() {
+    local status="$1"
+
+    case "$WM" in
+        "dwm")
+            if [ "$status" = "true" ]; then
+                xinput enable "$device"
+            else
+                xinput disable "$device"
+            fi
+            ;;
+        "hyprland")
+            hyprctl eval "hl.device({ name = [[$device]], enabled = $status })"
+            printf "%s\n" "$status" > "$status_file"
+            ;;
+    esac
+}
+
+touchpad_status() {
+    init_touchpad
+    get_status
+}
+
+touchpad_toggle() {
+    local status
+
+    init_touchpad
+    status="$(get_status)"
+
+    if [ "$status" = "true" ]; then
+        status="false"
+    else
+        status="true"
+    fi
+
+    set_status "$status"
+}
+
+action="${1:-status}"
+# TODO: Add `set` action for explicit setting of the status.
+case "$action" in
+    "status") touchpad_status;;
+    "toggle") touchpad_toggle;;
+    *) eprint "Invalid action '$action'.";;
+esac
