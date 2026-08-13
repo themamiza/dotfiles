@@ -75,9 +75,9 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-(setq doom-font (font-spec :family "FiraCode Nerd Font" :size 20 :weight 'medium)
-      doom-variable-pitch-font (font-spec :family "FiraCode Nerd Font" :size 22)
-      doom-serif-font (font-spec :family "FiraCode Nerd Font" :size 20))
+(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 20 :weight 'medium)
+      doom-variable-pitch-font (font-spec :family "JetBrainsMono Nerd Font" :size 22)
+      doom-serif-font (font-spec :family "JetBrainsMono Nerd Font" :size 20))
 
 (add-to-list 'default-frame-alist '(alpha-background . 90))
 
@@ -116,7 +116,6 @@
        "mais"
        "install-dotfiles"))))
 
-
 ;; Restart Waybar after saving anything inside its config directory,
 ;; except style.css.
 (add-hook! 'after-save-hook
@@ -137,7 +136,6 @@
            "restart-waybar"
            nil
            "pkill waybar; setsid -f waybar >/dev/null 2>&1"))))))
-
 
 ;; Reload Hyprland after saving any file named hyprland.conf.
 (add-hook! 'after-save-hook
