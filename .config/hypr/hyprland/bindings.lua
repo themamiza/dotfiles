@@ -9,11 +9,14 @@ hl.bind("SUPER + SHIFT + T", hl.dsp.exec_cmd("$TERMINAL -e tuxedo"))
 
 hl.bind("SUPER + E", hl.dsp.submap("emacs"))
 hl.define_submap("emacs", "reset", function()
+    -- Launch emacs the normal way
     hl.bind("e", hl.dsp.exec_cmd("emacs"))
+    -- Launch emacsclient and attach to the (if) existing daemon
     hl.bind("c", hl.dsp.exec_cmd("emacsclient -c"))
-    hl.bind("r", hl.dsp.exec_cmd("emacsclient -c --eval '(dirvish)'"))
-    -- hl.bind("r", hl.dsp.exec_cmd("emacsclient -r"))
-
+    -- Use emacs as a file manager (requires the daemon to be running)
+    hl.bind("g", hl.dsp.exec_cmd("emacsclient -c --eval '(dirvish)'"))
+    -- Restart daemon
+    hl.bind("r", hl.dsp.exec_cmd("ttmuxer -k -i -q emacs -- emacs --fg-daemon"))
     hl.bind("catchall", hl.dsp.submap("reset"))
 end)
 

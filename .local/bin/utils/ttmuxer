@@ -1,4 +1,124 @@
 #!/bin/sh
 
-# shellcheck disable=2015
-! tmux ls >/dev/null 2>&1 && $TERMINAL -e tmux new -s main || $TERMINAL -e tmux att
+shell="${SHELL:-/bin/sh}"
+session=""
+silent=""
+keep_shell=""
+kill=""
+
+usage() {
+    cat <<EOF
+Usage: ttmuxer [options] [session] [-- command...]
+
+Start or attach to a tmux session, optionally running a command.
+
+Options:
+  -q, --silent   Run detached; don't open a terminal
+  -i, --shell    Keep a shell open after the command exits
+  -k, --kill     Kill the named session before starting
+  -h, --help     Show this help
+
+Quickstart:
+  ttmuxer                       - Attach to the last session, or create "main"
+  ttmuxer work                  - Attach to or create 'work'
+  ttmuxer work -- make          - Run \`make\` in 'work'
+  ttmuxer -i work -- make       - Run \`make\`, then keep a shell open
+  ttmuxer -q jobs -- job        - Run \`job\` in 'jobs' detached
+    **
+  ttmuxer -q -k emacs -- emacs --fg-daemon
+        - Restart (kill if already running) detached session and run
+        the emacs daemon there
+    **
+EOF
+}
+
+die() {
+    printf 'ttmuxer: %s\n\n' "$*" >&2
+    usage >&2
+    exit 1
+}
+
+# Options
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+        -q|--silent) silent=1;;
+        -i|--shell)  keep_shell=1;;
+        -k|--kill)   kill=1;;
+        -h|--help)   usage; exit 0;;
+        --)          break;;
+        -*)          die "unknown option: $1";;
+        *)           session="$1"; shift; break;;
+    esac
+    shift
+done
+
+# After the session name, only -- is valid
+if [ "$#" -gt 0 ] && [ "$1" != "--" ]; then
+    case "$1" in
+        -*) die "unknown option: $1" ;;
+        *)  die "unexpected argument: $1" ;;
+    esac
+fi
+
+# --kill requires an explicit session
+if [ -n "$kill" ]; then
+    [ -n "$session" ] || die "--kill requires a session name"
+    tmux kill-session -t "=$session" 2>/dev/null || :
+fi
+
+new_session() {
+    if [ -n "$silent" ]; then
+        exec tmux new-session -d "$@"
+    fi
+    exec $TERMINAL -e tmux new-session "$@"
+}
+
+# Command supplied after --
+if [ "${1-}" = "--" ]; then
+    shift
+    [ "$#" -gt 0 ] || die "no command specified after --"
+
+    shell_command='"$@"'
+    [ -n "$keep_shell" ] && shell_command="$shell_command
+exec \"\$SHELL\" -i"
+
+    if [ -n "$session" ]; then
+        if tmux has-session -t "=$session" 2>/dev/null; then
+            tmux new-window ${silent:+-d} -t "=$session:" -- "$shell" -ic "$shell_command" ttmuxer "$@"
+
+            [ -n "$silent" ] && exit
+            exec $TERMINAL -e tmux attach-session -t "=$session"
+        fi
+
+        new_session -s "$session" -- "$shell" -ic "$shell_command" ttmuxer "$@"
+    fi
+
+    if tmux list-sessions >/dev/null 2>&1; then
+        tmux new-window ${silent:+-d} -- "$shell" -ic "$shell_command" ttmuxer "$@"
+
+        [ -n "$silent" ] && exit
+        exec $TERMINAL -e tmux attach-session
+    fi
+
+    new_session -s main -- "$shell" -ic "$shell_command" ttmuxer "$@"
+fi
+
+# Silent without a command just ensures a session exists
+if [ -n "$silent" ]; then
+    if [ -n "$session" ]; then
+        tmux has-session -t "=$session" 2>/dev/null || new_session -s "$session"
+    elif ! tmux list-sessions >/dev/null 2>&1; then
+        new_session -s main
+    fi
+    exit
+fi
+
+if [ -n "$session" ]; then
+    new_session -A -s "$session"
+fi
+
+if tmux list-sessions >/dev/null 2>&1; then
+    exec $TERMINAL -e tmux attach-session
+fi
+
+new_session -s main
