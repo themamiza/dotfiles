@@ -50,4 +50,3 @@
 ;(unpin! t)
 
 (package! dired-open)
-(package! spacious-padding)
