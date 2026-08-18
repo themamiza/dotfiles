@@ -8,9 +8,9 @@
 
 # Use eza for ls if present (if not just colorize ls):
 if [ -x "$(command -v eza)" ]; then
-	alias ls="eza --group-directories-first --git"
+    alias ls="eza --group-directories-first --git"
 else
-	alias ls="ls -hNr --color=auto --group-directories-first"
+    alias ls="ls -hNr --color=auto --group-directories-first"
 fi
 
 # Use $XINITRC variable if file exists:
@@ -18,7 +18,7 @@ fi
 
 # sudo not required for some system commands:
 for command in mount umount pacman su fdisk dd systemctl; do
-	alias $command="sudo $command"
+    alias $command="sudo $command"
 done; unset command
 
 # Use kitty's own ssh when using kitty:
@@ -27,35 +27,46 @@ done; unset command
 # Unnecessary bling:
 command -v spark lolcat >/dev/null 2>&1 && alias clear='echo -en "\x1b[2J\x1b[1;1H"; echo; echo; seq 1 $(tput cols) | sort -R | spark | lolcat; echo; echo'
 
+command -v proxychains >/dev/null 2>&1 && alias qq="proxychains -q"
+command -v lf          >/dev/null 2>&1 && alias lf="lfub"
+command -v unrar-free  >/dev/null 2>&1 && alias unrar="unrar-free" \
+
+shell="$(ps -p $$ -o comm=)"
+if [ "$shell" = "zsh" ]; then
+    alias history="history 0"
+fi
+unset shell
+
+if [ -x "$(command -v nsxiv)" ]; then
+    alias \
+        nsxiv="nsxiv -b" \
+        sxiv="nsxiv"
+fi
+
+command -v rg >/dev/null 2>&1 && alias hl="rg --passthru"
+
 # Verbosity and settings that you pretty much just always are going to want:
 alias \
-	cp="cp -iv" \
-	mv="mv -iv" \
-	rm="rm -vI" \
-	nsxiv="nsxiv -b" \
-	sxiv="nsxiv" \
-	history="history 0" \
-	cw="wc -w" \
-	lc="wc -l" \
-	du="du -hs" \
-	df="df -h"
+    ll="ls -lA" \
+    cp="cp -iv" \
+    mv="mv -iv" \
+    rm="rm -vI" \
+    cw="wc -w" \
+    lc="wc -l" \
+    du="du -hs" \
+    df="df -h"
 
 # Colorize commmands when possible:
 alias \
-	grep="grep --color=auto" \
-	diff="diff --color=auto" \
-	ip="ip -color=auto"
+    ip="ip -color=auto" \
+    grep="grep --color=auto" \
+    diff="diff --color=auto"
 
 # These common commands are just too long! Abbreviate them:
 alias \
-	c="clear" \
-	v="vim" \
-	z="zathura" \
-	lf="lfub" \
-	ll="ls -la" \
-	hl="rg --passthru" \
-	unrar="unrar-free" \
-	update-grub="sudo grub-mkconfig -o /boot/grub/grub.cfg" \
-	cget="curl -LO -C -" \
-	pong="ping 4.2.2.4" \
-	qq="proxychains -q"
+    v="vim" \
+    c="clear" \
+    z="zathura" \
+    pong="ping 4.2.2.4" \
+    cget="curl -LO -C -" \
+    update-grub="sudo grub-mkconfig -o /boot/grub/grub.cfg"
