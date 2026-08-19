@@ -75,3 +75,5 @@ vim.api.nvim_create_autocmd({
 }, {
         callback = transparent_hl,
 })
+
+vim.api.nvim_set_hl(0, "CursorLine", { bg = "#181a1f" })
