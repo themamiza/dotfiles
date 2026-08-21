@@ -84,7 +84,17 @@ bindkey -v "^?" backward-delete-char
 
 # Some more keybindings:
 bindkey "^A" beginning-of-line
-bindkey "^H" backward-kill-word
+
+ctrl-backspace() {
+    if [[ "$LBUFFER" == *[^[:space:]]* ]]; then
+        zle backward-kill-word
+    else
+        LBUFFER=''
+    fi
+}
+zle -N ctrl-backspace
+bindkey '^H' ctrl-backspace
+
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
 
