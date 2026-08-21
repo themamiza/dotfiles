@@ -70,10 +70,11 @@ _comp_options+=(globdots)	 # Include hidden files.
 bindkey -v
 export KEYTIMEOUT=1
 
-# Use bash style word selection:
+# Use Bash-style word selection, with '_' considered part of a word.
 # WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 autoload -U select-word-style
 select-word-style bash
+zstyle ':zle:*' word-chars '_'
 
 # Use vim keys in tab completion menu:
 bindkey -M menuselect 'h' vi-backward-char
@@ -84,6 +85,15 @@ bindkey -v "^?" backward-delete-char
 
 # Some more keybindings:
 bindkey "^A" beginning-of-line
+
+autoload -U history-search-end
+zle -N history-beginning-search-backward-end history-search-end
+zle -N history-beginning-search-forward-end history-search-end
+
+bindkey -M viins '^[[A' history-beginning-search-backward-end
+bindkey -M viins '^[[B' history-beginning-search-forward-end
+bindkey -M vicmd '^[[A' history-beginning-search-backward-end
+bindkey -M vicmd '^[[B' history-beginning-search-forward-end
 
 ctrl-backspace() {
     if [[ "$LBUFFER" == *[^[:space:]]* ]]; then
