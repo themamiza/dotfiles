@@ -27,4 +27,7 @@
         { on = [ "c", "W" ], for = "unix", run = 'rename --empty="all"', desc = "Change whole name" },
 
         { on = [ "<C-b>" ], for = "unix", run = 'shell --block vidir; clear', desc = "Bulk rename" },
+
+        # Custom size
+        { on = [ "U" ], for = "unix", run = "plugin size", desc = "Show size of the hovered item" },
     ]
