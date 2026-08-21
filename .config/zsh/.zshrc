@@ -13,10 +13,10 @@ setopt interactivecomments
 stty stop undef		# Disable ctrl-s to freeze terminal.
 
 # Better history
-setopt HIST_IGNORE_DUPS
-setopt HIST_IGNORE_ALL_DUPS
-setopt HIST_REDUCE_BLANKS
-setopt HIST_APPEND
+setopt HIST_IGNORE_SPACE      # Don't save commands starting with a space
+setopt HIST_FIND_NO_DUPS      # Skip duplicates when navigating/searching history
+setopt HIST_REDUCE_BLANKS     # Remove unnecessary whitespace
+setopt SHARE_HISTORY          # Share history between shells and append immediately
 
 # Command and Path corrections
 setopt CORRECT

@@ -10,9 +10,12 @@ fi
 stty -ixon      # Disable ctrl-s to freeze terminal.
 shopt -s autocd # Automatically cd into typed directory.
 
-# History in cache directory:
+# Better history
 HISTSIZE=
 HISTFILESIZE=
+HISTCONTROL=ignorespace       # Don't save commands beginning with a space.
+shopt -s histappend           # Append history instead of overwriting it.
+# History in cache directory:
 HISTFILE=~/.cache/bash/history
 [ -d "$(dirname $HISTFILE)" ] || mkdir -p "$(dirname $HISTFILE)"
 
