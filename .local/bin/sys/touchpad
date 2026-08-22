@@ -1,5 +1,5 @@
 #!/bin/bash
-# Original author: Iahwaacz
+# Original author of get_device for xinput: Iahwaacz
 # https://raw.githubusercontent.com/lahwaacz/Scripts/master/toggle-touchpad.sh
 
 program_name="${0##*/}"
@@ -8,6 +8,10 @@ eprint() {
     local code="${2:-1}"
     printf "%s: %b\n" "$program_name" "$1" >&2
     exit "$code"
+}
+
+usage() {
+    printf "Usage: touchpad [disable|enable|status|toggle|reset]\n"
 }
 
 get_device() {
@@ -66,15 +70,9 @@ set_status() {
     esac
 }
 
-touchpad_status() {
-    init_touchpad
-    get_status
-}
-
 touchpad_toggle() {
     local status
 
-    init_touchpad
     status="$(get_status)"
 
     if [ "$status" = "true" ]; then
@@ -86,10 +84,20 @@ touchpad_toggle() {
     set_status "$status"
 }
 
+init_touchpad
 action="${1:-status}"
-# TODO: Add `set` action for explicit setting of the status.
+
+if [ "$#" -gt 1 ]; then
+    usage
+    eprint "Invalid usage '$*'."
+fi
+
 case "$action" in
-    "status") touchpad_status;;
+    "disable") set_status false;;
+    "enable") set_status true;;
+    "status") get_status;;
     "toggle") touchpad_toggle;;
-    *) eprint "Invalid action '$action'.";;
+    # The `reset` function is useful to restore touchpad status upon startup.
+    "reset") set_status "$(get_status)";;
+    *) usage; eprint "Invalid action '$action'.";;
 esac
