@@ -1,3 +1,0 @@
-#!/bin/sh
-
-ifinstalled brave && brave --app="https://web.eitaa.com"

@@ -1,0 +1,36 @@
+#!/bin/sh
+
+set -eu
+
+data_dir="${XDG_DATA_HOME:-"$HOME/.local/share"}"
+list="$data_dir/webapps.list"
+template="$data_dir/template_webapp"
+
+output="$HOME/.local/bin/webapps"
+tmp="$output.$$"
+
+# Remove and recreate previously created temporary files.
+rm -rf "$tmp"
+mkdir -p "$tmp"
+
+# Remove the temporary files in case of early exit.
+trap 'rm -rf "$tmp"' 0 HUP INT TERM
+
+# Process the 'webapps.list' file.
+while read -r name url; do
+    # Remove empty lines or comments.
+    case $name in
+        ''|'#'*) continue;;
+    esac
+
+    # Escape for '&'.
+    escaped_url=$(printf '%s\n' "$url" | sed 's/[\\&|]/\\&/g')
+
+    # Create the executable from the template.
+    sed "s|@WEBAPP_URL@|$escaped_url|g" "$template" > "$tmp/$name"
+    chmod +x "$tmp/$name"
+done < "$list"
+
+# Re-move previously created webapps files.
+rm -rf "$output"
+mv "$tmp" "$output"

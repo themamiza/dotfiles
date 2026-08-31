@@ -1,3 +1,0 @@
-#!/bin/bash
-
-ifinstalled brave && brave --app="https://www.reddit.com/r/unixporn"
