@@ -59,6 +59,7 @@ hl.bind("SUPER + SHIFT + n", hl.dsp.exec_cmd("setbg ~/.local/share/wallpapers"))
 
 -- Tui applications --
 hl.bind("SUPER + R",         hl.dsp.exec_cmd('$TERMINAL -e "$TUIFM"'))
+hl.bind("SUPER + M",         hl.dsp.exec_cmd('$TERMINAL -e rmpc'))
 hl.bind("SUPER + SHIFT + H", hl.dsp.exec_cmd("$TERMINAL -e btop"))
 hl.bind("SUPER + SHIFT + I", hl.dsp.exec_cmd("$TERMINAL -e nmtui"))
 

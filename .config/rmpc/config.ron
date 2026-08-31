@@ -1,0 +1,22 @@
+#![enable(implicit_some)]
+(
+    keybinds: (
+        global: {
+            "=":     VolumeUp,
+            "-":     VolumeDown,
+            "r":     ToggleRepeat,
+            "R":     ToggleRandom,
+            "<Space>": TogglePause,
+            "<C-c>": Stop,
+        },
+        navigation: {
+            "m": Select,
+            "M": InvertSelection,
+        },
+        queue: {
+            "dd": Delete,
+            "DD": DeleteAll,
+            "~":  JumpToCurrent,
+        },
+    ),
+)
